@@ -37,8 +37,9 @@ export default async function Home() {
       <div className="flex flex-col gap-4">
         <h1 className="font-semibold text-2xl">Trending</h1>
         <div className="flex gap-4">
-          {trendingMovies.map((movie) => (
+          {trendingMovies.map((movie, index) => (
             <Card
+              key={index}
               hoverable
               style={{ width: 240 }}
               cover={
@@ -54,8 +55,9 @@ export default async function Home() {
       <div className="flex flex-col gap-4">
         <h1 className="font-semibold text-2xl">Upcoming</h1>
         <div className="flex gap-4">
-          {upcomingMovies.map((movie) => (
+          {upcomingMovies.map((movie, index) => (
             <Card
+              key={index}
               hoverable
               style={{ width: 240 }}
               cover={
