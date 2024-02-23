@@ -14,7 +14,7 @@ import type { MenuProps } from "antd";
 import { Avatar, Input, Layout, Menu, theme } from "antd";
 import type { SearchProps } from "antd/es/input/Search";
 
-import React from "react";
+import React, { useState } from "react";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
@@ -50,26 +50,35 @@ export const LayoutApp = ({ children }: LayoutProps) => {
   const {
     token: { colorBgContainer, borderRadiusLG, colorBgBase },
   } = theme.useToken();
+  const [collapsed, setCollapsed] = useState(false);
 
   const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
     console.log(info?.source, value);
 
   return (
-    <Layout hasSider>
+    <Layout className="w-full">
       <Sider
+        // collapsible
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
         breakpoint="lg"
-        style={{
-          overflow: "auto",
-          height: "100vh",
-          position: "fixed",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: 200,
-        }}
+        // style={{
+        //   overflow: "auto",
+        //   height: "100vh",
+        //   position: "fixed",
+        //   left: 0,
+        //   top: 0,
+        //   bottom: 0,
+        //   width: 200,
+        // }}
       >
-        <div className="h-16 flex items-center justify-center">
-          <h1 className="font-bold text-white text-2xl">watcher 📸</h1>
+        <div className="h-16 flex items-center justify-center transition-all">
+          {collapsed ? (
+            <h1 className="font-bold text-white text-2xl">📸</h1>
+          ) : (
+            <h1 className="font-bold text-white text-2xl">watcher 📸</h1>
+          )}
         </div>
         <Menu
           theme="dark"
@@ -78,13 +87,13 @@ export const LayoutApp = ({ children }: LayoutProps) => {
           items={newItems}
         />
       </Sider>
-      <Layout style={{ marginLeft: 200 }}>
-        <div className="h-16 flex items-center justify-between container">
+      <div className="container">
+        <div className="h-16 flex items-center justify-between container gap-6">
           <Search
             placeholder="input search text"
             allowClear
             onSearch={onSearch}
-            style={{ width: "70%" }}
+            style={{ width: "100%" }}
           />
           <Avatar
             style={{ backgroundColor: "#87d068" }}
@@ -97,7 +106,7 @@ export const LayoutApp = ({ children }: LayoutProps) => {
         <Footer style={{ textAlign: "center" }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
         </Footer>
-      </Layout>
+      </div>
     </Layout>
   );
 };

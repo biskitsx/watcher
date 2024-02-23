@@ -23,5 +23,27 @@ export const getTrendingMovies = async (limit: number) => {
       }
 }
 
+export const getUpcomingMovies = async (limit: number) => {
+    try {
+        // const url = 'https://api.themoviedb.org/3/trending/all/day?language=en-US';
+        const url = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
+        const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: AUTH_TOKEN
+        }
+        };
+
+        const res = await fetch(url, options);
+        const json = await res.json();
+        return json['results'].slice(0, limit);
+        
+      } catch (error) {
+        console.error('error:', error);
+      }
+}
+
+
 
 
