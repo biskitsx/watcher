@@ -23,7 +23,7 @@ export default async function Home() {
   return (
     <div className="container flex flex-col gap-6 w-full">
       <Carousel autoplay className="rounded-md overflow-hidden max-h-96">
-        {upcomingMovies.map((movie, index) => (
+        {upcomingMovies.map((movie: any, index: number) => (
           <div key={index}>
             <img
               src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
@@ -37,7 +37,7 @@ export default async function Home() {
       <div className="flex flex-col gap-4">
         <h1 className="font-semibold text-2xl">Trending</h1>
         <div className="flex gap-4">
-          {trendingMovies.map((movie, index) => (
+          {trendingMovies.map((movie: any, index: number) => (
             <Card
               key={index}
               hoverable
@@ -55,7 +55,7 @@ export default async function Home() {
       <div className="flex flex-col gap-4">
         <h1 className="font-semibold text-2xl">Upcoming</h1>
         <div className="flex gap-4">
-          {upcomingMovies.map((movie, index) => (
+          {upcomingMovies.map((movie: any, index: number) => (
             <Card
               key={index}
               hoverable
