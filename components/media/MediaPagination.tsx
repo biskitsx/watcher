@@ -5,6 +5,7 @@ interface MediaPaginationProps {
   items: any[];
   baseUrl: string;
   name: string;
+  type: "movies" | "series" | "anime";
 }
 export const MediaPagination = ({
   items,

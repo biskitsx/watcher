@@ -21,12 +21,14 @@ export default async function Home() {
       <MediaPagination
         baseUrl={tmdbImagesURL}
         items={trendingMovies}
-        name={"Trending"}
+        name="Trending"
+        type="movies"
       />
       <MediaPagination
         baseUrl={tmdbImagesURL}
         items={upcomingMovies}
-        name={"Upcoming"}
+        type="movies"
+        name="Upcoming"
       />
     </Container>
   );
