@@ -3,6 +3,8 @@ import { Inter, Poppins, Roboto } from "next/font/google";
 import "./globals.css";
 import { LayoutApp } from "@/components/LayoutApp";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -25,8 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AntdRegistry>
-        <body className={`${roboto.className} max-w-full overflow-x-hidden`}>
-          <LayoutApp>{children}</LayoutApp>
+        <body className={`${roboto.className} flex flex-col gap-6`}>
+          {/* <LayoutApp>
+            </LayoutApp> */}
+          <Navbar />
+          {children}
+          <Footer />
         </body>
       </AntdRegistry>
     </html>
