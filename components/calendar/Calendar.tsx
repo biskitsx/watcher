@@ -1,9 +1,6 @@
 "use client";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
-import interactionPlugin from "@fullcalendar/interaction";
-import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
-import timeGridPlugin from "@fullcalendar/timegrid";
 
 export default function Calendar() {
   return (
@@ -18,7 +15,7 @@ export default function Calendar() {
       headerToolbar={{
         left: "prev,next",
         center: "title",
-        right: "dayGridWeek,dayGridDay,dayGridMonth,",
+        right: "dayGridWeek,dayGridDay,dayGridMonth",
       }}
     />
   );
