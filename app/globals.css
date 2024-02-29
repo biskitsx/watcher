@@ -39,7 +39,7 @@ p {
   @apply font-normal text-sm text-slate-500
 }
 /* body {
-  @apply 
+  @apply bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-200 to-blue-400
 } */
 
 /* :root {
