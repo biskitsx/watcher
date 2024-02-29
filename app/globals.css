@@ -3,12 +3,44 @@
 @tailwind utilities;
 
 .container {
-    @apply mx-auto;
-    @apply px-4;
-    @apply sm:px-6;
-    @apply lg:px-8;
+  @apply w-10/12 
+  sm:w-[540px]
+  md:w-[720px]
+  lg:w-[960px]
+  xl:w-[1140px]
+  2xl:w-[1320px]
+  /* px-8 */
+  h-full
+  mx-auto
 }
 
+.active_link {
+  @apply border-b-2 border-accent
+}
+
+.inactive_link {
+  @apply border-b-2 border-transparent
+}
+
+h1 {
+  @apply font-medium text-xl
+}
+
+h2 {
+  @apply font-medium text-lg
+}
+
+h3 {
+  @apply font-medium text-base
+
+}
+
+p {
+  @apply font-normal text-sm text-slate-500
+}
+/* body {
+  @apply 
+} */
 
 /* :root {
   --foreground-rgb: 0, 0, 0;
