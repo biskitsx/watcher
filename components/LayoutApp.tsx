@@ -59,9 +59,9 @@ export const LayoutApp = ({ children }: LayoutProps) => {
     <Layout className="w-full">
       <Sider
         // collapsible
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
+        // collapsible
+        // collapsed={collapsed}
+        // onCollapse={(value) => setCollapsed(value)}
         breakpoint="lg"
         // style={{
         //   overflow: "auto",
@@ -77,7 +77,7 @@ export const LayoutApp = ({ children }: LayoutProps) => {
           {collapsed ? (
             <h1 className="font-bold text-white text-2xl">📸</h1>
           ) : (
-            <h1 className="font-bold text-white text-2xl">watcher 📸</h1>
+            <h1 className="font-bold text-white text-2xl">watcher </h1>
           )}
         </div>
         <Menu
@@ -90,7 +90,7 @@ export const LayoutApp = ({ children }: LayoutProps) => {
       <div className="container">
         <div className="h-16 flex items-center justify-between container gap-6">
           <Search
-            placeholder="input search text"
+            placeholder=""
             allowClear
             onSearch={onSearch}
             style={{ width: "100%" }}
