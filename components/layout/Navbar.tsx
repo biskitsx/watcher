@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { Logo } from "../Logo";
 
 interface NavbarProps {}
 export const Navbar = ({}: NavbarProps) => {
@@ -19,8 +20,8 @@ export const Navbar = ({}: NavbarProps) => {
       <div className="shadow-md fixed top-0 w-full z-10 bg-base-100">
         <div className="container">
           <div className="navbar justify-between flex p-0 items-center">
-            <Link href={"/"} className="text-xl font-bold">
-              watcher
+            <Link href={"/"}>
+              <Logo />
             </Link>
             <ul className="flex gap-2 font-normal text-xs sm:text-sm sm:gap-4">
               <li
@@ -69,6 +70,7 @@ export const Navbar = ({}: NavbarProps) => {
                   Anime
                 </Link>
               </li>
+              <span className="font-semibold">|</span>
               <li
                 className={
                   pathname === "/track" ? "active_link" : "inactive_link"

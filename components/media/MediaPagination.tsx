@@ -12,7 +12,7 @@ export const MediaPagination = ({
   baseUrl,
   name,
 }: MediaPaginationProps) => {
-  console.log(items);
+  // console.log(items);
   return (
     <div className="flex flex-col gap-2">
       <h1 className="font-medium text-xl">{name}</h1>
