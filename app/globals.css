@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap');
+
 
 .container {
   @apply w-10/12 
@@ -13,13 +15,19 @@
   h-full
   mx-auto
 }
+* {
+  /* font-family: 'Kanit', sans-serif; */
+  font-family: 'Poppins';
+  /* font-family: sans-serif; */
+}
+
 
 .active_link {
-  @apply border-b-2 border-accent
+  @apply border-b-2 border-primary hover:scale-105 transition-all
 }
 
 .inactive_link {
-  @apply border-b-2 border-transparent
+  @apply border-b-2 border-transparent hover:scale-105 transition-all
 }
 
 h1 {
@@ -41,6 +49,12 @@ p {
 /* body {
   @apply bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-200 to-blue-400
 } */
+
+.bg-custom {
+  /* @apply bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-orange-300 to-red-600 */
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(255,8,45,1) 0%, rgba(255,159,0,1) 100%);
+}
 
 /* :root {
   --foreground-rgb: 0, 0, 0;
