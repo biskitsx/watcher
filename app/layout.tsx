@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Poppins, Roboto } from "next/font/google";
 import "./globals.css";
-import { LayoutApp } from "@/components/LayoutApp";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
