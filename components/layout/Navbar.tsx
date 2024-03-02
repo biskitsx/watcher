@@ -9,18 +9,31 @@ export const Navbar = ({}: NavbarProps) => {
   // const router = useRouter();
   const pathname = usePathname();
   const [activeLink, setActiveLink] = useState<string | null>(null);
-  const HomeClassName = "bg-transparent text-base-100";
+  const [homeClassName, setHomeClassName] = useState(
+    "bg-transparent text-base-100"
+  );
   const OtherClassName = "bg-base-100 shadow-md";
   const handleLinkClick = (path: string) => {
     setActiveLink(path);
   };
 
+  if (pathname == "/") {
+    const changeColor = () => {
+      if (window.scrollY > 70) {
+        setHomeClassName(OtherClassName);
+      } else {
+        setHomeClassName("bg-transparent text-base-100");
+      }
+    };
+    window.addEventListener("scroll", changeColor);
+  }
+
   return (
     <div className="">
       {pathname != "/" && <div className="navbar bg-transparent my-2"></div>}
       <div
-        className={`fixed top-0 w-full z-10  transition-colors${
-          pathname == "/" ? HomeClassName : OtherClassName
+        className={`fixed top-0 w-full z-10  transition-colors  ${
+          pathname == "/" ? homeClassName : OtherClassName
         }`}
       >
         {/* <div className="shadow-md fixed top-0 w-full z-10 bg-base-100"> */}
