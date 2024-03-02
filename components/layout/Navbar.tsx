@@ -18,14 +18,16 @@ export const Navbar = ({}: NavbarProps) => {
   };
 
   if (pathname == "/") {
-    const changeColor = () => {
-      if (window.scrollY > 70) {
-        setHomeClassName(OtherClassName);
-      } else {
-        setHomeClassName("bg-transparent text-base-100");
-      }
-    };
-    window.addEventListener("scroll", changeColor);
+    if (typeof window !== "undefined") {
+      const changeColor = () => {
+        if (window.scrollY > 70) {
+          setHomeClassName(OtherClassName);
+        } else {
+          setHomeClassName("bg-transparent text-base-100");
+        }
+      };
+      window.addEventListener("scroll", changeColor);
+    }
   }
 
   return (
