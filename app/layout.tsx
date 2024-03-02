@@ -26,8 +26,8 @@ export default function RootLayout({
         />
       </head>
       <AntdRegistry>
-        {/* <body className={`flex flex-col gap-6`}> */}
-        <body className={`flex flex-col gap-6`}>
+        <body>
+          {/* <body className={`flex flex-col gap-6`}> */}
           {/* <LayoutApp>
             </LayoutApp> */}
           <Navbar />

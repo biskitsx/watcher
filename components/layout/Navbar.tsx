@@ -9,16 +9,22 @@ export const Navbar = ({}: NavbarProps) => {
   // const router = useRouter();
   const pathname = usePathname();
   const [activeLink, setActiveLink] = useState<string | null>(null);
-
+  const HomeClassName = "bg-transparent text-base-100";
+  const OtherClassName = "bg-base-100 shadow-md";
   const handleLinkClick = (path: string) => {
     setActiveLink(path);
   };
 
   return (
     <div className="">
-      <div className="navbar"></div>
-      <div className="shadow-md fixed top-0 w-full z-10 bg-base-100">
-        <div className="container">
+      {pathname != "/" && <div className="navbar bg-transparent my-2"></div>}
+      <div
+        className={`fixed top-0 w-full z-10  transition-colors${
+          pathname == "/" ? HomeClassName : OtherClassName
+        }`}
+      >
+        {/* <div className="shadow-md fixed top-0 w-full z-10 bg-base-100"> */}
+        <div className="px-8">
           <div className="navbar justify-between flex p-0 items-center">
             <Link href={"/"}>
               <Logo />
