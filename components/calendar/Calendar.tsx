@@ -11,15 +11,19 @@ export default function Calendar() {
       initialView="dayGridMonth"
       //   weekends={false}
       events={[
-        { title: "event 1", date: "2024-03-01" },
-        { title: "event 2", date: "2024-03-02" },
+        { title: "Spaceman", date: "2024-03-01", backgroundColor: "#1CBEC8" },
         {
-          title: "Meeting",
-          start: "2024-03-12T14:30:00",
-          extendedProps: {
-            status: "done",
-          },
+          title: "Code 8 Part",
+          date: "2024-03-02",
+          backgroundColor: "#1CBEC8",
         },
+        // {
+        //   title: "Poor Things",
+        //   start: "2024-03-12T14:30:00",
+        //   extendedProps: {
+        //     status: "done",
+        //   },
+        // },
       ]}
       headerToolbar={{
         left: "prev,next",
