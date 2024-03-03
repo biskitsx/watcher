@@ -20,8 +20,10 @@ export const MediaSlider = ({ items, baseUrl, name }: MediaSliderProps) => {
               <MediaCard
                 cover={`${baseUrl}/${media.poster_path}`}
                 key={index}
+                // บาง movies ไม่มี title แค่ใช้คำว่า name แทน
                 title={media.title ? media.title : media.name}
                 release_date={
+                  // บาง movies ไม่มี release_date แค่ใช้คำว่า first_air_date แทน
                   media.release_date ? media.release_date : media.first_air_date
                 }
               />
