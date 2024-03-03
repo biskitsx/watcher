@@ -4,7 +4,7 @@ import Image from "next/image";
 import { getTrendingMovies, getUpcomingMovies } from "@/action/movies";
 import { Suspense } from "react";
 import { Navbar } from "@/components/layout/Navbar";
-import { MediaPagination } from "@/components/media/MediaPagination";
+import { MediaSlider } from "@/components/media/MediaSlider";
 import { tmdbImagesURL } from "@/data/baseUrl";
 import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { Container } from "@/components/layout/Container";
@@ -19,14 +19,14 @@ export default async function Home() {
     <PageContainer>
       <HomeCarousel items={trendingMovies} />
       {/* <MediaCarousel items={upcomingMovies} /> */}
-      <MediaPagination
+      <MediaSlider
         baseUrl={tmdbImagesURL}
         items={trendingMovies}
         name="Movies"
         type="movies"
         key={0}
       />
-      <MediaPagination
+      <MediaSlider
         baseUrl={tmdbImagesURL}
         items={upcomingMovies}
         type="movies"

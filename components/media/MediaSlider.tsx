@@ -2,24 +2,20 @@ import { Card } from "antd";
 import { MediaCard } from "./MediaCard";
 import { Container } from "../layout/Container";
 
-interface MediaPaginationProps {
+interface MediaSliderProps {
   items: any[];
   baseUrl: string;
   name: string;
   type: "movies" | "series" | "anime";
 }
-export const MediaPagination = ({
-  items,
-  baseUrl,
-  name,
-}: MediaPaginationProps) => {
+export const MediaSlider = ({ items, baseUrl, name }: MediaSliderProps) => {
   // console.log(items);
   return (
     <Container>
       <div className="flex flex-col gap-2">
         <h1 className="font-bold text-2xl">{name} ...</h1>
         <div className="py-2">
-          <div className="overflow-x-auto  whitespace-nowrap space-x-5 align-top bg-scroll scrollable-element">
+          <div className="overflow-x-auto  whitespace-nowrap space-x-5 align-top bg-scroll scrollable-element overflow-y-hidden">
             {items.map((media: any, index: number) => (
               <MediaCard
                 cover={`${baseUrl}/${media.poster_path}`}
