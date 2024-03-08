@@ -63,6 +63,9 @@ body {
 }
 
 
+.ForumCategoryCard:hover img {
+  @apply brightness-90
+}
 
 
 /* :root {
