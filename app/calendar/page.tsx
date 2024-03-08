@@ -1,11 +1,15 @@
 import Calendar from "@/components/calendar/Calendar";
 import { Container } from "@/components/layout/Container";
+import { getTrendingMovies, getUpcomingMovies } from "@/action/movies";
+
 import React from "react";
 
-function Page() {
+async function Page() {
+  const upcomingMovies = await getUpcomingMovies(12);
+
   return (
     <Container>
-      <Calendar />
+      <Calendar items={upcomingMovies} />
     </Container>
   );
 }
