@@ -26,10 +26,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
-        <script
+        {/* <script
           src="https://kit.fontawesome.com/1c3b4fe1a8.js"
           crossOrigin="anonymous"
-        ></script>
+        ></script> */}
       </head>
       <AntdRegistry>
         <body>
