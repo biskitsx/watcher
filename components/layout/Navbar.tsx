@@ -91,31 +91,31 @@ export const Navbar = ({}: NavbarProps) => {
                   Anime
                 </Link>
               </li>
-              <span className="font-semibold">|</span>
+              <span className="">|</span>
               <li
                 className={
-                  pathname === "/track" ? "active_link" : "inactive_link"
+                  pathname === "/calendar" ? "active_link" : "inactive_link"
                 }
               >
                 <Link
-                  href={"/track"}
+                  href={"/calendar"}
                   passHref
-                  onClick={() => handleLinkClick("/track")}
+                  onClick={() => handleLinkClick("/calendar")}
                 >
-                  Track
+                  Calendar
                 </Link>
               </li>
               <li
                 className={
-                  pathname === "/review" ? "active_link" : "inactive_link"
+                  pathname === "/forum" ? "active_link" : "inactive_link"
                 }
               >
                 <Link
-                  href={"/review"}
+                  href={"/forum"}
                   passHref
-                  onClick={() => handleLinkClick("/review")}
+                  onClick={() => handleLinkClick("/forum")}
                 >
-                  Review
+                  Forum
                 </Link>
               </li>
             </ul>
@@ -152,7 +152,7 @@ export const Navbar = ({}: NavbarProps) => {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                  className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content"
                 >
                   <li>
                     <a className="justify-between">

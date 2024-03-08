@@ -4,6 +4,8 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+// import { config } from "@fortawesome/free-solid-svg-icons";
+// config.autoAddCss = false;
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +26,13 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
+        <script
+          src="https://kit.fontawesome.com/1c3b4fe1a8.js"
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <AntdRegistry>
         <body>
-          {/* <body className={`flex flex-col gap-6`}> */}
-          {/* <LayoutApp>
-            </LayoutApp> */}
           <Navbar />
           {children}
           <Footer />
