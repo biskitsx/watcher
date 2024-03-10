@@ -4,8 +4,6 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-// import { config } from "@fortawesome/free-solid-svg-icons";
-// config.autoAddCss = false;
 
 const inter = Inter({ subsets: ["latin"] });
 
