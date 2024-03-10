@@ -13,7 +13,7 @@ export const getJikan = async (path: string, limit: number) => {
         const res = await fetch(url, options);
         const json = ((await res.json())["data"] as any[]);
         // const json = ((await res.json())["data"] as any[]).slice(0, limit);
-        const media = json.map((item: any) => {
+        const media = json?.map((item: any) => {
           const handled_data: MediaInfoProps = {
             poster_path: item.images.jpg.image_url,
             backdrop_path: item.trailer.images.maximum_image_url,

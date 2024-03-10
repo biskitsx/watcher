@@ -6,14 +6,13 @@ import { BreadcrumbApp } from "@/components/BreadCrumb";
 
 async function Page() {
   const trendingAll = await getTrendingAll(12);
-
   return (
     <Container>
       <BreadcrumbApp items={["Home", "Forums"]} />
       <div className="grid grid-cols-2 gap-12">
         <ForumCategoryCard
           category="Movies Discussion"
-          cover={trendingAll[4].backdrop_path}
+          cover={trendingAll[4]?.backdrop_path}
         />
         <ForumCategoryCard
           category="Anime Discussion"

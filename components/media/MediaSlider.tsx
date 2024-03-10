@@ -35,7 +35,7 @@ export const MediaSlider = ({ items, name, type, href }: MediaSliderProps) => {
         </Link>
         <div className="py-2">
           <div className="overflow-x-auto  whitespace-nowrap space-x-5 align-top bg-scroll scrollable-element overflow-y-hidden">
-            {items.map((media, index: number) => {
+            {items?.map((media, index: number) => {
               return (
                 <MediaCard
                   cover={media.poster_path}

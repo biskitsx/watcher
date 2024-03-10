@@ -14,7 +14,7 @@ export default async function Home() {
       <MediaCarousel items={upcomingMovies} />
       <MediaSlider
         href="#"
-        items={recommendMovies.slice(12, 24)}
+        items={recommendMovies?.slice(12, 24)}
         name="Recommend For You"
         type="movies"
       />

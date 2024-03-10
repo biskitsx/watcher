@@ -9,13 +9,15 @@ interface CalendarProp {
 }
 
 export default function Calendar({ items }: CalendarProp) {
-  const eventsItem = items.map((item) => {
+  const eventsItem = items?.map((item) => {
     return {
       title: item.title,
       allDay: false,
       date: item.release_date,
     };
   });
+
+  console.log(eventsItem);
   return (
     <FullCalendar
       plugins={[dayGridPlugin, listPlugin]}

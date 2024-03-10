@@ -16,7 +16,7 @@ export const BreadcrumbApp = ({ items }: BreadcrumbAppProps) => (
     //     title: "Forums",
     //   },
     // ]}
-    items={items.map((item) => {
+    items={items?.map((item) => {
       return { title: item };
     })}
   />

@@ -66,7 +66,7 @@ interface TrackTableProps {
 // convert media to data
 const convertMediaToData = (media: MediaInfoProps[]) => {
   const randomStatus = ["watching", "watched", "planned", "dropped"];
-  const data: DataType[] = media.map((item, idx) => {
+  const data: DataType[] = media?.map((item, idx) => {
     const status =
       randomStatus[Math.floor(Math.random() * randomStatus.length)];
     return {

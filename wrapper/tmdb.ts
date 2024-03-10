@@ -17,7 +17,7 @@ export const getTMDb = async (path: string, limit: number) => {
         const json = ((await res.json())['results'] as any[]);
         // const json = ((await res.json())['results'] as any[]).slice(0, limit) as any[];
 
-        const media = json.map((item: any) => {
+        const media = json?.map((item: any) => {
           const handled_data: MediaInfoProps = {
             poster_path: `${tmdbImagesURL}/${item.poster_path}`,
             backdrop_path: `${tmdbImagesURL}/${item.backdrop_path}`,

@@ -9,7 +9,7 @@ export const MediaCarousel = ({ items }: MediaCarouselProps) => {
       autoplay
       className="rounded-md overflow-hidden max-h-96 shadow-md"
     >
-      {items.map((movie: any, index: number) => {
+      {items?.map((movie: any, index: number) => {
         if (movie.backdrop_path) {
           return (
             <div key={index} className="relative">
