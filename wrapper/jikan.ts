@@ -11,7 +11,8 @@ export const getJikan = async (path: string, limit: number) => {
         };
 
         const res = await fetch(url, options);
-        const json = ((await res.json())["data"] as any[]).slice(0, limit);
+        const json = ((await res.json())["data"] as any[]);
+        // const json = ((await res.json())["data"] as any[]).slice(0, limit);
         const handled = json.map((item: any) => {
           // attach a new data to each item
           const handled_data: HandledDataProps = {
