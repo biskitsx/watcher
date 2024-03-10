@@ -9,16 +9,20 @@ export const MediaCarousel = ({ items }: MediaCarouselProps) => {
       autoplay
       className="rounded-md overflow-hidden max-h-96 shadow-md"
     >
-      {items.map((movie: any, index: number) => (
-        <div key={index} className="relative">
-          <img
-            src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-            alt={movie.title}
-            width={1920}
-            height={1080}
-          />
-        </div>
-      ))}
+      {items.map((movie: any, index: number) => {
+        if (movie.handled_data.backdrop_path) {
+          return (
+            <div key={index} className="relative">
+              <img
+                src={movie.handled_data.backdrop_path}
+                alt={movie.handled_data.title}
+                width={1920}
+                height={1080}
+              />
+            </div>
+          );
+        }
+      })}
     </Carousel>
   );
 };
