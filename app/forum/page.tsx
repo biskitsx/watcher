@@ -5,7 +5,7 @@ import { tmdbImagesURL } from "@/data/baseUrl";
 import { BreadcrumbApp } from "@/components/BreadCrumb";
 
 async function Page() {
-  const trendingAll = (await getTrendingAll(12)) as any[];
+  const trendingAll = await getTrendingAll(12);
 
   return (
     <Container>
@@ -13,8 +13,7 @@ async function Page() {
       <div className="grid grid-cols-2 gap-12">
         <ForumCategoryCard
           category="Movies Discussion"
-          cover={trendingAll[4].handled_data.backdrop_path}
-          // cover={`${tmdbImagesURL}/${trendingAll[4].handled_data.backdrop_path}`}
+          cover={trendingAll[4].backdrop_path}
         />
         <ForumCategoryCard
           category="Anime Discussion"

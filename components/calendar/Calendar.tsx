@@ -3,8 +3,9 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 // import listPlugin from "@fullcalendar/list
 import listPlugin from "@fullcalendar/list";
+import { MediaInfoProps } from "@/wrapper/handled";
 interface CalendarProp {
-  items: any[];
+  items: MediaInfoProps[];
 }
 
 export default function Calendar({ items }: CalendarProp) {

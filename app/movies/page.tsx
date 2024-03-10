@@ -6,9 +6,9 @@ import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { Container } from "@/components/layout/Container";
 
 export default async function Home() {
-  const trendingMovies = (await getTrendingAll(12)) as any[];
-  const upcomingMovies = (await getUpcomingMovies(12)) as any[];
-  const recommendMovies = (await getTrendingAll(24)) as any[];
+  const trendingMovies = await getTrendingAll(12);
+  const upcomingMovies = await getUpcomingMovies(12);
+  const recommendMovies = await getTrendingAll(24);
   return (
     <Container>
       <MediaCarousel items={upcomingMovies} />

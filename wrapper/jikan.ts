@@ -1,4 +1,4 @@
-import { HandledDataProps} from "./handled"
+import { HandledDataProps, MediaInfoProps} from "./handled"
 
 export const getJikan = async (path: string, limit: number) => {
     try {
@@ -13,18 +13,16 @@ export const getJikan = async (path: string, limit: number) => {
         const res = await fetch(url, options);
         const json = ((await res.json())["data"] as any[]);
         // const json = ((await res.json())["data"] as any[]).slice(0, limit);
-        const handled = json.map((item: any) => {
-          // attach a new data to each item
-          const handled_data: HandledDataProps = {
+        const media = json.map((item: any) => {
+          const handled_data: MediaInfoProps = {
             poster_path: item.images.jpg.image_url,
             backdrop_path: item.trailer.images.maximum_image_url,
             release_date: item.aired.to,
             title: item.title
           }
-          item.handled_data = handled_data
-          return item
+          return handled_data
         })
-        return handled
+        return media
         
       } catch (error) {
         console.error('error:', error);

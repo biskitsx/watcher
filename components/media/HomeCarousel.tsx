@@ -1,18 +1,19 @@
 import { Carousel, Card, Button } from "antd";
 import { Logo } from "../Logo";
+import { MediaInfoProps } from "@/wrapper/handled";
 
 interface HomeCarouselProps {
-  items: any[];
+  items: MediaInfoProps[];
 }
 export const HomeCarousel = ({ items }: HomeCarouselProps) => {
   // console.log(items);
   return (
     <div className="relative max-h-[60vh]  overflow-hidden">
       <Carousel autoplay className="  shadow-md brightness-50 max-h-[60vh]">
-        {items.map((movie: any, index: number) => (
+        {items.map((movie, index: number) => (
           <div key={index} className="relative">
             <img
-              src={movie.handled_data.backdrop_path}
+              src={movie.backdrop_path}
               alt={movie.title}
               // width={1920}
               // height={1080}

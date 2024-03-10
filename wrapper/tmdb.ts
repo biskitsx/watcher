@@ -1,5 +1,5 @@
 import { TMDB_TOKEN } from "@/data/baseUrl";
-import { HandledDataProps} from "./handled"
+import { HandledDataProps, MediaInfoProps} from "./handled"
 const tmdbImagesURL = "https://image.tmdb.org/t/p/original";
 
 export const getTMDb = async (path: string, limit: number) => {
@@ -17,8 +17,8 @@ export const getTMDb = async (path: string, limit: number) => {
         const json = ((await res.json())['results'] as any[]);
         // const json = ((await res.json())['results'] as any[]).slice(0, limit) as any[];
 
-        const handled = json.map((item: any) => {
-          const handled_data: HandledDataProps = {
+        const media = json.map((item: any) => {
+          const handled_data: MediaInfoProps = {
             poster_path: `${tmdbImagesURL}/${item.poster_path}`,
             backdrop_path: `${tmdbImagesURL}/${item.backdrop_path}`,
             release_date: item.release_date
@@ -26,10 +26,9 @@ export const getTMDb = async (path: string, limit: number) => {
             : item.first_air_date,
             title: item.title ? item.title : item.name
           }
-          item.handled_data = handled_data
-          return item
+          return handled_data
         })
-        return handled as any[];
+        return media
         
       } catch (error) {
         console.error('error:', error);

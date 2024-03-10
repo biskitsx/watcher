@@ -1,11 +1,12 @@
 "use server"
 
+import { MediaInfoProps } from "@/wrapper/handled";
 import { getTMDb } from "../wrapper/tmdb";
 
 export const getAiringTodaySeries = async (limit: number) => {
-    const json = await getTMDb("tv/airing_today?language=en-US&page=1", limit)
+    const res = await getTMDb("tv/airing_today?language=en-US&page=1", limit)
+    return res as MediaInfoProps[]
 
-    return json as any[]; 
 }
 
 // export const getUpcomingMovies = async (limit: number) => {

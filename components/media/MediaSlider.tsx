@@ -6,9 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleChevronRight } from "@fortawesome/free-solid-svg-icons/faCircleChevronRight";
 import Link from "next/link";
 import { useState } from "react";
+import { MediaInfoProps } from "@/wrapper/handled";
 
 interface MediaSliderProps {
-  items: any[];
+  items: MediaInfoProps[];
   name: string;
   type: "movies" | "series" | "anime";
   href: string;
@@ -34,13 +35,13 @@ export const MediaSlider = ({ items, name, type, href }: MediaSliderProps) => {
         </Link>
         <div className="py-2">
           <div className="overflow-x-auto  whitespace-nowrap space-x-5 align-top bg-scroll scrollable-element overflow-y-hidden">
-            {items.map((media: any, index: number) => {
+            {items.map((media, index: number) => {
               return (
                 <MediaCard
-                  cover={media.handled_data.poster_path}
+                  cover={media.poster_path}
                   key={index}
-                  title={media.handled_data.title}
-                  release_date={media.handled_data.release_date}
+                  title={media.title}
+                  release_date={media.release_date}
                 />
               );
             })}

@@ -2,6 +2,7 @@
 import React from "react";
 import { Table } from "antd";
 import type { TableProps } from "antd";
+import { MediaInfoProps } from "@/wrapper/handled";
 
 interface DataType {
   key: string;
@@ -59,20 +60,20 @@ const columns: TableProps<DataType>["columns"] = [
 // ];
 
 interface TrackTableProps {
-  media: any[];
+  media: MediaInfoProps[];
 }
 
 // convert media to data
-const convertMediaToData = (media: any[]) => {
+const convertMediaToData = (media: MediaInfoProps[]) => {
   const randomStatus = ["watching", "watched", "planned", "dropped"];
   const data: DataType[] = media.map((item, idx) => {
     const status =
       randomStatus[Math.floor(Math.random() * randomStatus.length)];
     return {
       key: (idx + 1).toString(),
-      image: item.handled_data.backdrop_path,
+      image: item.backdrop_path,
       status: status,
-      title: item.handled_data.title,
+      title: item.title,
     } as DataType;
   });
   return data;
