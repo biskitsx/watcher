@@ -3,21 +3,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "../Logo";
+import { LiLink } from "./LiLink";
 
 interface NavbarProps {}
 export const Navbar = ({}: NavbarProps) => {
-  // const router = useRouter();
-  const pathname = usePathname();
-  const [activeLink, setActiveLink] = useState<string | null>(null);
+  const currentPathname = usePathname();
   const [homeClassName, setHomeClassName] = useState(
     "bg-transparent text-base-100"
   );
   const OtherClassName = "bg-base-100 shadow-md";
-  const handleLinkClick = (path: string) => {
-    setActiveLink(path);
-  };
 
-  if (pathname == "/") {
+  if (currentPathname == "/") {
     if (typeof window !== "undefined") {
       const changeColor = () => {
         if (window.scrollY > 70) {
@@ -31,11 +27,13 @@ export const Navbar = ({}: NavbarProps) => {
   }
 
   return (
-    <div className="">
-      {pathname != "/" && <div className="navbar bg-transparent my-2"></div>}
+    <header className="">
+      {currentPathname != "/" && (
+        <div className="navbar bg-transparent my-2"></div>
+      )}
       <div
         className={`fixed top-0 w-full z-10  transition-colors  ${
-          pathname == "/" ? homeClassName : OtherClassName
+          currentPathname == "/" ? homeClassName : OtherClassName
         }`}
       >
         {/* <div className="shadow-md fixed top-0 w-full z-10 bg-base-100"> */}
@@ -45,92 +43,15 @@ export const Navbar = ({}: NavbarProps) => {
               <Logo />
             </Link>
             <ul className="flex gap-2 font-normal text-xs sm:text-sm sm:gap-4">
-              <li
-                className={pathname === "/" ? "active_link" : "inactive_link"}
-              >
-                <Link href={"/"} passHref onClick={() => handleLinkClick("/")}>
-                  Home
-                </Link>
-              </li>
-              <li
-                className={
-                  pathname === "/movies" ? "active_link" : "inactive_link"
-                }
-              >
-                <Link
-                  href={"/movies"}
-                  passHref
-                  onClick={() => handleLinkClick("/movies")}
-                >
-                  Movies
-                </Link>
-              </li>
-              <li
-                className={
-                  pathname === "/series" ? "active_link" : "inactive_link"
-                }
-              >
-                <Link
-                  href={"/series"}
-                  passHref
-                  onClick={() => handleLinkClick("/series")}
-                >
-                  Series
-                </Link>
-              </li>
-              <li
-                className={
-                  pathname === "/anime" ? "active_link" : "inactive_link"
-                }
-              >
-                <Link
-                  href={"/anime"}
-                  passHref
-                  onClick={() => handleLinkClick("/anime")}
-                >
-                  Anime
-                </Link>
-              </li>
+              <LiLink currentPathname={currentPathname} pathname="home" />
+              <LiLink currentPathname={currentPathname} pathname="movies" />
+              <LiLink currentPathname={currentPathname} pathname="series" />
+              <LiLink currentPathname={currentPathname} pathname="anime" />
               <span className="">|</span>
-              <li
-                className={
-                  pathname === "/calendar" ? "active_link" : "inactive_link"
-                }
-              >
-                <Link
-                  href={"/calendar"}
-                  passHref
-                  onClick={() => handleLinkClick("/calendar")}
-                >
-                  Calendar
-                </Link>
-              </li>
-              <li
-                className={
-                  pathname === "/forum" ? "active_link" : "inactive_link"
-                }
-              >
-                <Link
-                  href={"/forum"}
-                  passHref
-                  onClick={() => handleLinkClick("/forum")}
-                >
-                  Forum
-                </Link>
-              </li>
-              <li
-                className={
-                  pathname === "/track" ? "active_link" : "inactive_link"
-                }
-              >
-                <Link
-                  href={"/track"}
-                  passHref
-                  onClick={() => handleLinkClick("/track")}
-                >
-                  Track
-                </Link>
-              </li>
+              <LiLink currentPathname={currentPathname} pathname="recommend" />
+              <LiLink currentPathname={currentPathname} pathname="calendar" />
+              <LiLink currentPathname={currentPathname} pathname="forum" />
+              <LiLink currentPathname={currentPathname} pathname="track" />
             </ul>
             <div className="flex-none">
               <button className="btn btn-ghost btn-circle">
@@ -185,6 +106,6 @@ export const Navbar = ({}: NavbarProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };

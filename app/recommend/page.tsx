@@ -11,24 +11,19 @@ async function Page() {
       <BreadcrumbApp />
       <div className="grid grid-cols-2 gap-12">
         <ForumCategoryCard
-          category="Movies Discussion"
+          category="Movies Recommendation"
           cover={trendingAll[4]?.backdrop_path}
-          href="/forum/movies"
+          href="/recommend/movies"
         />
         <ForumCategoryCard
-          category="Anime Discussion"
+          category="Anime Recommendation"
           cover={`https://digital-trans.asia/storage/app/uploads/public/64e/4ed/449/64e4ed4491c23348209561.jpg`}
-          href="/forum/anime"
+          href="/recommend/anime"
         />
         <ForumCategoryCard
-          category="Series Discussion"
+          category="Series Recommendation"
           cover={`https://m.media-amazon.com/images/S/pv-target-images/715cf83eecae70af83c4c354a341363cf9177a7940d1893cdba2ce8c7ab29aa4.jpg`}
-          href="/forum/series"
-        />
-        <ForumCategoryCard
-          category="General Discussion"
-          cover={`https://static0.colliderimages.com/wordpress/wp-content/uploads/2023/04/25-best-action-movies-of-all-time-ranked.jpg`}
-          href="/forum/general"
+          href="/recommend/series"
         />
       </div>
     </Container>

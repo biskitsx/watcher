@@ -10,7 +10,7 @@ export const MediaCard = ({ cover, title, release_date }: MediaCardProps) => {
   const date = new Date(release_date);
   const formattedDate = format(date, "dd MMMM yyyy");
   return (
-    <div className="w-[185px] rounded-md  inline-block cursor-pointer align-top">
+    <div className="w-[180px] rounded-md  inline-block cursor-pointer align-top">
       <div className="rounded-md shadow-md overflow-hidden">
         <img
           src={cover}

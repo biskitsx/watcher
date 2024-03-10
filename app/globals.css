@@ -24,6 +24,7 @@
 
 .active_link {
   @apply border-b-2 hover:text-[#f79552] transition-all border-[#1CBEC8];
+  
 }
 
 .inactive_link {
