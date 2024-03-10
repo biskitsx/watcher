@@ -7,7 +7,6 @@ import { getSearchAnime, getTopAnime } from "@/action/anime";
 export default async function Home() {
   const topAnime = await getTopAnime(12);
   const search = await getSearchAnime("naruto");
-  console.log(search);
   return (
     <Container>
       <MediaCarousel items={topAnime} />

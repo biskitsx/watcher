@@ -14,7 +14,7 @@ export const getTMDb = async (path: string, limit: number) => {
         };
 
         const res = await fetch(url, options);
-        const json = (await res.json())['results'].slice(0, limit) as any[];
+        const json = ((await res.json())['results'] as any[]).slice(0, limit) as any[];
 
         const handled = json.map((item: any) => {
           const handled_data: HandledDataProps = {
