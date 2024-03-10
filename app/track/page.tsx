@@ -10,7 +10,7 @@ async function Page() {
 
   return (
     <Container>
-      <BreadcrumbApp items={["Home", "Track"]} />
+      <BreadcrumbApp />
       <TrackTable media={trendingMovies} />
     </Container>
   );

@@ -10,7 +10,7 @@ async function Page() {
 
   return (
     <Container>
-      <BreadcrumbApp items={["Home", "Calendars"]} />
+      <BreadcrumbApp />
       <Calendar items={upcomingMovies} />
     </Container>
   );
