@@ -1,35 +1,33 @@
 // "use client";
-
-import { getTrendingAll, getUpcomingMovies } from "@/action/movies";
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { Container } from "@/components/layout/Container";
+import { getSearchAnime, getTopAnime } from "@/action/anime";
 
 export default async function Home() {
-  const trendingMovies = await getTrendingAll(12);
-  const upcomingMovies = await getUpcomingMovies(12);
-  const recommendMovies = await getTrendingAll(24);
+  const topAnime = await getTopAnime(12);
+  const search = await getSearchAnime("naruto");
   return (
     <Container>
-      <MediaCarousel items={upcomingMovies} />
+      <MediaCarousel items={topAnime} />
       <MediaSlider
         href="#"
-        items={recommendMovies?.slice(12, 24)}
-        name="Recommend For You"
-        type="movies"
+        items={topAnime.slice(0, 12)}
+        name="Top anime"
+        type="anime"
       />
-      <MediaSlider
-        href="#"
+      {/* <MediaSlider
+        baseUrl={tmdbImagesURL}
         items={trendingMovies}
         name="Trending"
         type="movies"
       />
       <MediaSlider
-        href="#"
+        baseUrl={tmdbImagesURL}
         items={upcomingMovies}
         type="movies"
         name="Upcoming"
-      />
+      /> */}
     </Container>
   );
 }

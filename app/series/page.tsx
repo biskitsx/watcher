@@ -1,35 +1,38 @@
 // "use client";
 
+import Image from "next/image";
 import { getTrendingAll, getUpcomingMovies } from "@/action/movies";
+import { Suspense } from "react";
+import { Navbar } from "@/components/layout/Navbar";
 import { MediaSlider } from "@/components/media/MediaSlider";
+import { tmdbImagesURL } from "@/data/baseUrl";
 import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { Container } from "@/components/layout/Container";
+import { getAiringTodaySeries } from "@/action/series";
 
 export default async function Home() {
-  const trendingMovies = await getTrendingAll(12);
-  const upcomingMovies = await getUpcomingMovies(12);
-  const recommendMovies = await getTrendingAll(24);
+  const airingTodaySeries = await getAiringTodaySeries(12);
   return (
     <Container>
-      <MediaCarousel items={upcomingMovies} />
+      <MediaCarousel items={airingTodaySeries} />
       <MediaSlider
         href="#"
-        items={recommendMovies?.slice(12, 24)}
-        name="Recommend For You"
-        type="movies"
+        items={airingTodaySeries.slice(0, 12)}
+        name="Airing Today Series"
+        type="series"
       />
-      <MediaSlider
-        href="#"
+      {/* <MediaSlider
+        baseUrl={tmdbImagesURL}
         items={trendingMovies}
         name="Trending"
         type="movies"
       />
       <MediaSlider
-        href="#"
+        baseUrl={tmdbImagesURL}
         items={upcomingMovies}
         type="movies"
         name="Upcoming"
-      />
+      /> */}
     </Container>
   );
 }

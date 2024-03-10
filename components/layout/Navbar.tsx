@@ -118,6 +118,19 @@ export const Navbar = ({}: NavbarProps) => {
                   Forum
                 </Link>
               </li>
+              <li
+                className={
+                  pathname === "/track" ? "active_link" : "inactive_link"
+                }
+              >
+                <Link
+                  href={"/track"}
+                  passHref
+                  onClick={() => handleLinkClick("/track")}
+                >
+                  Track
+                </Link>
+              </li>
             </ul>
             <div className="flex-none">
               <button className="btn btn-ghost btn-circle">
