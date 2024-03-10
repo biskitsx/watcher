@@ -20,6 +20,7 @@ interface MediaTapsProps {
   trendingAll: MediaInfoProps[];
 }
 
+// TODO - ทำให้ component ใชช้งานได้โดยยส่ง props เข้ามาเป็น TabsProps
 export const MediaTaps = ({ trendingAll }: MediaTapsProps) => {
   const items: TabsProps["items"] = [
     {
