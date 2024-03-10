@@ -15,16 +15,6 @@ async function Page() {
       <BreadcrumbApp />
       <h1 className="text-3xl">Movies Recommendation</h1>
       <MediaTaps trendingAll={trendingAll} />
-      {/* <div className="flex flex-wrap gap-6 justify-between">
-        {trendingAll &&
-          trendingAll.map((movie) => (
-            <MediaCard
-              cover={movie.poster_path}
-              title={movie.title}
-              release_date={movie.release_date}
-            />
-          ))}
-      </div> */}
     </Container>
   );
 }

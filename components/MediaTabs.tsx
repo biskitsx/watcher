@@ -29,8 +29,9 @@ export const MediaTaps = ({ trendingAll }: MediaTapsProps) => {
       children: (
         <div className="flex flex-wrap gap-6 justify-between">
           {trendingAll &&
-            trendingAll.map((movie) => (
+            trendingAll.map((movie, idx) => (
               <MediaCard
+                key={idx}
                 cover={movie.poster_path}
                 title={movie.title}
                 release_date={movie.release_date}
