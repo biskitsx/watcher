@@ -8,7 +8,10 @@ async function Page() {
   const trendingAll = await getTrendingAll(12);
   return (
     <Container>
-      <BreadcrumbApp />
+      <div className="flex gap-2 flex-col">
+        <BreadcrumbApp />
+        <h1 className="text-3xl font-semibold">Forum</h1>
+      </div>
       <div className="grid grid-cols-2 gap-12">
         <ForumCategoryCard
           category="Movies Discussion"

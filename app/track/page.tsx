@@ -10,7 +10,10 @@ async function Page() {
 
   return (
     <Container>
-      <BreadcrumbApp />
+      <div className="flex gap-2 flex-col">
+        <BreadcrumbApp />
+        <h1 className="text-3xl font-semibold">Track</h1>
+      </div>
       <TrackTable media={trendingMovies} />
     </Container>
   );

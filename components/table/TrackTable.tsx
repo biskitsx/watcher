@@ -9,6 +9,7 @@ interface DataType {
   image: string;
   title: string;
   status: "watching" | "watched" | "planned" | "dropped";
+  type: "movie" | "series" | "anime";
   tags?: string;
 }
 
@@ -24,12 +25,15 @@ const columns: TableProps<DataType>["columns"] = [
     // className: "column-money",
     dataIndex: "image",
     render: (img_url) => <img src={img_url} alt={img_url} className="w-full" />,
-    width: 100,
-    // align: "right",
+    width: 120,
   },
   {
     title: "Title",
     dataIndex: "title",
+  },
+  {
+    title: "Type",
+    dataIndex: "type",
   },
   {
     title: "Status",
@@ -65,15 +69,17 @@ interface TrackTableProps {
 
 // convert media to data
 const convertMediaToData = (media: MediaInfoProps[]) => {
-  const randomStatus = ["watching", "watched", "planned", "dropped"];
+  const statuses = ["watching", "watched", "planned", "dropped"];
+  const types = ["movie", "series", "anime"];
   const data: DataType[] = media?.map((item, idx) => {
-    const status =
-      randomStatus[Math.floor(Math.random() * randomStatus.length)];
+    const status = statuses[Math.floor(Math.random() * statuses.length)];
+    const type = types[Math.floor(Math.random() * types.length)];
     return {
       key: (idx + 1).toString(),
       image: item.backdrop_path,
       status: status,
       title: item.title,
+      type: type,
     } as DataType;
   });
   return data;
@@ -86,8 +92,9 @@ export const TrackTable = ({ media }: TrackTableProps) => {
       columns={columns}
       dataSource={data}
       bordered
-      title={() => "Your Track"}
-      footer={() => ""}
+      // title={() => "Your Track"}
+      // footer={() => ""}
+      pagination={{ pageSize: 5 }}
     />
   );
 };

@@ -12,9 +12,11 @@ async function Page() {
 
   return (
     <Container>
-      <BreadcrumbApp />
-      <h1 className="text-3xl">Movies Recommendation</h1>
-      <MediaTaps trendingAll={trendingAll} />
+      <div className="flex gap-2 flex-col">
+        <BreadcrumbApp />
+        <h1 className="text-3xl font-semibold">Movies Recommendation</h1>
+        <MediaTaps trendingAll={trendingAll} />
+      </div>
     </Container>
   );
 }
