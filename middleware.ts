@@ -1,9 +1,10 @@
-import { getToken, NextRequest, NextApiRequest } from "next-auth/jwt";
+import { getToken } from "next-auth/jwt";
 import { IncomingMessage } from "http";
 import { getSession } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT, authRoutes, privateRoutes, publicRoutes } from "./route";
+import { NextRequest } from "next/server";
 
-export async function middleware(request: IncomingMessage & { cookies: Partial<{ [key: string]: string }> } | NextRequest | NextApiRequest) {
+export async function middleware(request:  NextRequest) {
     const user = await getToken({
         req: request,
         secret: process.env.JWT_SECRET,

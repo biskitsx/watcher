@@ -6,9 +6,7 @@ import { useEffect } from "react";
 
 export default function Profile() {
   const { data: session, status } = useSession();
-
   const router = useRouter();
-  // console.log({ session, status });
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/");
@@ -25,7 +23,7 @@ export default function Profile() {
             Welcome, <b>{session.user.name}!</b>
           </p>
           <p>Email: {session.user.email}</p>
-          <p>Role: {session.user.role}</p>
+          <p>Role: {session.user?.role}</p>
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
             className="w-full bg-blue-500 text-white py-2 rounded"
