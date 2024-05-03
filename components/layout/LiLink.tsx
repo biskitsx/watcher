@@ -6,7 +6,7 @@ interface LiLinkProps {
 }
 export const LiLink = ({ currentPathname, pathname }: LiLinkProps) => {
   const firstPathname = currentPathname.split("/")[1];
-  console.log({ currentPathname, pathname, firstPathname });
+  // console.log({ currentPathname, pathname, firstPathname });
   let liClassName =
     `/${firstPathname}` === `/${pathname}` ? "active_link" : "inactive_link";
   if (firstPathname === "" && pathname === "home") {

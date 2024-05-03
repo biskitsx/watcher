@@ -17,7 +17,6 @@ export default function Calendar({ items }: CalendarProp) {
     };
   });
 
-  console.log(eventsItem);
   return (
     <FullCalendar
       plugins={[dayGridPlugin, listPlugin]}

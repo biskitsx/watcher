@@ -4,9 +4,16 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "../Logo";
 import { LiLink } from "./LiLink";
-
+import { signOut, useSession } from "next-auth/react";
+import { AuthStatus, avatarProfile } from "@/constant/auth";
+import { Button } from "antd";
+import { cn } from "@/util/cn";
+import { useToast } from "@chakra-ui/react";
+import { toastConfig } from "../toast/ToastConfig";
 interface NavbarProps {}
 export const Navbar = ({}: NavbarProps) => {
+  const { data: session, status } = useSession();
+  const toast = useToast();
   const currentPathname = usePathname();
   const [homeClassName, setHomeClassName] = useState(
     "bg-transparent text-base-100"
@@ -26,6 +33,19 @@ export const Navbar = ({}: NavbarProps) => {
     }
   }
 
+  const handleSignOut = async () => {
+    toast({
+      title: "Logging out...",
+      status: "loading",
+      ...toastConfig,
+    });
+    await signOut({ callbackUrl: "/" });
+    toast({
+      title: "Logout Successfully",
+      status: "success",
+      ...toastConfig,
+    });
+  };
   return (
     <header className="">
       {currentPathname != "/" && (
@@ -53,7 +73,7 @@ export const Navbar = ({}: NavbarProps) => {
               <LiLink currentPathname={currentPathname} pathname="forum" />
               <LiLink currentPathname={currentPathname} pathname="track" />
             </ul>
-            <div className="flex-none">
+            <div className="flex">
               <button className="btn btn-ghost btn-circle">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -70,38 +90,56 @@ export const Navbar = ({}: NavbarProps) => {
                   />
                 </svg>
               </button>
-
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-circle avatar"
-                >
-                  <div className="w-10 rounded-full">
-                    <img
-                      alt="Tailwind CSS Navbar component"
-                      src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                    />
+              {status === AuthStatus.AUTHENTICATED ? (
+                <div className="dropdown dropdown-end">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-circle avatar"
+                  >
+                    <div className="w-10 rounded-full">
+                      <img
+                        alt="Tailwind CSS Navbar component"
+                        src={session?.user?.image || avatarProfile}
+                      />
+                    </div>
                   </div>
+                  <ul
+                    tabIndex={0}
+                    className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content"
+                  >
+                    <li>
+                      <Link className="" href={"/profile"}>
+                        Profile
+                        <span className="badge">New</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <a>Settings</a>
+                    </li>
+                    <li>
+                      <a onClick={handleSignOut}>Logout</a>
+                    </li>
+                  </ul>
                 </div>
-                <ul
-                  tabIndex={0}
-                  className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content"
-                >
-                  <li>
-                    <a className="justify-between">
-                      Profile
-                      <span className="badge">New</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a>Settings</a>
-                  </li>
-                  <li>
-                    <a>Logout</a>
-                  </li>
-                </ul>
-              </div>
+              ) : (
+                <div className="space-x-2">
+                  {/* <Button
+                    type="default"
+                    href="/auth/login"
+                    className=" tracking-wider"
+                  >
+                    SIGN UP
+                  </Button> */}
+                  <Button
+                    type="primary"
+                    href="/auth/login"
+                    className=" tracking-wider"
+                  >
+                    Login
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
