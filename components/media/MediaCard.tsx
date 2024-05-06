@@ -26,7 +26,7 @@ export const MediaCard = ({ media }: MediaCardProps) => {
         </div>
         <RadialProgress
           value={media.vote_average * 10}
-          className="absolute -bottom-4 left-2 z-10"
+          className="absolute -bottom-4 left-2"
         />
       </div>
       <div className="py-2 px-1">
