@@ -2,7 +2,7 @@
 import React from "react";
 import { Table } from "antd";
 import type { TableProps } from "antd";
-import { MediaInfoProps } from "@/wrapper/handled";
+import { MediaInfoProps } from "@/wrapper/media-info";
 
 interface DataType {
   key: string;

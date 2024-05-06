@@ -30,7 +30,7 @@
 .inactive_link {
   @apply border-b-2 border-transparent hover:text-[#f79552] transition-all
 }
-
+/* 
 h1 {
   @apply font-medium text-xl
 }
@@ -41,8 +41,7 @@ h2 {
 
 h3 {
   @apply font-medium text-base
-
-}
+} */
 /* .scrollable-element {
   scrollbar-color: #1CBEC8 white;
 } */

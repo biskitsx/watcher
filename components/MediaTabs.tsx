@@ -3,7 +3,7 @@ import React from "react";
 import { ConfigProvider, Tabs } from "antd";
 import type { TabsProps } from "antd";
 import { Footer } from "./layout/Footer";
-import { MediaInfoProps } from "@/wrapper/handled";
+import { MediaInfoProps } from "@/wrapper/media-info";
 import { MediaCard } from "./media/MediaCard";
 import Search from "antd/es/input/Search";
 
@@ -30,12 +30,7 @@ export const MediaTaps = ({ trendingAll }: MediaTapsProps) => {
         <div className="flex flex-wrap gap-6 justify-between">
           {trendingAll &&
             trendingAll.map((movie, idx) => (
-              <MediaCard
-                key={idx}
-                cover={movie.poster_path}
-                title={movie.title}
-                release_date={movie.release_date}
-              />
+              <MediaCard key={idx} media={movie} />
             ))}
         </div>
       ),

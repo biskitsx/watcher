@@ -1,6 +1,36 @@
 import { TMDB_TOKEN } from "@/data/baseUrl";
-import { HandledDataProps, MediaInfoProps} from "./handled"
+import { MediaInfoProps} from "./media-info"
 const tmdbImagesURL = "https://image.tmdb.org/t/p/original";
+
+export const tmdbConvertToMediaInfo = (item: any): MediaInfoProps => {
+  return {
+    poster_path: `${tmdbImagesURL}/${item.poster_path}`,
+    backdrop_path: `${tmdbImagesURL}/${item.backdrop_path}`,
+    release_date: item.release_date
+    ? item.release_date
+    : item.first_air_date,
+    title: item.title ? item.title : item.name,
+    type: item.media_type,
+    vote_average: item.vote_average
+  }
+}
+
+export const tmdbConvertToMediaInfoList = (json: any[]) => {
+  return json?.map((item: any) => {
+    return tmdbConvertToMediaInfo(item)
+  })
+}
+
+export const getTMDbHelper = async (pathname: string, limit: number) => {
+  try {
+      const json = await getTMDb(pathname, limit)
+      const res = tmdbConvertToMediaInfoList(json.results)
+      return res;
+  } catch (error) {
+      console.log(error);
+      return [] as MediaInfoProps[];
+  }    
+}
 
 export const getTMDb = async (path: string, limit: number) => {
     try {
@@ -14,25 +44,12 @@ export const getTMDb = async (path: string, limit: number) => {
         };
 
         const res = await fetch(url, options);
-        const json = ((await res.json())['results'] as any[]);
-        // const json = ((await res.json())['results'] as any[]).slice(0, limit) as any[];
-
-        const media = json?.map((item: any) => {
-          const handled_data: MediaInfoProps = {
-            poster_path: `${tmdbImagesURL}/${item.poster_path}`,
-            backdrop_path: `${tmdbImagesURL}/${item.backdrop_path}`,
-            release_date: item.release_date
-            ? item.release_date
-            : item.first_air_date,
-            title: item.title ? item.title : item.name
-          }
-          return handled_data
-        })
-        return media
+        const json = await res.json()
+        return json
         
-      } catch (error) {
+      } catch (error: any) {
         console.error('error:', error);
-        return []
+        throw new Error(error)
       }
     
 }
