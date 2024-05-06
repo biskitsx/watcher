@@ -56,7 +56,6 @@ export const Navbar = ({}: NavbarProps) => {
           currentPathname == "/" ? homeClassName : OtherClassName
         }`}
       >
-        {/* <div className="shadow-md fixed top-0 w-full z-10 bg-base-100"> */}
         <div className="px-8">
           <div className="navbar justify-between flex p-0 items-center">
             <Link href={"/"}>
@@ -70,7 +69,6 @@ export const Navbar = ({}: NavbarProps) => {
               <span className="">|</span>
               <LiLink currentPathname={currentPathname} pathname="recommend" />
               <LiLink currentPathname={currentPathname} pathname="calendar" />
-              <LiLink currentPathname={currentPathname} pathname="forum" />
               <LiLink currentPathname={currentPathname} pathname="track" />
             </ul>
             <div className="flex">

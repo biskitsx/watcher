@@ -1,7 +1,8 @@
+import { MediaInfoProps } from "@/wrapper/media-info";
 import { Carousel, Card, Button } from "antd";
 
 interface MediaCarouselProps {
-  items: any[];
+  items: MediaInfoProps[];
 }
 export const MediaCarousel = ({ items }: MediaCarouselProps) => {
   return (

@@ -1,6 +1,6 @@
 import { Carousel, Card, Button } from "antd";
 import { Logo } from "../Logo";
-import { MediaInfoProps } from "@/wrapper/handled";
+import { MediaInfoProps } from "@/wrapper/media-info";
 
 interface HomeCarouselProps {
   items: MediaInfoProps[];

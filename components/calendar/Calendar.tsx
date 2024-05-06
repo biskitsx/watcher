@@ -3,7 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 // import listPlugin from "@fullcalendar/list
 import listPlugin from "@fullcalendar/list";
-import { MediaInfoProps } from "@/wrapper/handled";
+import { MediaInfoProps } from "@/wrapper/media-info";
 interface CalendarProp {
   items: MediaInfoProps[];
 }
