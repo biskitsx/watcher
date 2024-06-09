@@ -1,15 +1,15 @@
 import { Carousel, Card, Button } from "antd";
 import { Logo } from "../Logo";
 import { MediaInfoProps } from "@/wrapper/media-info";
+import { Box } from "@chakra-ui/react";
 
 interface HomeCarouselProps {
   items: MediaInfoProps[];
 }
 export const HomeCarousel = ({ items }: HomeCarouselProps) => {
-  // console.log(items);
   return (
     <div className="relative max-h-[60vh]  overflow-hidden">
-      <Carousel autoplay className="  shadow-md brightness-50 max-h-[60vh]">
+      <Carousel autoplay className="shadow-md brightness-50 max-h-[60vh]">
         {items.map((movie, index: number) => (
           <div key={index} className="relative">
             <img
@@ -21,7 +21,6 @@ export const HomeCarousel = ({ items }: HomeCarouselProps) => {
           </div>
         ))}
       </Carousel>
-
       <div className="absolute w-full top-1/2 text-base-100 max-h-[60vh] text-center tracking-wider">
         <div className="text-5xl font-extrabold flex justify-center items-end gap-2">
           <h1 className="text-xl md:text-5xl font-extrabold">Welcome to</h1>

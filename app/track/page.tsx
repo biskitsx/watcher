@@ -1,20 +1,21 @@
-import { ForumCategoryCard } from "@/components/forum/ForumCategoryCard";
 import { Container } from "@/components/layout/Container";
-import { getTrendingAll, getUpcomingMovies } from "@/action/movies";
-import { tmdbImagesURL } from "@/data/baseUrl";
 import { BreadcrumbApp } from "@/components/BreadCrumb";
 import { TrackTable } from "@/components/table/TrackTable";
+import { getUserWatchList } from "@/action/media";
+import { Suspense } from "react";
 
 async function Page() {
-  const trendingMovies = (await getTrendingAll(12)) as any[];
-
+  // const trendingMovies = (await getTrendingAll(12)) as any[];
+  const data = await getUserWatchList();
   return (
     <Container>
       <div className="flex gap-2 flex-col">
         <BreadcrumbApp />
-        <h1 className="text-3xl font-semibold">Track</h1>
+        <h1 className="text-3xl font-semibold">Watch list</h1>
       </div>
-      <TrackTable media={trendingMovies} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <TrackTable media={data || []} />
+      </Suspense>
     </Container>
   );
 }

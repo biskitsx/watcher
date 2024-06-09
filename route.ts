@@ -17,6 +17,7 @@ export const privateRoutes: string[] = [
     "/track",
     "/recommend",
     "/calendar",
+    "/profile"
 ]
 
 /**

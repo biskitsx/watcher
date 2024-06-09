@@ -29,6 +29,20 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model Media {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  mediaType String
+  mediaId String
+  mediaTitle String
+  mediaPoster String
+  status Status @default(NOTHING)
+  point Int @default(-1)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, mediaId, mediaType])
+}
+
 model User {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
   name      String?
@@ -37,11 +51,33 @@ model User {
   image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  role      String   @default("MEMBER")
+  role      Role   @default(MEMBER)
   accounts  Account[]
-  // sessions  Session[]
+  media    Media[]
   emailVerified DateTime?
 }
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum Type {
+  MOVIE
+  SERIE
+  ANIME
+}
+
+enum Status {
+  NOTHING
+  WATCHING
+  WATCHED
+  PLAN_TO_WATCH
+  DROPPED
+}
+
+
+
 
 // model Session {
 //   id           String    @id @default(auto()) @map("_id") @db.ObjectId

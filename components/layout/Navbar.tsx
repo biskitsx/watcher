@@ -15,12 +15,14 @@ export const Navbar = ({}: NavbarProps) => {
   const { data: session, status } = useSession();
   const toast = useToast();
   const currentPathname = usePathname();
+  const navbarTranparentPath = ["/", "/movies"];
   const [homeClassName, setHomeClassName] = useState(
     "bg-transparent text-base-100"
   );
   const OtherClassName = "bg-base-100 shadow-md";
 
-  if (currentPathname == "/") {
+  const shouldTransparent = navbarTranparentPath.includes(currentPathname);
+  if (shouldTransparent) {
     if (typeof window !== "undefined") {
       const changeColor = () => {
         if (window.scrollY > 70) {
@@ -48,12 +50,10 @@ export const Navbar = ({}: NavbarProps) => {
   };
   return (
     <header className="">
-      {currentPathname != "/" && (
-        <div className="navbar bg-transparent my-2"></div>
-      )}
+      {!shouldTransparent && <div className="navbar bg-transparent"></div>}
       <div
         className={`fixed top-0 w-full z-10  transition-colors  ${
-          currentPathname == "/" ? homeClassName : OtherClassName
+          shouldTransparent ? homeClassName : OtherClassName
         }`}
       >
         <div className="px-8">
@@ -67,9 +67,10 @@ export const Navbar = ({}: NavbarProps) => {
               <LiLink currentPathname={currentPathname} pathname="series" />
               <LiLink currentPathname={currentPathname} pathname="anime" />
               <span className="">|</span>
-              <LiLink currentPathname={currentPathname} pathname="recommend" />
+              <LiLink currentPathname={currentPathname} pathname="profile" />
+              {/* <LiLink currentPathname={currentPathname} pathname="recommend" />
               <LiLink currentPathname={currentPathname} pathname="calendar" />
-              <LiLink currentPathname={currentPathname} pathname="track" />
+              <LiLink currentPathname={currentPathname} pathname="track" /> */}
             </ul>
             <div className="flex">
               <button className="btn btn-ghost btn-circle">

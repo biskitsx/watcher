@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 interface RadialProgressProps {
   value: number;
   className?: string;
+  size?: string;
 }
 
 const calculateColor = (value: number): string => {
@@ -15,7 +16,11 @@ const calculateColor = (value: number): string => {
   return `#${redHex}${greenHex}00`;
 };
 
-export const RadialProgress = ({ value, className }: RadialProgressProps) => {
+export const RadialProgress = ({
+  value,
+  className,
+  size,
+}: RadialProgressProps) => {
   const [cssColor, setCssColor] = useState<string>("");
   const [roundedValue, setRoundedValue] = useState<number>(Math.round(value));
 
@@ -34,7 +39,7 @@ export const RadialProgress = ({ value, className }: RadialProgressProps) => {
       style={
         {
           "--value": roundedValue,
-          "--size": "32px",
+          "--size": size ? size : "32px",
           "--thickness": "2px",
           color: cssColor,
         } as React.CSSProperties
