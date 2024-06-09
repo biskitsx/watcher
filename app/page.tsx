@@ -6,25 +6,26 @@ import { HomeCarousel } from "@/components/media/HomeCarousel";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Container } from "@/components/layout/Container";
 import { getTopAnime } from "@/action/anime";
+import { getAiringTodaySeries } from "@/action/series";
 
 export default async function Home() {
-  const trendingMovies = await getTrendingAll(12);
   const upcomingMovies = await getUpcomingMovies(12);
+  const series = await getAiringTodaySeries(12);
   const topAnimes = await getTopAnime(12);
   return (
     <PageContainer>
-      <HomeCarousel items={trendingMovies} />
+      <HomeCarousel items={upcomingMovies} />
       <Container>
         <MediaSlider
           href="/movies"
-          items={trendingMovies}
+          items={upcomingMovies}
           name="Movies"
           type="movies"
           key={0}
         />
         <MediaSlider
           href="/series"
-          items={upcomingMovies}
+          items={series}
           type="series"
           name="Series"
           key={1}

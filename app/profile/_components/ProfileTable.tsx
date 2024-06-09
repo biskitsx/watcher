@@ -2,16 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { Table, Select, Space } from "antd";
 import type { TableProps } from "antd";
-import { MediaInfoProps } from "@/wrapper/media-info";
 import { Media, Status } from "@prisma/client";
-import {
-  getUserWatchList,
-  updateMediaRating,
-  updateMediaStatus,
-} from "@/action/media";
+import { updateMediaRating, updateMediaStatus } from "@/action/media";
 import Link from "next/link";
 import { Button, useDisclosure, useToast } from "@chakra-ui/react";
-import { toastConfig } from "../toast/ToastConfig";
+import { toastConfig } from "@/components/toast/ToastConfig";
+import { Container } from "@/components/layout/Container";
 
 interface TitleTableProps {
   title: string;
@@ -36,17 +32,16 @@ interface DataType {
   title: TitleTableProps;
   status: StatusTableProps;
   type: string;
-  actions?: string;
   rating: RatingTableProps;
 }
 
-interface TrackTableProps {
+interface ProfileTableProps {
   media: Media[];
+  title: string;
 }
 
-export const TrackTable = ({ media }: TrackTableProps) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [userWatchList, setUserWatchList] = useState<Media[]>(media);
+export const ProfileTable = ({ media, title }: ProfileTableProps) => {
+  const [userMedia, setUserMedia] = useState<Media[]>(media);
   const [dataSource, setDataSource] = useState<DataType[]>([] as DataType[]);
   const [rating, setRating] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
@@ -94,7 +89,9 @@ export const TrackTable = ({ media }: TrackTableProps) => {
           <Select
             defaultValue={status}
             onChange={handleSelectStatusChange}
+            style={{ width: 170 }}
             options={[
+              { value: Status.NOTHING, label: "not in Watchlist" },
               { value: Status.PLAN_TO_WATCH, label: "plan" },
               { value: Status.WATCHING, label: "watching" },
               { value: Status.DROPPED, label: "drop" },
@@ -132,20 +129,10 @@ export const TrackTable = ({ media }: TrackTableProps) => {
         );
       },
     },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      render: () => (
-        <div className="space-x-2">
-          <Button onClick={onOpen}>Edit</Button>
-          <Button>Delete</Button>
-        </div>
-      ),
-    },
   ];
 
   useEffect(() => {
-    let temp = userWatchList.map((item: Media, idx: number) => {
+    let temp = userMedia.map((item: Media, idx: number) => {
       return {
         key: (idx + 1).toString(),
         image: item.mediaPoster,
@@ -167,10 +154,11 @@ export const TrackTable = ({ media }: TrackTableProps) => {
       } as DataType;
     });
     setDataSource(temp);
-  }, [userWatchList]);
+  }, [userMedia]);
 
   return (
-    <>
+    <Container>
+      {title && <h1 className="text-2xl font-bold pt-6">{title}</h1>}
       <Table
         columns={columns}
         dataSource={dataSource}
@@ -178,6 +166,6 @@ export const TrackTable = ({ media }: TrackTableProps) => {
         scroll={{ x: "max-content" }}
         pagination={{ pageSize: 5 }}
       />
-    </>
+    </Container>
   );
 };
