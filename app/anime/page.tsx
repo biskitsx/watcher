@@ -3,20 +3,21 @@ import { MediaSlider } from "@/components/media/MediaSlider";
 import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { Container } from "@/components/layout/Container";
 import { getSearchAnime, getTopAnime } from "@/action/anime";
+import { PageContainer } from "@/components/layout/PageContainer";
 
 export default async function Home() {
   const topAnime = await getTopAnime(12);
-  const search = await getSearchAnime("naruto");
   return (
-    <Container>
+    <PageContainer>
       <MediaCarousel items={topAnime} />
-      <MediaSlider
-        href="#"
-        items={topAnime.slice(0, 12)}
-        name="Top anime"
-        type="anime"
-      />
-      {/* <MediaSlider
+      <Container>
+        <MediaSlider
+          href="#"
+          items={topAnime.slice(0, 12)}
+          name="Top anime"
+          type="anime"
+        />
+        {/* <MediaSlider
         baseUrl={tmdbImagesURL}
         items={trendingMovies}
         name="Trending"
@@ -28,6 +29,7 @@ export default async function Home() {
         type="movies"
         name="Upcoming"
       /> */}
-    </Container>
+      </Container>
+    </PageContainer>
   );
 }

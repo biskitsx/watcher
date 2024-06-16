@@ -37,6 +37,7 @@ interface MediaDetailProps {
   media: MediaInfoProps;
 }
 export const MediaDetail = ({ media }: MediaDetailProps) => {
+  console.log({ media });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const session = useSession();
@@ -68,13 +69,7 @@ export const MediaDetail = ({ media }: MediaDetailProps) => {
 
   const handleOnSubmit = async () => {
     setIsLoading(true);
-    await addRateTomedia(
-      media.type,
-      media.id ? media.id : "test",
-      rating,
-      media.title,
-      media.poster_path
-    );
+    await addRateTomedia(media, rating);
     setIsLoading(false);
     toast({
       title: "Rating changed successfully!",
@@ -96,12 +91,7 @@ export const MediaDetail = ({ media }: MediaDetailProps) => {
       return router.push("/auth/login");
     }
     setIsAddToWatchListLoading(true);
-    await toggleWatchList(
-      media.type,
-      media.id ? media.id : "test",
-      media.title,
-      media.poster_path
-    );
+    await toggleWatchList(media);
     toast({
       title: "Added to watch list",
       status: "success",

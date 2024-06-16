@@ -1,12 +1,16 @@
 import { MediaInfoProps } from "@/wrapper/media-info";
-import { getJikan, getJikanHelper } from "../wrapper/jikan";
+import { getJikan, getJikanHelper, getJikanHelperList } from "../wrapper/jikan";
 import { getTVDB } from "../wrapper/tvdb"
 const ANIME_ID = 27
 
 export const getTopAnime = async (limit: number) => {
-    return getJikanHelper("top/anime", limit);
+    return await getJikanHelperList("top/anime", limit);
 }
 
 export const getSearchAnime = async (search: string) => {
-    return getJikanHelper(`search/anime?q=${search}`, 12);
+    return await getJikanHelperList(`search/anime?q=${search}`, 12);
+}
+
+export const getAnimeById = async (id: string) => {
+    return await getJikanHelper(`anime/${id}`, 1);
 }

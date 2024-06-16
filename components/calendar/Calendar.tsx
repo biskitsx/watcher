@@ -22,22 +22,24 @@ export default function Calendar({ items }: CalendarProp) {
       plugins={[dayGridPlugin, listPlugin]}
       initialView="dayGridMonth"
       // weekends={false}
-      // events={[
-      //   { title: "Spaceman", date: "2024-03-01", backgroundColor: "#1CBEC8" },
-      //   {
-      //     title: "Code 8 Part",
-      //     date: "2024-03-02",
-      //     allDay: false,
-      //   },
-      //   {
-      //     title: "Spiderman",
-      //     date: "2024-03-02",
-      //     allDay: false,
-      //     editable: true,
-      //     url: "movies",
-      //   },
-      // ]}
-      events={eventsItem}
+
+      events={[
+        { title: "Spaceman", date: "2024-03-01", backgroundColor: "#1CBEC8" },
+        {
+          title: "Code 8 Part",
+          date: "2024-03-02",
+          allDay: false,
+        },
+        {
+          title: "Spiderman",
+          date: "2024-03-02",
+          allDay: false,
+          editable: true,
+          url: "movies",
+        },
+      ]}
+      // events={eventsItem}
+
       headerToolbar={{
         left: "prev,next",
         center: "title",

@@ -11,10 +11,17 @@ import { MediaInfoProps } from "@/wrapper/media-info";
 interface MediaSliderProps {
   items: MediaInfoProps[];
   name: string;
-  type: "movies" | "series" | "anime";
+  type: "movie" | "serie" | "anime";
   href: string;
+  isLong?: boolean;
 }
-export const MediaSlider = ({ items, name, type, href }: MediaSliderProps) => {
+export const MediaSlider = ({
+  items,
+  name,
+  type,
+  href,
+  isLong,
+}: MediaSliderProps) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <>
@@ -36,7 +43,7 @@ export const MediaSlider = ({ items, name, type, href }: MediaSliderProps) => {
         <div className="py-2">
           <div className="overflow-x-auto  whitespace-nowrap space-x-5 align-top bg-scroll scrollable-element overflow-y-hidden">
             {items?.map((media, index: number) => {
-              return <MediaCard media={media} key={index} />;
+              return <MediaCard media={media} key={index} isLong={isLong} />;
             })}
           </div>
         </div>

@@ -3,6 +3,7 @@ import { MediaSlider } from "@/components/media/MediaSlider";
 import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { Container } from "@/components/layout/Container";
 import { PageContainer } from "@/components/layout/PageContainer";
+import { Suspense } from "react";
 
 export default async function Home() {
   const trendingMovies = await getTrendingAll(12);
@@ -12,22 +13,24 @@ export default async function Home() {
     <PageContainer>
       <MediaCarousel items={upcomingMovies} />
       <Container>
-        <MediaSlider
-          href="#"
-          items={recommendMovies?.slice(12, 24)}
-          name="Recommend For You"
-          type="movies"
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <MediaSlider
+            href="#"
+            items={recommendMovies?.slice(12, 24)}
+            name="Recommend For You"
+            type="movie"
+          />
+        </Suspense>
         <MediaSlider
           href="#"
           items={trendingMovies}
           name="Trending"
-          type="movies"
+          type="movie"
         />
         <MediaSlider
           href="#"
           items={upcomingMovies}
-          type="movies"
+          type="movie"
           name="Upcoming"
         />
       </Container>

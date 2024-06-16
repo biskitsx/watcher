@@ -1,13 +1,9 @@
 import { TMDB_TOKEN } from "@/data/baseUrl";
 import { MediaInfoProps} from "./media-info"
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOption";
-import { Session, getServerSession } from "next-auth";
-import prisma from "@/prisma";
-import { Media } from "@prisma/client";
 import { MediaMap, getUserDataMedia } from "@/action/media";
 const tmdbImagesURL = "https://image.tmdb.org/t/p/original";
 
-export const tmdbConvertToMediaInfo =  (item: any, type: "movies" | "series", userDataMedia?: MediaMap): MediaInfoProps=> {
+export const tmdbConvertToMediaInfo =  (item: any, type: "movie" | "serie", userDataMedia?: MediaMap): MediaInfoProps=> {
   let media: MediaInfoProps = {
     id: String(item.id),
     poster_path: `${tmdbImagesURL}/${item.poster_path}`,
@@ -22,22 +18,23 @@ export const tmdbConvertToMediaInfo =  (item: any, type: "movies" | "series", us
   }
 
   if (userDataMedia) {
-    if (type === "movies" && userDataMedia.userMovieMap.has(String(media.id))) {
-      media.userMediaData = userDataMedia.userMovieMap.get(String(media.id))
-    } else if (type === "series" && userDataMedia.userSerieMap.has(String(media.id))){
+    if (type === "serie" && userDataMedia.userSerieMap.has(String(media.id))){
       media.userMediaData = userDataMedia.userSerieMap.get(String(media.id))
     }
+    else if (type === "movie" && userDataMedia.userMovieMap.has(String(media.id))) {
+      media.userMediaData = userDataMedia.userMovieMap.get(String(media.id))
+    } 
   }
   return media;
 }
 
-export const tmdbConvertToMediaInfoList = (json: any[], type: "movies" | "series", userDataMedia?: MediaMap) : MediaInfoProps[]=> {
+export const tmdbConvertToMediaInfoList = (json: any[], type: "movie" | "serie", userDataMedia?: MediaMap) : MediaInfoProps[]=> {
   return json?.map((item: any) => {
     return tmdbConvertToMediaInfo(item, type, userDataMedia)
   })
 }
 
-export const getTMDbHelperList = async (pathname: string, limit: number, type: "movies" | "series") => {
+export const getTMDbHelperList = async (pathname: string, limit: number, type: "movie" | "serie") => {
   try {
     const json = await getTMDb(pathname, limit)
     const userDataMedia = await getUserDataMedia()
@@ -52,7 +49,7 @@ export const getTMDbHelperList = async (pathname: string, limit: number, type: "
   }    
 }
 
-export const getTMDbHelper = async (pathname: string, limit: number, type: "movies" | "series") => {
+export const getTMDbHelper = async (pathname: string, limit: number, type: "movie" | "serie") => {
   try {
       const json = await getTMDb(pathname, limit)
       const userDataMedia = await getUserDataMedia()

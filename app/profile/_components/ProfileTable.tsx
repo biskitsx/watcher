@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Table, Select, Space } from "antd";
+import { Table, Select, Space, Tag } from "antd";
 import type { TableProps } from "antd";
 import { Media, Status } from "@prisma/client";
 import { updateMediaRating, updateMediaStatus } from "@/action/media";
@@ -8,6 +8,8 @@ import Link from "next/link";
 import { Button, useDisclosure, useToast } from "@chakra-ui/react";
 import { toastConfig } from "@/components/toast/ToastConfig";
 import { Container } from "@/components/layout/Container";
+import { palatte } from "@/constant/palatte";
+import { cn } from "@/util/cn";
 
 interface TitleTableProps {
   title: string;
@@ -27,7 +29,7 @@ interface RatingTableProps {
 }
 
 interface DataType {
-  key: string;
+  key: number;
   image: string;
   title: TitleTableProps;
   status: StatusTableProps;
@@ -49,11 +51,6 @@ export const ProfileTable = ({ media, title }: ProfileTableProps) => {
   const toast = useToast();
   const columns: TableProps<DataType>["columns"] = [
     {
-      title: "No",
-      dataIndex: "key",
-      width: 50,
-    },
-    {
       title: "Image",
       dataIndex: "image",
       width: 120,
@@ -71,6 +68,27 @@ export const ProfileTable = ({ media, title }: ProfileTableProps) => {
     {
       title: "Type",
       dataIndex: "type",
+      render: (type) => (
+        <Tag
+          color={cn({
+            green: type === "anime",
+            blue: type === "movie",
+            purple: type === "serie",
+          })}
+        >
+          {type}
+        </Tag>
+      ),
+      filters: [
+        { text: "Anime", value: "anime" },
+        { text: "Movie", value: "movie" },
+        { text: "Serie", value: "serie" },
+      ],
+
+      onFilter: (value, record) => {
+        return record.type.indexOf(value as string) === 0;
+      },
+      filterSearch: true,
     },
     {
       title: "Status",
@@ -87,6 +105,7 @@ export const ProfileTable = ({ media, title }: ProfileTableProps) => {
 
         return (
           <Select
+            size="small"
             defaultValue={status}
             onChange={handleSelectStatusChange}
             style={{ width: 170 }}
@@ -99,6 +118,16 @@ export const ProfileTable = ({ media, title }: ProfileTableProps) => {
             ]}
           />
         );
+      },
+      filters: [
+        { text: "Not in Watchlist", value: Status.NOTHING },
+        { text: "Plan to Watch", value: Status.PLAN_TO_WATCH },
+        { text: "Watching", value: Status.WATCHING },
+        { text: "Dropped", value: Status.DROPPED },
+        { text: "Watched", value: Status.WATCHED },
+      ],
+      onFilter: (value, record) => {
+        return record.status.status.indexOf(value as Status) === 0;
       },
     },
     {
@@ -116,9 +145,10 @@ export const ProfileTable = ({ media, title }: ProfileTableProps) => {
 
         return (
           <Select
+            size="small"
             defaultValue={rating}
             onChange={handleSelectRatingChange}
-            style={{ width: 110 }}
+            style={{ width: 110, fontSize: "small" }}
             options={[
               { value: -1, label: "no rating" },
               ...scale.map((item) => {
@@ -128,14 +158,15 @@ export const ProfileTable = ({ media, title }: ProfileTableProps) => {
           />
         );
       },
+      sorter: (a, b) => a.rating.rating - b.rating.rating,
     },
   ];
 
   useEffect(() => {
     let temp = userMedia.map((item: Media, idx: number) => {
       return {
-        key: (idx + 1).toString(),
-        image: item.mediaPoster,
+        key: idx,
+        image: item.mediaBackDrop,
         status: {
           mediaId: item.mediaId,
           mediaType: item.mediaType,
@@ -162,9 +193,8 @@ export const ProfileTable = ({ media, title }: ProfileTableProps) => {
       <Table
         columns={columns}
         dataSource={dataSource}
-        bordered
         scroll={{ x: "max-content" }}
-        pagination={{ pageSize: 5 }}
+        // pagination={{ pageSize: 5 }}
       />
     </Container>
   );

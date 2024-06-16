@@ -1,14 +1,15 @@
 "use server"
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOption"
 import prisma from "@/prisma"
+import { MediaInfoProps } from "@/wrapper/media-info"
 import { Media, Status } from "@prisma/client"
 import { getServerSession } from "next-auth"
 
-export const addRateTomedia = async (type: string, id: string, rating: number, title: string, poster: string) => {
+export const addRateTomedia = async (media: MediaInfoProps, rating: number) => {
     const session = await getServerSession(authOptions)   
 
     // TODO: change logic to search in media array on user
-    const existingMedia = await prisma.media.findFirst({where:{ userId: session?.user.id, mediaId: id, mediaType: type}})
+    const existingMedia = await prisma.media.findFirst({where:{ userId: session?.user.id, mediaId: media.id, mediaType: media.type}})
     if (existingMedia) {
         await prisma.media.update({
             where: {id: existingMedia.id},
@@ -20,39 +21,43 @@ export const addRateTomedia = async (type: string, id: string, rating: number, t
         await prisma.media.create({
             data: {
                 userId: session?.user.id!,
-                mediaId: id,
+                mediaId: media.id ? media.id : "test",
                 point: rating,
-                mediaType: type,
-                mediaTitle: title,
-                mediaPoster: poster
+                mediaType: media.type,
+                mediaTitle: media.title,
+                mediaPoster: media.poster_path,
+                mediaBackDrop: media.backdrop_path ? media.backdrop_path : media.poster_path,
+                mediaReleaseDate: media.release_date,
             },
         })
     }
 }
 
-export const toggleWatchList = async (type: string, id: string,  title: string, poster: string) => {
+export const toggleWatchList = async (media: MediaInfoProps) => {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
         return null
     }
 
-    const existingMedia = await prisma.media.findFirst({where:{ userId: session?.user.id, mediaId: id, mediaType: type}})
+    const existingMedia = await prisma.media.findFirst({where:{ userId: session?.user.id, mediaId: media.id, mediaType: media.type}})
     if (existingMedia) {
         await prisma.media.update({
             where: {id: existingMedia.id},
             data: {
-                status: existingMedia.status === Status.NOTHING ? Status.PLAN_TO_WATCH : Status.NOTHING
+                status: existingMedia.status === Status.NOTHING ? Status.WATCHING : Status.NOTHING
             }
         })
     } else {
         await prisma.media.create({
             data: {
                 userId: session?.user.id!,
-                mediaId: id,
-                mediaType: type,
+                mediaId: media.id ? media.id : "test",
+                mediaType: media.type,
+                mediaTitle: media.title,
+                mediaPoster: media.poster_path,
+                mediaBackDrop: media.backdrop_path ? media.backdrop_path : media.poster_path,
+                mediaReleaseDate: media.release_date ? media.release_date : "",
                 status: Status.WATCHING,
-                mediaTitle: title,
-                mediaPoster: poster
             },
         })
     }
@@ -100,14 +105,14 @@ export const getUserDataMedia = async (): Promise<MediaMap | null> => {
         return null
     }
     // create movies map
-    const userMovie =  await prisma.media.findMany({where:{ userId: session?.user.id, mediaType: "movies"}})
+    const userMovie =  await prisma.media.findMany({where:{ userId: session?.user.id, mediaType: "movie"}})
     const userMovieMap = new Map<string, Media>();
     userMovie.forEach((media) => {
         userMovieMap.set(media.mediaId, media);
     });
     
     // create series map
-    const userSerie =  await prisma.media.findMany({where:{ userId: session?.user.id, mediaType: "series"}})
+    const userSerie =  await prisma.media.findMany({where:{ userId: session?.user.id, mediaType: "serie"}})
     const userSerieMap = new Map<string, Media>();
     userSerie.forEach((media) => {
         userSerieMap.set(media.mediaId, media);
@@ -130,7 +135,6 @@ export const updateMediaStatus = async (mediaType: string, mediaId: string, stat
         return null
     }
     const existingMedia = await prisma.media.findFirst({where:{ userId: session?.user.id, mediaId: mediaId, mediaType: mediaType}})
-    console.log({existingMedia});
     if (existingMedia) {
         const eiei = await prisma.media.update({
             where: {id: existingMedia.id},

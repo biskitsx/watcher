@@ -4,9 +4,9 @@
  */
 export const publicRoutes: string[] = [
     "/",
-    "/movies",
+    "/movie",
     "/anime",
-    "series"
+    "serie"
 ]
 
 /**

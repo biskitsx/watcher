@@ -16,7 +16,7 @@ async function Page() {
         <ForumCategoryCard
           category="Movies Discussion"
           cover={trendingAll[4]?.backdrop_path}
-          href="/forum/movies"
+          href="/forum/movie"
         />
         <ForumCategoryCard
           category="Anime Discussion"

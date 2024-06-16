@@ -1,9 +1,9 @@
 "use server"
 
 import { MediaInfoProps } from "@/wrapper/media-info";
-import { getTMDb, tmdbConvertToMediaInfo, tmdbConvertToMediaInfoList } from "../wrapper/tmdb";
+import { getTMDb, getTMDbHelper, getTMDbHelperList, tmdbConvertToMediaInfo, tmdbConvertToMediaInfoList } from "../wrapper/tmdb";
 
-const SERIES = "series";
+const SERIES = "serie";
 
 export const getAiringTodaySeries = async (limit: number) => {
     const json = await getTMDb("tv/airing_today?language=en-US&page=1", limit)
@@ -11,20 +11,10 @@ export const getAiringTodaySeries = async (limit: number) => {
     return res as MediaInfoProps[]
 }
 
-
 export const getSeriesById = async (id: string) => {
-    const json = await getTMDb(`tv/${id}?language=en-US`, 1);
-    return tmdbConvertToMediaInfo(json, SERIES);
+    return await getTMDbHelper(`tv/${id}?language=en-US`, 1, SERIES)
 }
 
-
-
-
-// export const getUpcomingMovies = async (limit: number) => {
-//     const json = await getTMDb("movie/upcoming?language=en-US&page=1", limit)
-//     return json; 
-// }
-
-
-
-
+export const getTrendingSeries = async (limit: number) => {
+    return await getTMDbHelperList("trending/tv/day?language=en-US", limit, SERIES)
+}
