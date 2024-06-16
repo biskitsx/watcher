@@ -6,7 +6,7 @@ export interface MediaInfoProps {
     poster_path: string;
     backdrop_path: string;
     release_date: string;
-    type: "movies" | "series" | "anime";
+    type: "movie" | "serie" | "anime";
     vote_average: number;
     overview?: string;
     userMediaData?: Media

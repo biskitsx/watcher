@@ -1,7 +1,7 @@
 import { MediaInfoProps } from "@/wrapper/media-info";
 import { getTMDb, getTMDbHelper, getTMDbHelperList, tmdbConvertToMediaInfo } from "../wrapper/tmdb";
 
-const MOVIE = "movies";
+const MOVIE = "movie";
 
 export const getTrendingAll = async (limit: number) => {
     return await getTMDbHelperList("trending/all/day?language=en-US", limit, MOVIE);

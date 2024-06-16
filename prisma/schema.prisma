@@ -36,8 +36,10 @@ model Media {
   mediaId String
   mediaTitle String
   mediaPoster String
+  mediaBackDrop String?
+  mediaReleaseDate String?
   status Status @default(NOTHING)
-  point Int @default(-1)
+  point Int @default(-1) // -1 mean no point given
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@unique([userId, mediaId, mediaType])
@@ -63,9 +65,9 @@ enum Role {
 }
 
 enum Type {
-  MOVIE
-  SERIE
-  ANIME
+  movie
+  serie
+  anime
 }
 
 enum Status {
@@ -75,17 +77,3 @@ enum Status {
   PLAN_TO_WATCH
   DROPPED
 }
-
-
-
-
-// model Session {
-//   id           String    @id @default(auto()) @map("_id") @db.ObjectId
-//   userId       String @db.ObjectId
-//   expires      DateTime
-//   sessionToken String
-//   accessToken  String
-//   createdAt    DateTime @default(now())
-//   updatedAt    DateTime @updatedAt
-//   user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }

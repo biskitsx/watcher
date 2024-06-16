@@ -20,13 +20,13 @@ export default async function Home() {
           href="/movies"
           items={upcomingMovies}
           name="Movies"
-          type="movies"
+          type="movie"
           key={0}
         />
         <MediaSlider
           href="/series"
           items={series}
-          type="series"
+          type="serie"
           name="Series"
           key={1}
         />

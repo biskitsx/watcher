@@ -63,8 +63,8 @@ export const Navbar = ({}: NavbarProps) => {
             </Link>
             <ul className="flex gap-2 font-normal text-xs sm:text-sm sm:gap-4">
               <LiLink currentPathname={currentPathname} pathname="home" />
-              <LiLink currentPathname={currentPathname} pathname="movies" />
-              <LiLink currentPathname={currentPathname} pathname="series" />
+              <LiLink currentPathname={currentPathname} pathname="movie" />
+              <LiLink currentPathname={currentPathname} pathname="serie" />
               <LiLink currentPathname={currentPathname} pathname="anime" />
               <span className="">|</span>
               <LiLink currentPathname={currentPathname} pathname="profile" />
@@ -73,22 +73,24 @@ export const Navbar = ({}: NavbarProps) => {
               <LiLink currentPathname={currentPathname} pathname="track" /> */}
             </ul>
             <div className="flex">
-              <button className="btn btn-ghost btn-circle">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
+              <Link href={"/search"}>
+                <button className="btn btn-ghost btn-circle">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </button>
+              </Link>
               {status === AuthStatus.AUTHENTICATED ? (
                 <div className="dropdown dropdown-end">
                   <div
@@ -114,22 +116,12 @@ export const Navbar = ({}: NavbarProps) => {
                       </Link>
                     </li>
                     <li>
-                      <a>Settings</a>
-                    </li>
-                    <li>
                       <a onClick={handleSignOut}>Logout</a>
                     </li>
                   </ul>
                 </div>
               ) : (
                 <div className="space-x-2">
-                  {/* <Button
-                    type="default"
-                    href="/auth/login"
-                    className=" tracking-wider"
-                  >
-                    SIGN UP
-                  </Button> */}
                   <Button
                     type="primary"
                     href="/auth/login"
