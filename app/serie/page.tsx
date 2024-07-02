@@ -1,7 +1,10 @@
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { Container } from "@/components/layout/Container";
-import { getAiringTodaySeries, getTrendingSeries } from "@/action/series";
+import {
+  getAiringTodaySeries,
+  getTrendingSeries,
+} from "@/app/api/serie/actions";
 import { PageContainer } from "@/components/layout/PageContainer";
 
 export default async function Home() {

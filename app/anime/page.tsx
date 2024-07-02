@@ -2,7 +2,7 @@
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { Container } from "@/components/layout/Container";
-import { getSearchAnime, getTopAnime } from "@/action/anime";
+import { searchAnime, getTopAnime } from "@/app/api/anime/actions";
 import { PageContainer } from "@/components/layout/PageContainer";
 
 export default async function Home() {

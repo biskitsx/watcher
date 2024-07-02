@@ -1,4 +1,4 @@
-import { getTrendingAll, getUpcomingMovies } from "@/action/movies";
+import { getTrendingAll, getUpcomingMovies } from "@/app/api/movie/actions";
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { Container } from "@/components/layout/Container";

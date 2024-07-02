@@ -2,12 +2,12 @@ import {
   getMovieById,
   getTrendingAll,
   getUpcomingMovies,
-} from "@/action/movies";
+} from "@/app/api/movie/actions";
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { Container } from "@/components/layout/Container";
 import { MediaDetail } from "@/components/media/MediaDetail";
 import { PageContainer } from "@/components/layout/PageContainer";
-import { getSeriesById, getTrendingSeries } from "@/action/series";
+import { getSeriesById, getTrendingSeries } from "@/app/api/serie/actions";
 
 export default async function Home({
   params: { id },

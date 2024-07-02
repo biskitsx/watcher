@@ -2,7 +2,7 @@ import {
   getMovieById,
   getTrendingAll,
   getUpcomingMovies,
-} from "@/action/movies";
+} from "@/app/api/movie/actions";
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { Container } from "@/components/layout/Container";
 import { MediaDetail } from "@/components/media/MediaDetail";

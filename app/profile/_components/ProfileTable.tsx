@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Select, Space, Tag } from "antd";
 import type { TableProps } from "antd";
 import { Media, Status } from "@prisma/client";
-import { updateMediaRating, updateMediaStatus } from "@/action/media";
+import { updateMediaRating, updateMediaStatus } from "@/app/api/media/actions";
 import Link from "next/link";
 import { Button, useDisclosure, useToast } from "@chakra-ui/react";
 import { toastConfig } from "@/components/toast/ToastConfig";

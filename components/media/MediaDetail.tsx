@@ -27,17 +27,17 @@ import {
 import { RadialProgress } from "./RadialProgress";
 import { palatte } from "@/constant/palatte";
 import { formatTheDate } from "@/util/formattedDate";
-import { addRateTomedia, toggleWatchList } from "@/action/media";
+import { addRateTomedia, toggleWatchList } from "@/app/api/media/actions";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toastConfig } from "../toast/ToastConfig";
 import { Status } from "@prisma/client";
+import { Image } from "antd";
 
 interface MediaDetailProps {
   media: MediaInfoProps;
 }
 export const MediaDetail = ({ media }: MediaDetailProps) => {
-  console.log({ media });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const session = useSession();
@@ -120,10 +120,15 @@ export const MediaDetail = ({ media }: MediaDetailProps) => {
               alt={media.poster_path}
               width={300}
               className="self-center"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src =
+                  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+              }}
             />
             <Stack direction={"column"} className="text-white" spacing={4}>
               <Heading as="h2" size="2xl">
-                {media.title} ({formattedDate.split(" ")[2]})
+                {media.title}{" "}
+                {formattedDate && `(${formattedDate.split(" ")[2]})`}
               </Heading>
               <Stack direction={"row"}>
                 <RadialProgress
@@ -157,7 +162,11 @@ export const MediaDetail = ({ media }: MediaDetailProps) => {
                     : "Rate your vibe"}
                 </Button>
               </Stack>
-              <Text textColor={"white"}>{media.overview}</Text>
+              <Text textColor={"white"}>
+                {media.overview
+                  ? media.overview
+                  : "We don't have an overview translated in English."}
+              </Text>
             </Stack>
           </Stack>
         </Box>
