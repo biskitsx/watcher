@@ -1,12 +1,12 @@
 // "use client";
 
-import { getTrendingAll, getUpcomingMovies } from "@/action/movies";
+import { getTrendingAll, getUpcomingMovies } from "@/app/api/movie/actions";
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { HomeCarousel } from "@/components/media/HomeCarousel";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Container } from "@/components/layout/Container";
-import { getTopAnime } from "@/action/anime";
-import { getAiringTodaySeries } from "@/action/series";
+import { getTopAnime } from "@/app/api/anime/actions";
+import { getAiringTodaySeries } from "@/app/api/serie/actions";
 
 export default async function Home() {
   const upcomingMovies = await getUpcomingMovies(12);

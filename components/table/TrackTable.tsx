@@ -8,7 +8,7 @@ import {
   getUserWatchList,
   updateMediaRating,
   updateMediaStatus,
-} from "@/action/media";
+} from "@/app/api/media/actions";
 import Link from "next/link";
 import { Button, useDisclosure, useToast } from "@chakra-ui/react";
 import { toastConfig } from "../toast/ToastConfig";

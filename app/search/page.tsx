@@ -1,11 +1,13 @@
 import { Container } from "@/components/layout/Container";
 import { SearchPage } from "./_components/SearchPage";
+import { getUpcomingMovies, searchMovie } from "../api/movie/actions";
+import { PageContainer } from "@/components/layout/PageContainer";
 
 export default async function Home() {
+  const firstMedia = await getUpcomingMovies(1);
   return (
-    <Container className="pt-6">
-      <h1 className="text-3xl font-semibold">Search your interest</h1>
-      <SearchPage />
-    </Container>
+    <PageContainer>
+      <SearchPage bannerMedia={firstMedia[0]} />
+    </PageContainer>
   );
 }

@@ -15,7 +15,7 @@ export const Navbar = ({}: NavbarProps) => {
   const { data: session, status } = useSession();
   const toast = useToast();
   const currentPathname = usePathname();
-  const navbarTranparentPath = ["/", "/movies"];
+  const navbarTranparentPath = ["/", "/search"];
   const [homeClassName, setHomeClassName] = useState(
     "bg-transparent text-base-100"
   );
@@ -68,9 +68,6 @@ export const Navbar = ({}: NavbarProps) => {
               <LiLink currentPathname={currentPathname} pathname="anime" />
               <span className="">|</span>
               <LiLink currentPathname={currentPathname} pathname="profile" />
-              {/* <LiLink currentPathname={currentPathname} pathname="recommend" />
-              <LiLink currentPathname={currentPathname} pathname="calendar" />
-              <LiLink currentPathname={currentPathname} pathname="track" /> */}
             </ul>
             <div className="flex">
               <Link href={"/search"}>
@@ -102,6 +99,10 @@ export const Navbar = ({}: NavbarProps) => {
                       <img
                         alt="Tailwind CSS Navbar component"
                         src={session?.user?.image || avatarProfile}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            "https://cdn-icons-png.freepik.com/512/219/219986.png";
+                        }}
                       />
                     </div>
                   </div>

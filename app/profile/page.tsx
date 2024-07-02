@@ -1,4 +1,4 @@
-import { getUserRatings, getUserWatchList } from "@/action/media";
+import { getUserRatings, getUserWatchList } from "@/app/api/media/actions";
 import ProfilePage from "./_components/ProfilePage";
 
 export default async function Profile() {

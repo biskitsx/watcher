@@ -1,6 +1,6 @@
 import { ForumCategoryCard } from "@/components/forum/ForumCategoryCard";
 import { Container } from "@/components/layout/Container";
-import { getTrendingAll, getUpcomingMovies } from "@/action/movies";
+import { getTrendingAll, getUpcomingMovies } from "@/app/api/movie/actions";
 import { tmdbImagesURL } from "@/data/baseUrl";
 import { BreadcrumbApp } from "@/components/BreadCrumb";
 import { useParams } from "next/navigation";

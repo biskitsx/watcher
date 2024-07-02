@@ -1,7 +1,7 @@
 import { Container } from "@/components/layout/Container";
 import { BreadcrumbApp } from "@/components/BreadCrumb";
 import { TrackTable } from "@/components/table/TrackTable";
-import { getUserWatchList } from "@/action/media";
+import { getUserWatchList } from "@/app/api/media/actions";
 import { Suspense } from "react";
 
 async function Page() {

@@ -3,6 +3,7 @@ import { MediaInfoProps } from "@/wrapper/media-info";
 import Link from "next/link";
 import { formatTheDate } from "@/util/formattedDate";
 import { cn } from "@/util/cn";
+import { Image } from "antd";
 
 interface MediaCardProps {
   media: MediaInfoProps;
@@ -13,7 +14,6 @@ export const MediaCard = ({ media, isLong }: MediaCardProps) => {
   const formattedDate = formatTheDate(media.release_date);
   return (
     <Link href={`/${media.type}/${media.id}`}>
-      {/* <div className="rounded-md  inline-block cursor-pointer align-top space-y-3"> */}
       <div
         className={cn(
           "w-[100px] md:w-[140px] rounded-md  inline-block cursor-pointer align-top space-y-3",
@@ -27,8 +27,12 @@ export const MediaCard = ({ media, isLong }: MediaCardProps) => {
             <img
               src={media.poster_path}
               alt={media.poster_path}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src =
+                  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+              }}
               className={cn(
-                "hover:scale-105 transition-all h-[150px] md:h-[210px] w-full object-cover"
+                "hover:scale-105 transition-all object-cover h-[150px] md:h-[210px]"
               )}
             />
           </div>
