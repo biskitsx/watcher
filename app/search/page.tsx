@@ -1,3 +1,4 @@
+"use server"
 import { Container } from "@/components/layout/Container";
 import { SearchPage } from "./_components/SearchPage";
 import { getUpcomingMovies, searchMovie } from "../api/movie/actions";

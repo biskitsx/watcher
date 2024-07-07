@@ -33,11 +33,15 @@ import { useRouter } from "next/navigation";
 import { toastConfig } from "../toast/ToastConfig";
 import { Status } from "@prisma/client";
 import { Image } from "antd";
+import { FaBookmark } from "react-icons/fa";
+import { IconContext } from "react-icons/lib";
+import { tmdbImagesURL } from "@/data/baseUrl";
 
 interface MediaDetailProps {
   media: MediaInfoProps;
+  casts?: any[];
 }
-export const MediaDetail = ({ media }: MediaDetailProps) => {
+export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const session = useSession();
@@ -100,7 +104,6 @@ export const MediaDetail = ({ media }: MediaDetailProps) => {
     router.refresh();
     setIsAddToWatchListLoading(false);
   };
-
   return (
     <>
       <Box
@@ -125,10 +128,16 @@ export const MediaDetail = ({ media }: MediaDetailProps) => {
                   "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
               }}
             />
-            <Stack direction={"column"} className="text-white" spacing={4}>
+            <Stack
+              direction={"column"}
+              className="text-white w-full"
+              spacing={4}
+            >
               <Heading as="h2" size="2xl">
                 {media.title}{" "}
-                {formattedDate && `(${formattedDate.split(" ")[2]})`}
+                <span className="text-[#e5e5e5] text-4xl">
+                  {formattedDate && `(${formattedDate.split(" ")[2]})`}
+                </span>
               </Heading>
               <Stack direction={"row"}>
                 <RadialProgress
@@ -137,29 +146,39 @@ export const MediaDetail = ({ media }: MediaDetailProps) => {
                   className="text-sm"
                 />
                 <Stack direction={"row"} placeItems={"center"}>
-                  <Badge>Action</Badge>
-                  <Badge>War</Badge>
-                  <Badge>drama</Badge>
+                  {media.genres &&
+                    media.genres.map((genre, index) => (
+                      <Badge key={index}>{genre.name}</Badge>
+                    ))}
                 </Stack>
               </Stack>
 
               <Stack direction={"row"} className="uppercase">
                 <Button
-                  bgColor={
-                    media.userMediaData &&
-                    media.userMediaData?.status !== Status.NOTHING
-                      ? palatte.secondary
-                      : palatte.primary
-                  }
+                  bgColor={palatte.darkBlue}
                   onClick={handleAddToWatchList}
                   isLoading={isAddToWatchListLoading}
+                  rounded={"full"}
+                  height={"40px"}
+                  width={"40px"}
                 >
-                  add to watch list{" "}
+                  <FaBookmark
+                    color={
+                      media.userMediaData &&
+                      media.userMediaData.status !== Status.NOTHING
+                        ? palatte.primary
+                        : "white"
+                    }
+                  />
                 </Button>
-                <Button bgColor={palatte.primary} onClick={handleOnOpen}>
+                <Button
+                  bg={palatte.darkBlue}
+                  textColor={"white"}
+                  onClick={handleOnOpen}
+                >
                   {media.userMediaData && media.userMediaData?.point !== -1
                     ? `Your vibe: ${media.userMediaData?.point}/10`
-                    : "Rate your vibe"}
+                    : "What's your vibe"}
                 </Button>
               </Stack>
               <Text textColor={"white"}>
@@ -167,6 +186,20 @@ export const MediaDetail = ({ media }: MediaDetailProps) => {
                   ? media.overview
                   : "We don't have an overview translated in English."}
               </Text>
+              <Text className="text-white text-lg font-semibold">Cast</Text>
+              <Box className="flex gap-4">
+                {casts?.splice(0, 4).map((cast, index) => (
+                  <Box key={index} className="inline-block">
+                    <Image
+                      src={`${tmdbImagesURL}/${cast.profile_path}`}
+                      alt={cast.name}
+                      width={100}
+                      preview={false}
+                    />
+                    <Text className="text-white">{cast.name}</Text>
+                  </Box>
+                ))}
+              </Box>
             </Stack>
           </Stack>
         </Box>
@@ -211,18 +244,20 @@ export const MediaDetail = ({ media }: MediaDetailProps) => {
             </Stack>
           </ModalBody>
 
-          <ModalFooter className="space-x-2">
+          <ModalFooter className="space-x-2 mt-4">
             <Button
-              bgColor={palatte.secondary}
+              bgColor={palatte.darkBlue}
               mr={3}
               onClick={onClose}
               size={"sm"}
+              color={"white"}
             >
               CANCLE
             </Button>
             <Button
               size={"sm"}
-              bgColor={palatte.secondary}
+              color={"white"}
+              bgColor={palatte.darkBlue}
               mr={3}
               isLoading={isLoading}
               onClick={handleOnSubmit}

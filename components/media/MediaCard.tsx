@@ -1,3 +1,4 @@
+"use client"
 import { RadialProgress } from "./RadialProgress";
 import { MediaInfoProps } from "@/wrapper/media-info";
 import Link from "next/link";

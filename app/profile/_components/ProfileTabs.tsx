@@ -33,7 +33,7 @@ export const ProfileTabs = ({ watchlist, ratings }: ProfileTabsProps) => {
     {
       key: "3",
       label: "Calendar",
-      children: <ProfileCalendar />,
+      children: <ProfileCalendar media={watchlist} />,
     },
   ];
 
