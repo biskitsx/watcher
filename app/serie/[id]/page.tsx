@@ -1,13 +1,12 @@
-import {
-  getMovieById,
-  getTrendingAll,
-  getUpcomingMovies,
-} from "@/app/api/movie/actions";
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { Container } from "@/components/layout/Container";
 import { MediaDetail } from "@/components/media/MediaDetail";
 import { PageContainer } from "@/components/layout/PageContainer";
-import { getSeriesById, getTrendingSeries } from "@/app/api/serie/actions";
+import {
+  getCreditsBySerieId,
+  getSeriesById,
+  getTrendingSeries,
+} from "@/app/api/serie/actions";
 
 export default async function Home({
   params: { id },
@@ -16,10 +15,10 @@ export default async function Home({
 }) {
   const media = await getSeriesById(id);
   const series = await getTrendingSeries(12);
-
+  const credits = await getCreditsBySerieId(id);
   return (
     <PageContainer>
-      <MediaDetail media={media} />
+      <MediaDetail media={media} casts={credits.cast} />
       <Container>
         <MediaSlider
           name="You may also like"

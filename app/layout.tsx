@@ -9,6 +9,8 @@ import SessionProvider from "./components/SessionProvider";
 import { ConfigProvider } from "antd";
 import { palatte } from "@/constant/palatte";
 import { ChakraProvider } from "@chakra-ui/react";
+import { font } from "@/util/font";
+import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,7 +23,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
   return (
     <html lang="en">
       <head>
@@ -40,26 +41,14 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
       </head>
-      <SessionProvider session={session}>
-        <AntdRegistry>
-          <ConfigProvider
-            theme={{
-              token: {
-                colorPrimary: palatte.primary,
-                // colorBgContainer: palatte.bgColor,
-                // colorFillSecondary: palatte.secondary,
-              },
-            }}
-          >
-            <body>
-              <ChakraProvider>
-                <Navbar />
-                {children}
-              </ChakraProvider>
-            </body>
-          </ConfigProvider>
-        </AntdRegistry>
-      </SessionProvider>
+      <body>
+        <Providers>
+          <div>
+            <Navbar />
+            {children}
+          </div>
+        </Providers>
+      </body>
     </html>
   );
 }

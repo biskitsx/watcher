@@ -1,7 +1,7 @@
 import { TMDB_TOKEN } from "@/data/baseUrl";
 import { MediaInfoProps } from "./media-info";
 import { MediaMap, getUserDataMedia } from "@/app/api/media/actions";
-const tmdbImagesURL = "https://image.tmdb.org/t/p/original";
+export const tmdbImagesURL = "https://image.tmdb.org/t/p/original";
 
 export const tmdbConvertToMediaInfo = (
   item: any,
@@ -17,6 +17,7 @@ export const tmdbConvertToMediaInfo = (
     type: type,
     vote_average: item.vote_average,
     overview: item.overview,
+    genres: item.genres,
   };
 
   if (userDataMedia) {

@@ -5,6 +5,12 @@ export const jikanConvertToMediaInfo = (
   item: any,
   userDataMedia?: MediaMap
 ): MediaInfoProps => {
+  const genres = item.genres.map((genre: any) => {
+    return {
+      id: genre.mal_id,
+      name: genre.name,
+    };
+  });
   let media: MediaInfoProps = {
     id: String(item.mal_id),
     poster_path: item.images.jpg.image_url,
@@ -14,6 +20,7 @@ export const jikanConvertToMediaInfo = (
     type: "anime",
     vote_average: item.score,
     overview: item.synopsis,
+    genres: genres,
   };
 
   if (userDataMedia) {
@@ -78,6 +85,7 @@ export const getJikan = async (path: string, limit: number) => {
 
     const res = await fetch(url, options);
     const json = await res.json();
+
     return json;
   } catch (error) {
     console.error("error:", error);

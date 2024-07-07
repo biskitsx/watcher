@@ -32,3 +32,7 @@ export const getTrendingSeries = async (limit: number) => {
 export const searchSerie = async (query: string) => {
   return await getTMDbHelperList(`search/tv?query=${query}`, 12, SERIES);
 };
+
+export const getCreditsBySerieId = async (id: string) => {
+  return await getTMDb(`tv/${id}/credits?language=en-US`, 1);
+};

@@ -7,9 +7,10 @@ import { LiLink } from "./LiLink";
 import { signOut, useSession } from "next-auth/react";
 import { AuthStatus, avatarProfile } from "@/constant/auth";
 import { Button } from "antd";
-import { cn } from "@/util/cn";
 import { useToast } from "@chakra-ui/react";
 import { toastConfig } from "../toast/ToastConfig";
+import { cn } from "@/util/cn";
+import { font } from "@/util/font";
 interface NavbarProps {}
 export const Navbar = ({}: NavbarProps) => {
   const { data: session, status } = useSession();
@@ -56,7 +57,7 @@ export const Navbar = ({}: NavbarProps) => {
           shouldTransparent ? homeClassName : OtherClassName
         }`}
       >
-        <div className="px-8">
+        <div className={cn("px-8", font.className)}>
           <div className="navbar justify-between flex p-0 items-center">
             <Link href={"/"}>
               <Logo />

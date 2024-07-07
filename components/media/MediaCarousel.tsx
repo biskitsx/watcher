@@ -34,9 +34,12 @@ export const MediaCarousel = ({ items }: MediaCarouselProps) => {
                     <Stack direction={"row"}>
                       <RadialProgress value={movie.vote_average * 10} />
                       <Stack direction={"row"} placeItems={"center"}>
-                        <Badge>Action</Badge>
-                        <Badge>War</Badge>
-                        <Badge>drama</Badge>
+                        <Stack direction={"row"} placeItems={"center"}>
+                          {movie.genres &&
+                            movie.genres.map((genre, index) => (
+                              <Badge key={index}>{genre.name}</Badge>
+                            ))}
+                        </Stack>
                       </Stack>
                     </Stack>
                     <Button

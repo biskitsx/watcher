@@ -1,4 +1,5 @@
 import {
+  getCreditsByMovieId,
   getMovieById,
   getTrendingAll,
   getUpcomingMovies,
@@ -15,10 +16,10 @@ export default async function Home({
 }) {
   const media = await getMovieById(id);
   const movies = await getUpcomingMovies(12);
-
+  const credits = await getCreditsByMovieId(id);
   return (
     <PageContainer>
-      <MediaDetail media={media} />
+      <MediaDetail media={media} casts={credits.cast} />
       <Container>
         <MediaSlider
           name="You may also like"

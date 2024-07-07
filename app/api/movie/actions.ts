@@ -1,6 +1,10 @@
 "use server";
 
-import { getTMDbHelper, getTMDbHelperList } from "../../../wrapper/tmdb";
+import {
+  getTMDb,
+  getTMDbHelper,
+  getTMDbHelperList,
+} from "../../../wrapper/tmdb";
 
 const MOVIE = "movie";
 
@@ -26,4 +30,8 @@ export const searchMovie = async (query: string) => {
 
 export const getMovieById = async (id: string) => {
   return await getTMDbHelper(`movie/${id}?language=en-US`, 1, MOVIE);
+};
+
+export const getCreditsByMovieId = async (id: string) => {
+  return await getTMDb(`movie/${id}/credits?language=en-US`, 1);
 };
