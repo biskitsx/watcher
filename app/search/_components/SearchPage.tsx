@@ -9,7 +9,7 @@ import { MediaInfoProps } from "@/wrapper/media-info";
 import { ConfigProvider, Radio } from "antd";
 import Search from "antd/es/input/Search";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 interface SearchPageProps {
   bannerMedia: MediaInfoProps;
