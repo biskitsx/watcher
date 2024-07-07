@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import { Inter, Poppins, Roboto } from "next/font/google";
 import "./globals.css";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Navbar } from "@/components/layout/Navbar";
-import { Providers } from "./providers";
+import { Footer } from "@/components/layout/Footer";
+import { getServerSession } from "next-auth";
+import SessionProvider from "./components/SessionProvider";
+import { ConfigProvider } from "antd";
+import { palatte } from "@/constant/palatte";
+import { ChakraProvider } from "@chakra-ui/react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -15,6 +21,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
   return (
     <html lang="en">
       <head>
@@ -33,14 +40,26 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
       </head>
-      <body>
-        <Providers>
-          <div>
-            <Navbar />
-            {children}
-          </div>
-        </Providers>
-      </body>
+      <SessionProvider session={session}>
+        <AntdRegistry>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: palatte.primary,
+                // colorBgContainer: palatte.bgColor,
+                // colorFillSecondary: palatte.secondary,
+              },
+            }}
+          >
+            <body>
+              <ChakraProvider>
+                <Navbar />
+                {children}
+              </ChakraProvider>
+            </body>
+          </ConfigProvider>
+        </AntdRegistry>
+      </SessionProvider>
     </html>
   );
 }
