@@ -5,7 +5,7 @@ import { tmdbImagesURL } from "@/data/baseUrl";
 import { BreadcrumbApp } from "@/components/BreadCrumb";
 
 async function Page() {
-  const trendingAll = await getTrendingAll(12);
+  const trendingAll = await getTrendingAll();
   return (
     <Container>
       <div className="flex gap-2 flex-col">

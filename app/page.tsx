@@ -9,9 +9,9 @@ import { getTopAnime } from "@/app/api/anime/actions";
 import { getAiringTodaySeries } from "@/app/api/serie/actions";
 
 export default async function Home() {
-  const upcomingMovies = await getUpcomingMovies(12);
-  const series = await getAiringTodaySeries(12);
-  const topAnimes = await getTopAnime(12);
+  const upcomingMovies = await getUpcomingMovies({ page: 1 });
+  const series = await getAiringTodaySeries({ page: 1 });
+  const topAnimes = await getTopAnime({ page: 1 });
   return (
     <PageContainer>
       <HomeCarousel items={upcomingMovies} />
@@ -29,6 +29,7 @@ export default async function Home() {
           type="serie"
           name="Series"
           key={1}
+          isLong
         />
         <MediaSlider
           href="/anime"

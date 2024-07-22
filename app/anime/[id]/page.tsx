@@ -10,7 +10,7 @@ export default async function Home({
   params: { id: string };
 }) {
   const media = await getAnimeById(id);
-  const anime = await getTopAnime(12);
+  const anime = await getTopAnime({ page: 1 });
   return (
     <PageContainer>
       <MediaDetail media={media} />

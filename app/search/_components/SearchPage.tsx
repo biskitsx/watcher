@@ -6,34 +6,75 @@ import { Container } from "@/components/layout/Container";
 import { MediaCardFlex } from "@/components/media/MediaCardFlex";
 import { palatte } from "@/constant/palatte";
 import { MediaInfoProps } from "@/wrapper/media-info";
-import { ConfigProvider, Radio } from "antd";
+import { ConfigProvider, Radio, Skeleton } from "antd";
 import Search from "antd/es/input/Search";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import SkeletonImage from "antd/es/skeleton/Image";
 
 interface SearchPageProps {
   bannerMedia: MediaInfoProps;
 }
+
 export const SearchPage = ({ bannerMedia }: SearchPageProps) => {
   const [value, setValue] = useState("");
   const [type, setType] = useState("movie");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<MediaInfoProps[]>([]);
-
-  const handleSearch = async () => {
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const skeletonArray = Array.from({ length: 10 }, (_, idx) => idx);
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore) return;
     setLoading(true);
-    if (type === "movie") {
-      const res = await searchMovie(value);
-      setResult(res);
-    } else if (type === "anime") {
-      const res = await searchAnime(value);
-      setResult(res);
-    } else {
-      const res = await searchSerie(value);
-      setResult(res);
+    try {
+      let res = [] as MediaInfoProps[];
+      if (type === "movie") {
+        res = await searchMovie({ query: value, page });
+      } else if (type === "anime") {
+        res = await searchAnime({ query: value, page });
+      } else if (type === "serie") {
+        res = await searchSerie({ query: value, page });
+      }
+      if (res.length === 0) {
+        setHasMore(false);
+      } else {
+        setResult((prev) => [...prev, ...res]);
+        setPage((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Error loading more data:", error);
     }
     setLoading(false);
-  };
+  }, [value, type, page, loading, hasMore]);
+
+  const handleSearch = useCallback(async () => {
+    setLoading(true);
+    try {
+      setPage(1);
+      setHasMore(true);
+      let res = [] as MediaInfoProps[];
+      if (type === "movie") {
+        res = await searchMovie({ query: value, page: 1 });
+      } else if (type === "anime") {
+        res = await searchAnime({ query: value, page: 1 });
+      } else if (type === "serie") {
+        res = await searchSerie({ query: value, page: 1 });
+      }
+      setResult(res);
+      setPage(2);
+      if (res.length === 0) setHasMore(false);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error during search:", error);
+    }
+    setLoading(false);
+  }, [value, type]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [type]);
 
   return (
     <ConfigProvider
@@ -56,11 +97,9 @@ export const SearchPage = ({ bannerMedia }: SearchPageProps) => {
             size="large"
             enterButton
             value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
+            onChange={(e) => setValue(e.target.value)}
             loading={loading}
-            onSearch={async () => await handleSearch()}
+            onSearch={handleSearch}
             style={{ width: "50%" }}
             className="absolute -bottom-5 left-1/2 transform -translate-x-1/2"
           />
@@ -71,9 +110,7 @@ export const SearchPage = ({ bannerMedia }: SearchPageProps) => {
             buttonStyle="solid"
             size="large"
             value={type}
-            onChange={(e) => {
-              setType(e.target.value);
-            }}
+            onChange={(e) => setType(e.target.value)}
           >
             <Radio.Button value="movie">Movies</Radio.Button>
             <Radio.Button value="serie">Series</Radio.Button>
@@ -81,7 +118,24 @@ export const SearchPage = ({ bannerMedia }: SearchPageProps) => {
           </Radio.Group>
         </div>
         <Container>
-          <MediaCardFlex medias={result} isLoading={loading} />{" "}
+          <InfiniteScroll
+            dataLength={result.length}
+            next={loadMore}
+            loader={
+              <div className="flex flex-wrap justify-between gap-6">
+                {skeletonArray.map((idx) => (
+                  <SkeletonImage
+                    key={idx}
+                    active
+                    style={{ height: 210, width: 140 }}
+                  />
+                ))}
+              </div>
+            }
+            hasMore={hasMore}
+          >
+            <MediaCardFlex medias={result} isLoading={loading} />
+          </InfiniteScroll>
         </Container>
       </div>
     </ConfigProvider>

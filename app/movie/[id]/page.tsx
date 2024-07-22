@@ -15,7 +15,7 @@ export default async function Home({
   params: { id: string };
 }) {
   const media = await getMovieById(id);
-  const movies = await getUpcomingMovies(12);
+  const movies = await getUpcomingMovies({ page: 1 });
   const credits = await getCreditsByMovieId(id);
   return (
     <PageContainer>
