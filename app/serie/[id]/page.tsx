@@ -14,7 +14,7 @@ export default async function Home({
   params: { id: string };
 }) {
   const media = await getSeriesById(id);
-  const series = await getTrendingSeries(12);
+  const series = await getTrendingSeries({ page: 1 });
   const credits = await getCreditsBySerieId(id);
   return (
     <PageContainer>

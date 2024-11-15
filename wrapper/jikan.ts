@@ -14,7 +14,9 @@ export const jikanConvertToMediaInfo = (
   let media: MediaInfoProps = {
     id: String(item.mal_id),
     poster_path: item.images.jpg.image_url,
-    backdrop_path: item.trailer.images.maximum_image_url,
+    backdrop_path: item.trailer.images.maximum_image_url
+      ? item.trailer.images.maximum_image_url
+      : item.images.jpg.image_url,
     release_date: item.aired.to,
     title: item.title,
     type: "anime",
@@ -41,9 +43,9 @@ export const jikanConvertToMediaInfoList = (
   });
 };
 
-export const getJikanHelperList = async (pathname: string, limit: number) => {
+export const getJikanHelperList = async (pathname: string) => {
   try {
-    const json = await getJikan(pathname, limit);
+    const json = await getJikan(pathname);
     const userDataMedia = await getUserDataMedia();
     if (userDataMedia) {
       const res = jikanConvertToMediaInfoList(json.data, userDataMedia);
@@ -57,9 +59,9 @@ export const getJikanHelperList = async (pathname: string, limit: number) => {
   }
 };
 
-export const getJikanHelper = async (pathname: string, limit: number) => {
+export const getJikanHelper = async (pathname: string) => {
   try {
-    const json = await getJikan(pathname, limit);
+    const json = await getJikan(pathname);
     const userDataMedia = await getUserDataMedia();
     if (userDataMedia) {
       const res = jikanConvertToMediaInfo(json.data, userDataMedia);
@@ -73,7 +75,7 @@ export const getJikanHelper = async (pathname: string, limit: number) => {
   }
 };
 
-export const getJikan = async (path: string, limit: number) => {
+export const getJikan = async (path: string) => {
   try {
     const url = `https://api.jikan.moe/v4/${path}`;
     const options = {

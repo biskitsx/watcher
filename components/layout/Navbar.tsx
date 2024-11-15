@@ -11,6 +11,7 @@ import { useToast } from "@chakra-ui/react";
 import { toastConfig } from "../toast/ToastConfig";
 import { cn } from "@/util/cn";
 import { font } from "@/util/font";
+import { FiMoreVertical } from "react-icons/fi";
 interface NavbarProps {}
 export const Navbar = ({}: NavbarProps) => {
   const { data: session, status } = useSession();
@@ -62,7 +63,7 @@ export const Navbar = ({}: NavbarProps) => {
             <Link href={"/"}>
               <Logo />
             </Link>
-            <ul className="flex gap-2 font-normal text-xs sm:text-sm sm:gap-4">
+            <ul className="gap-2 font-normal text-xs sm:text-sm sm:gap-4 hidden sm:flex">
               <LiLink currentPathname={currentPathname} pathname="home" />
               <LiLink currentPathname={currentPathname} pathname="movie" />
               <LiLink currentPathname={currentPathname} pathname="serie" />
@@ -98,7 +99,6 @@ export const Navbar = ({}: NavbarProps) => {
                   >
                     <div className="w-10 rounded-full">
                       <img
-                        alt="Tailwind CSS Navbar component"
                         src={session?.user?.image || avatarProfile}
                         onError={(e) => {
                           (e.target as HTMLImageElement).src =
@@ -133,6 +133,36 @@ export const Navbar = ({}: NavbarProps) => {
                   </Button>
                 </div>
               )}
+              <div className="dropdown dropdown-end sm:hidden">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <FiMoreVertical size={20} />
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content"
+                >
+                  <li>
+                    <Link href={"/"}>Home</Link>
+                  </li>
+                  <li>
+                    <Link href={"/movie"}>Movie</Link>
+                  </li>
+                  <li>
+                    <Link href={"/serie"}>Serie</Link>
+                  </li>
+                  <li>
+                    <Link href={"/anime"}>Anime</Link>
+                  </li>
+                  <li></li>
+                  <li>
+                    <Link href={"/profile"}>Profile</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

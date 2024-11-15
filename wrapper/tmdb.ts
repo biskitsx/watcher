@@ -45,11 +45,10 @@ export const tmdbConvertToMediaInfoList = (
 
 export const getTMDbHelperList = async (
   pathname: string,
-  limit: number,
   type: "movie" | "serie"
 ) => {
   try {
-    const json = await getTMDb(pathname, limit);
+    const json = await getTMDb(pathname);
     const userDataMedia = await getUserDataMedia();
     if (userDataMedia) {
       const res = tmdbConvertToMediaInfoList(json.results, type, userDataMedia);
@@ -64,11 +63,10 @@ export const getTMDbHelperList = async (
 
 export const getTMDbHelper = async (
   pathname: string,
-  limit: number,
   type: "movie" | "serie"
 ) => {
   try {
-    const json = await getTMDb(pathname, limit);
+    const json = await getTMDb(pathname);
     const userDataMedia = await getUserDataMedia();
     if (userDataMedia) {
       const res = tmdbConvertToMediaInfo(json, type, userDataMedia);
@@ -81,7 +79,7 @@ export const getTMDbHelper = async (
   }
 };
 
-export const getTMDb = async (path: string, limit: number) => {
+export const getTMDb = async (path: string) => {
   try {
     const url = `https://api.themoviedb.org/3/${path}`;
     const options = {

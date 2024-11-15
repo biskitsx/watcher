@@ -8,7 +8,7 @@ import { MediaCard } from "@/components/media/MediaCard";
 import { MediaTaps } from "@/components/MediaTabs";
 
 async function Page() {
-  const trendingAll = await getTrendingAll(12);
+  const trendingAll = await getTrendingAll();
 
   return (
     <Container>

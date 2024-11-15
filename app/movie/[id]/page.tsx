@@ -14,20 +14,24 @@ export default async function Home({
 }: {
   params: { id: string };
 }) {
-  const media = await getMovieById(id);
-  const movies = await getUpcomingMovies(12);
-  const credits = await getCreditsByMovieId(id);
-  return (
-    <PageContainer>
-      <MediaDetail media={media} casts={credits.cast} />
-      <Container>
-        <MediaSlider
-          name="You may also like"
-          items={movies}
-          type="movie"
-          href=""
-        />
-      </Container>
-    </PageContainer>
-  );
+  try {
+    const media = await getMovieById(id);
+    const movies = await getUpcomingMovies({ page: 1 });
+    const credits = await getCreditsByMovieId(id);
+    return (
+      <PageContainer>
+        <MediaDetail media={media} casts={credits.cast} />
+        <Container>
+          <MediaSlider
+            name="You may also like"
+            items={movies}
+            type="movie"
+            href=""
+          />
+        </Container>
+      </PageContainer>
+    );
+  } catch (error) {
+    return <div>Something went wrong</div>;
+  }
 }

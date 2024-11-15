@@ -5,7 +5,6 @@ import { getUserWatchList } from "@/app/api/media/actions";
 import { Suspense } from "react";
 
 async function Page() {
-  // const trendingMovies = (await getTrendingAll(12)) as any[];
   const data = await getUserWatchList();
   return (
     <Container>
