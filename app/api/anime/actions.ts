@@ -6,6 +6,7 @@ import {
   getJikanHelperList,
 } from "../../../wrapper/jikan";
 import { getTVDB } from "../../../wrapper/tvdb";
+import { PaginationProps, SearchProps } from "../media/types";
 const ANIME_ID = 27;
 
 export const getTopAnime = async ({ page }: PaginationProps) => {

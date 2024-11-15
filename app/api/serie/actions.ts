@@ -7,6 +7,7 @@ import {
   getTMDbHelperList,
   tmdbConvertToMediaInfoList,
 } from "../../../wrapper/tmdb";
+import { PaginationProps, SearchProps } from "../media/types";
 
 const SERIES = "serie";
 
