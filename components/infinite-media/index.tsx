@@ -3,6 +3,7 @@ import { MediaInfoProps } from "@/wrapper/media-info";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { MediaCard } from "../media/MediaCard";
+import { PaginationProps } from "@/app/api/media/types";
 
 interface InfiniteMediaProps {
   fetchData: ({ page }: PaginationProps) => Promise<MediaInfoProps[]>;

@@ -5,10 +5,11 @@ import { getUpcomingMovies, searchMovie } from "../api/movie/actions";
 import { PageContainer } from "@/components/layout/PageContainer";
 
 export default async function Home() {
-  const firstMedia = await getUpcomingMovies({ page: 1 });
+  const media = await getUpcomingMovies({ page: 1 });
+  const firstMedia = media[0];
   return (
     <PageContainer>
-      <SearchPage bannerMedia={firstMedia[1]} />
+      <SearchPage bannerMedia={firstMedia} />
     </PageContainer>
   );
 }

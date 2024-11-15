@@ -1,6 +1,4 @@
-// "use client";
-
-import { getTrendingAll, getUpcomingMovies } from "@/app/api/movie/actions";
+import { getUpcomingMovies } from "@/app/api/movie/actions";
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { HomeCarousel } from "@/components/media/HomeCarousel";
 import { PageContainer } from "@/components/layout/PageContainer";
@@ -14,7 +12,7 @@ export default async function Home() {
   const topAnimes = await getTopAnime({ page: 1 });
   return (
     <PageContainer>
-      <HomeCarousel items={upcomingMovies} />
+      <HomeCarousel items={upcomingMovies.splice(0, 8)} />
       <Container>
         <MediaSlider
           href="/movies"

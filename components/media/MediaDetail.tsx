@@ -1,7 +1,7 @@
 "use client";
 import { MediaInfoProps } from "@/wrapper/media-info";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Badge,
   Box,
@@ -36,10 +36,11 @@ import { Image } from "antd";
 import { FaBookmark } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 import { tmdbImagesURL } from "@/data/baseUrl";
+import { CastProps } from "@/app/api/media/types";
 
 interface MediaDetailProps {
   media: MediaInfoProps;
-  casts?: any[];
+  casts?: CastProps[];
 }
 export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -70,7 +71,10 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
     "Champions",
   ];
   const formattedDate = formatTheDate(media.release_date);
-
+  const [watchList, setWatchList] = useState(
+    media.userMediaData?.status &&
+      media.userMediaData?.status !== Status.NOTHING
+  );
   const handleOnSubmit = async () => {
     setIsLoading(true);
     await addRateTomedia(media, rating);
@@ -101,9 +105,27 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
       status: "success",
       ...toastConfig,
     });
-    router.refresh();
+    setWatchList(!watchList);
     setIsAddToWatchListLoading(false);
   };
+
+  const castsElement = useMemo(() => {
+    return casts?.map((cast, index) => (
+      <Box key={index} className="inline-block">
+        <Image
+          src={`${tmdbImagesURL}/${cast.profile_path}`}
+          alt={cast.name}
+          width={100}
+          height={150}
+          preview={false}
+        />
+        <Text className="text-white text-xs">
+          <span className="font-bold">{cast.name}</span> (
+          {cast.job ? cast.job : cast.known_for_department})
+        </Text>
+      </Box>
+    ));
+  }, [casts]);
   return (
     <>
       <Box
@@ -130,7 +152,7 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
             />
             <Stack
               direction={"column"}
-              className="text-white w-full"
+              className="text-white w-full  overflow-x-hidden"
               spacing={4}
             >
               <Heading as="h2" size="2xl">
@@ -143,6 +165,7 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
                 <RadialProgress
                   value={media.vote_average * 10}
                   size="48px"
+                  thickness="3px"
                   className="text-sm"
                 />
                 <Stack direction={"row"} placeItems={"center"}>
@@ -162,14 +185,7 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
                   height={"40px"}
                   width={"40px"}
                 >
-                  <FaBookmark
-                    color={
-                      media.userMediaData &&
-                      media.userMediaData.status !== Status.NOTHING
-                        ? palatte.primary
-                        : "white"
-                    }
-                  />
+                  <FaBookmark color={watchList ? palatte.primary : "white"} />
                 </Button>
                 <Button
                   bg={palatte.darkBlue}
@@ -186,87 +202,82 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
                   ? media.overview
                   : "We don't have an overview translated in English."}
               </Text>
-              <Text className="text-white text-lg font-semibold">Cast</Text>
-              <Box className="flex gap-4">
-                {casts?.splice(0, 4).map((cast, index) => (
-                  <Box key={index} className="inline-block">
-                    <Image
-                      src={`${tmdbImagesURL}/${cast.profile_path}`}
-                      alt={cast.name}
-                      width={100}
-                      preview={false}
-                    />
-                    <Text className="text-white">{cast.name}</Text>
-                  </Box>
-                ))}
+              <Text className="text-white text-lg font-semibold ">Cast</Text>
+              <Box className="flex gap-4 overflow-x-scroll hide-scrollbar">
+                {castsElement}
               </Box>
             </Stack>
           </Stack>
         </Box>
       </Box>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent className="">
-          <ModalHeader>Rating</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Stack direction={"column"}>
-              <Text>
-                What you think about{" "}
-                <span className="font-semibold">{media.title}</span>
-              </Text>
-              <Box className="px-2">
-                <Slider
-                  defaultValue={rating}
-                  min={0}
-                  max={10}
-                  step={1}
-                  size="lg"
-                  onChange={(v) => setRating(v)}
-                >
-                  {scale.map((value, index: number) => (
-                    <SliderMark
-                      value={value}
-                      mt="4"
-                      ml="-1.5"
-                      fontSize="sm"
-                      key={index}
-                    >
-                      {value}
-                    </SliderMark>
-                  ))}
-                  <SliderTrack bg={"blue.100"} height={4}>
-                    <SliderFilledTrack bg={palatte.bgGradient} />
-                  </SliderTrack>
-                  <SliderThumb boxSize={4} />
-                </Slider>
-              </Box>
-            </Stack>
-          </ModalBody>
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Rating</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Stack direction={"column"}>
+                <Text>
+                  What you think about{" "}
+                  <span className="font-semibold">{media.title}</span>
+                </Text>
+                <Box className="px-2">
+                  <Slider
+                    defaultValue={rating}
+                    min={0}
+                    max={10}
+                    step={1}
+                    size="lg"
+                    onChange={(v) => setRating(v)}
+                  >
+                    {scale.map((value, index: number) => (
+                      <SliderMark
+                        value={value}
+                        mt="4"
+                        ml="-1.5"
+                        fontSize="sm"
+                        key={index}
+                      >
+                        {value}
+                      </SliderMark>
+                    ))}
+                    <SliderTrack bg={"blue.100"} height={3}>
+                      <SliderFilledTrack bg={palatte.bgGradient} />
+                    </SliderTrack>
+                    <SliderThumb boxSize={4} className="!bg-red-300" />
+                  </Slider>
+                </Box>
+                <Text className="text-end mt-4 text-secondary text-sm underline ">
+                  Clear my rating
+                </Text>
+              </Stack>
+            </ModalBody>
 
-          <ModalFooter className="space-x-2 mt-4">
-            <Button
-              bgColor={palatte.darkBlue}
-              mr={3}
-              onClick={onClose}
-              size={"sm"}
-              color={"white"}
-            >
-              CANCLE
-            </Button>
-            <Button
-              size={"sm"}
-              color={"white"}
-              bgColor={palatte.darkBlue}
-              mr={3}
-              isLoading={isLoading}
-              onClick={handleOnSubmit}
-            >
-              SUBMIT
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            <ModalFooter className="space-x-2 mt-4">
+              <Button
+                bgColor={palatte.darkBlue}
+                mr={3}
+                onClick={onClose}
+                size={"sm"}
+                color={"white"}
+              >
+                CANCLE
+              </Button>
+              <Button
+                size={"sm"}
+                color={"white"}
+                bgColor={palatte.darkBlue}
+                mr={3}
+                isLoading={isLoading}
+                onClick={handleOnSubmit}
+              >
+                SUBMIT
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 };

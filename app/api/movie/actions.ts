@@ -5,6 +5,7 @@ import {
   getTMDbHelper,
   getTMDbHelperList,
 } from "../../../wrapper/tmdb";
+import { CastProps, PaginationProps, SearchProps } from "../media/types";
 
 const MOVIE = "movie";
 

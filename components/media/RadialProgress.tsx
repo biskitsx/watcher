@@ -5,6 +5,7 @@ interface RadialProgressProps {
   value: number;
   className?: string;
   size?: string;
+  thickness?: string;
 }
 
 const calculateColor = (value: number): string => {
@@ -20,14 +21,20 @@ export const RadialProgress = ({
   value,
   className,
   size,
+  thickness,
 }: RadialProgressProps) => {
   const [cssColor, setCssColor] = useState<string>("");
   const [roundedValue, setRoundedValue] = useState<number>(Math.round(value));
-
+  const [valueString, setValueString] = useState<string>("");
   useEffect(() => {
     setRoundedValue(Math.round(value));
     const color = calculateColor(roundedValue);
-    setCssColor(color);
+    const valueStr = roundedValue === 0 ? "NR" : `${roundedValue}%`;
+    if (roundedValue === 0) {
+      setRoundedValue(100);
+      setCssColor("gray");
+    } else setCssColor(color);
+    setValueString(valueStr);
   }, [value]);
 
   return (
@@ -40,13 +47,13 @@ export const RadialProgress = ({
         {
           "--value": roundedValue,
           "--size": size ? size : "32px",
-          "--thickness": "2px",
+          "--thickness": thickness ? thickness : "2px",
           color: cssColor,
         } as React.CSSProperties
       }
       role="progressbar"
     >
-      <span className="text-white">{roundedValue}%</span>
+      <span className="text-white">{valueString}</span>
     </div>
   );
 };

@@ -7,7 +7,6 @@ import { Suspense } from "react";
 import { InfiniteMedia } from "@/components/infinite-media";
 
 export default async function Home() {
-  const trendingMovies = await getTrendingAll();
   const upcomingMovies = await getUpcomingMovies({ page: 1 });
   const recommendMovies = await getTrendingAll();
   return (

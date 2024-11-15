@@ -2,7 +2,7 @@
 
 import { MediaInfoProps } from "@/wrapper/media-info";
 import { Badge, Box, Stack } from "@chakra-ui/react";
-import { Carousel, Card, Button } from "antd";
+import { Carousel, Button } from "antd";
 import { RadialProgress } from "./RadialProgress";
 
 interface MediaCarouselProps {
