@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 import daisyui from "daisyui";
 const config: Config = {
+  darkMode: ["class"],
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -18,8 +19,16 @@ const config: Config = {
         secondary: "#1CBEC8",
         tertiary: "#8C52F7",
       },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
     },
   },
-  plugins: [daisyui],
+  daisyui: {
+    themes: ["light"],
+  },
+  plugins: [daisyui, require("tailwindcss-animate")],
 };
 export default config;

@@ -16,7 +16,7 @@ export default async function Home() {
         <Suspense fallback={<div>Loading...</div>}>
           <MediaSlider
             href="#"
-            items={recommendMovies?.slice(12, 24)}
+            items={upcomingMovies?.slice(12, 24)}
             name="Recommend For You"
             type="movie"
             isLong

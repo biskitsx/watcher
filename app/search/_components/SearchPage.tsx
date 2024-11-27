@@ -87,11 +87,11 @@ export const SearchPage = ({ bannerMedia }: SearchPageProps) => {
       <div className="flex flex-col gap-4">
         <div className="relative mb-5">
           <img
-            src={bannerMedia.poster_path}
+            src={bannerMedia.backdrop_path}
             className="object-cover brightness-50 h-[40vh] w-full"
           />
-          <div className="absolute left-1/2 transform -translate-x-1/2 top-3/4 -translate-y-1/2 z-10 text-3xl text-white font-bold">
-            Search Result
+          <div className="absolute left-1/2 transform -translate-x-1/2 top-3/4 -translate-y-1/2 z-10 text-3xl text-white font-bold text-center">
+            Find Your Favorite Media !
           </div>
           <Search
             size="large"

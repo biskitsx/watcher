@@ -1,5 +1,6 @@
 import { cn } from "@/util/cn";
 import { useEffect, useState } from "react";
+import { useSpring, animated } from "react-spring";
 
 interface RadialProgressProps {
   value: number;
@@ -26,6 +27,8 @@ export const RadialProgress = ({
   const [cssColor, setCssColor] = useState<string>("");
   const [roundedValue, setRoundedValue] = useState<number>(Math.round(value));
   const [valueString, setValueString] = useState<string>("");
+  const props = useSpring({ value: value, from: { value: 0 } });
+
   useEffect(() => {
     setRoundedValue(Math.round(value));
     const color = calculateColor(roundedValue);
@@ -40,7 +43,7 @@ export const RadialProgress = ({
   return (
     <div
       className={cn(
-        `radial-progress bg-black border-2 border-black text-[10px] font-bold`,
+        `radial-progress bg-black border-2 border-black text-[10px] font-bold animate-value`,
         className
       )}
       style={

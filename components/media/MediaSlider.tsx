@@ -32,6 +32,7 @@ export const MediaSlider = ({
           onMouseLeave={() => setIsHovered(false)}
         >
           <div className="flex gap-2 items-center text-2xl">
+            <div className="bg-primary h-6 w-[5px] " />
             <h1 className="font-bold">{name}</h1>
             {isHovered ? (
               <FontAwesomeIcon icon={faCircleChevronRight} width={20} beat />

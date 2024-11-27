@@ -6,10 +6,10 @@ import { PageContainer } from "@/components/layout/PageContainer";
 
 export default async function Home() {
   const media = await getUpcomingMovies({ page: 1 });
-  const firstMedia = media[0];
+  const selectedMedia = media[2];
   return (
     <PageContainer>
-      <SearchPage bannerMedia={firstMedia} />
+      <SearchPage bannerMedia={selectedMedia} />
     </PageContainer>
   );
 }

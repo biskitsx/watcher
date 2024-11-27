@@ -28,6 +28,7 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
       >
         <div className="relative">
           <div className="rounded-md shadow-md overflow-hidden relative">
+            {/*  eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={isLong ? media.backdrop_path : media.poster_path}
               alt={media.poster_path}
