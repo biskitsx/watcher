@@ -2,42 +2,94 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOption";
 import prisma from "@/prisma";
 import { MediaInfoProps } from "@/wrapper/media-info";
-import { Media, Status } from "@prisma/client";
+import { Media, Role, Status } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
 export const addRateTomedia = async (media: MediaInfoProps, rating: number) => {
-  const session = await getServerSession(authOptions);
+  try {
+    const session = await getServerSession(authOptions);
 
-  // TODO: change logic to search in media array on user
-  const existingMedia = await prisma.media.findFirst({
-    where: {
-      userId: session?.user.id,
-      mediaId: media.id,
-      mediaType: media.type,
-    },
-  });
-  if (existingMedia) {
-    await prisma.media.update({
-      where: { id: existingMedia.id },
-      data: {
-        point: rating,
-      },
-    });
-  } else {
-    await prisma.media.create({
-      data: {
-        userId: session?.user.id!,
-        mediaId: media.id ? media.id : "test",
-        point: rating,
+    // TODO: change logic to search in media array on user
+    const existingMedia = await prisma.media.findFirst({
+      where: {
+        userId: session?.user.id,
+        mediaId: media.id,
         mediaType: media.type,
-        mediaTitle: media.title,
-        mediaPoster: media.poster_path,
-        mediaBackDrop: media.backdrop_path
-          ? media.backdrop_path
-          : media.poster_path,
-        mediaReleaseDate: media.release_date,
       },
     });
+    if (existingMedia) {
+      await prisma.media.update({
+        where: { id: existingMedia.id },
+        data: {
+          point: rating,
+          ratedAt: new Date(),
+        },
+      });
+    } else {
+      await prisma.media.create({
+        data: {
+          userId: session?.user.id!,
+          mediaId: media.id ? media.id : "test",
+          point: rating,
+          mediaType: media.type,
+          mediaTitle: media.title,
+          mediaPoster: media.poster_path,
+          mediaBackDrop: media.backdrop_path
+            ? media.backdrop_path
+            : media.poster_path,
+          mediaReleaseDate: media.release_date,
+          mediaOverview: media.overview,
+          mediaVoteAverage: media.vote_average,
+          status: Status.NOTHING,
+          ratedAt: new Date(),
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const addRateTomediaWithMedia = async (media: Media, rating: number) => {
+  try {
+    const session = await getServerSession(authOptions);
+    // TODO: change logic to search in media array on user
+    const existingMedia = await prisma.media.findFirst({
+      where: {
+        userId: session?.user.id,
+        mediaId: media.mediaId,
+        mediaType: media.mediaType,
+      },
+    });
+    if (existingMedia) {
+      await prisma.media.update({
+        where: { id: existingMedia.id },
+        data: {
+          point: rating,
+          ratedAt: new Date(),
+        },
+      });
+    } else {
+      await prisma.media.create({
+        data: {
+          userId: session?.user.id!,
+          mediaId: media.id ? media.id : "test",
+          point: rating,
+          mediaType: media.mediaType,
+          mediaTitle: media.mediaTitle,
+          mediaPoster: media.mediaPoster,
+          mediaBackDrop: media.mediaBackDrop
+            ? media.mediaBackDrop
+            : media.mediaPoster,
+          mediaReleaseDate: media.mediaReleaseDate,
+          mediaOverview: media.mediaOverview,
+          mediaVoteAverage: media.mediaVoteAverage,
+          status: Status.NOTHING,
+          ratedAt: new Date(),
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -55,13 +107,12 @@ export const toggleWatchList = async (media: MediaInfoProps) => {
     },
   });
   if (existingMedia) {
+    const isPrevNothing = existingMedia.status === Status.NOTHING;
     await prisma.media.update({
       where: { id: existingMedia.id },
       data: {
-        status:
-          existingMedia.status === Status.NOTHING
-            ? Status.WATCHING
-            : Status.NOTHING,
+        status: isPrevNothing ? Status.WATCHING : Status.NOTHING,
+        watchListAt: isPrevNothing ? new Date() : null,
       },
     });
   } else {
@@ -77,6 +128,33 @@ export const toggleWatchList = async (media: MediaInfoProps) => {
           : media.poster_path,
         mediaReleaseDate: media.release_date ? media.release_date : "",
         status: Status.WATCHING,
+        mediaOverview: media.overview,
+        mediaVoteAverage: media.vote_average,
+        watchListAt: new Date(),
+      },
+    });
+  }
+};
+
+export const toggleWatchListInRating = async (media: Media) => {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return null;
+  }
+  const existingMedia = await prisma.media.findFirst({
+    where: {
+      userId: session?.user.id,
+      mediaId: media.mediaId,
+      mediaType: media.mediaType,
+    },
+  });
+  if (existingMedia) {
+    const isPrevNothing = existingMedia.status === Status.NOTHING;
+    await prisma.media.update({
+      where: { id: existingMedia.id },
+      data: {
+        status: isPrevNothing ? Status.WATCHING : Status.NOTHING,
+        watchListAt: isPrevNothing ? new Date() : null,
       },
     });
   }
@@ -108,6 +186,7 @@ export const getUserWatchList = async (): Promise<Media[] | null> => {
   }
   const userMedia = await prisma.media.findMany({
     where: { userId: session?.user.id, status: { not: Status.NOTHING } },
+    orderBy: { watchListAt: "desc" },
   });
   return userMedia as Media[];
 };
@@ -119,6 +198,7 @@ export const getUserRatings = async (): Promise<Media[] | null> => {
   }
   const userMedia = await prisma.media.findMany({
     where: { userId: session?.user.id, point: { not: -1 } },
+    orderBy: { ratedAt: "desc" },
   });
   return userMedia as Media[];
 };
@@ -171,7 +251,7 @@ export const updateMediaStatus = async (
     where: { userId: session?.user.id, mediaId: mediaId, mediaType: mediaType },
   });
   if (existingMedia) {
-    const eiei = await prisma.media.update({
+    await prisma.media.update({
       where: { id: existingMedia.id },
       data: {
         status: status,
@@ -195,7 +275,7 @@ export const updateMediaRating = async (
     where: { userId: session?.user.id, mediaId: mediaId, mediaType: mediaType },
   });
   if (existingMedia) {
-    const eiei = await prisma.media.update({
+    await prisma.media.update({
       where: { id: existingMedia.id },
       data: {
         point: rating,
@@ -204,4 +284,92 @@ export const updateMediaRating = async (
     return existingMedia;
   }
   return null;
+};
+
+export interface MediaAverageScore {
+  movieAvg: number;
+  serieAvg: number;
+  animeAvg: number;
+}
+
+export const getMediaAverage = async () => {
+  try {
+    const session = await getServerSession(authOptions);
+
+    const avgs = await prisma.media.groupBy({
+      where: { userId: session?.user.id, point: { not: -1 } },
+      by: ["mediaType"],
+      _avg: {
+        point: true,
+      },
+    });
+
+    let movieAvg = 0,
+      serieAvg = 0,
+      animeAvg = 0;
+
+    avgs.forEach((avg) => {
+      if (avg._avg.point != null) {
+        if (avg.mediaType === "movie") {
+          movieAvg = avg._avg.point;
+        } else if (avg.mediaType === "serie") {
+          serieAvg = avg._avg.point;
+        } else {
+          animeAvg = avg._avg.point;
+        }
+      }
+    });
+
+    return { movieAvg, serieAvg, animeAvg } as MediaAverageScore;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const toggleFavorite = async (media: Media) => {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return null;
+    }
+
+    const existingMedia = await prisma.media.findFirst({
+      where: {
+        userId: session?.user.id,
+        mediaId: media.mediaId,
+        mediaType: media.mediaType,
+      },
+    });
+
+    if (existingMedia) {
+      await prisma.media.update({
+        where: { id: existingMedia.id },
+        data: {
+          favoriteAt: !!existingMedia.favoriteAt ? null : new Date(),
+        },
+      });
+    } else {
+      await prisma.media.create({
+        data: {
+          userId: session?.user.id!,
+          mediaId: media.id ? media.id : "test",
+          mediaType: media.mediaType,
+          mediaTitle: media.mediaTitle,
+          mediaPoster: media.mediaPoster,
+          mediaBackDrop: media.mediaBackDrop
+            ? media.mediaBackDrop
+            : media.mediaPoster,
+          mediaReleaseDate: media.mediaReleaseDate,
+          mediaOverview: media.mediaOverview,
+          mediaVoteAverage: media.mediaVoteAverage,
+          status: Status.NOTHING,
+          favoriteAt: new Date(),
+        },
+      });
+    }
+
+    return existingMedia;
+  } catch (error) {
+    throw error;
+  }
 };

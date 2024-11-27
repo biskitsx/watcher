@@ -75,7 +75,7 @@ const ProfileCalendar = ({ media }: ProfileCalendarProps) => {
 
   return (
     <Container>
-      <h1 className="text-2xl font-bold pt-6">Watchlist Calendar</h1>
+      <h1 className="text-xl font-bold pt-6">Watchlist Calendar</h1>
       <Calendar cellRender={cellRender} />
     </Container>
   );

@@ -14,6 +14,7 @@ export default async function Home({
   params: { id: string };
 }) {
   const media = await getSeriesById(id);
+  console.log(media.genres);
   const series = await getTrendingSeries({ page: 1 });
   const credits = await getCreditsBySerieId(id);
   return (

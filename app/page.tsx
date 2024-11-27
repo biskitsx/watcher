@@ -5,6 +5,7 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import { Container } from "@/components/layout/Container";
 import { getTopAnime } from "@/app/api/anime/actions";
 import { getAiringTodaySeries } from "@/app/api/serie/actions";
+import { RadialProgressShadCN } from "@/components/radial-progress";
 
 export default async function Home() {
   const upcomingMovies = await getUpcomingMovies({ page: 1 });

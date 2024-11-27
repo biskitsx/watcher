@@ -37,6 +37,7 @@ import { FaBookmark } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 import { tmdbImagesURL } from "@/data/baseUrl";
 import { CastProps } from "@/app/api/media/types";
+import { RatingModal } from "@/app/components/RatingModal";
 
 interface MediaDetailProps {
   media: MediaInfoProps;
@@ -126,6 +127,23 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
       </Box>
     ));
   }, [casts]);
+
+  const handleOnClearRating = async () => {
+    try {
+      setIsAddToWatchListLoading(true);
+      await addRateTomedia(media, -1);
+      setIsAddToWatchListLoading(false);
+      toast({
+        title: "Rating changed successfully!",
+        status: "success",
+        ...toastConfig,
+      });
+      setRating(-1);
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <Box
@@ -162,13 +180,19 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
                 </span>
               </Heading>
               <Stack direction={"row"}>
-                <RadialProgress
-                  value={media.vote_average * 10}
-                  size="48px"
-                  thickness="3px"
-                  className="text-sm"
-                />
-                <Stack direction={"row"} placeItems={"center"}>
+                <div>
+                  <RadialProgress
+                    value={media.vote_average * 10}
+                    size="48px"
+                    thickness="3px"
+                    className="text-sm"
+                  />
+                </div>
+                <Stack
+                  direction={"row"}
+                  placeItems={"center"}
+                  className="!overflow-x-scroll hide-scrollbar"
+                >
                   {media.genres &&
                     media.genres.map((genre, index) => (
                       <Badge key={index}>{genre.name}</Badge>
@@ -211,72 +235,82 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
         </Box>
       </Box>
       {isOpen && (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Rating</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <Stack direction={"column"}>
-                <Text>
-                  What you think about{" "}
-                  <span className="font-semibold">{media.title}</span>
-                </Text>
-                <Box className="px-2">
-                  <Slider
-                    defaultValue={rating}
-                    min={0}
-                    max={10}
-                    step={1}
-                    size="lg"
-                    onChange={(v) => setRating(v)}
-                  >
-                    {scale.map((value, index: number) => (
-                      <SliderMark
-                        value={value}
-                        mt="4"
-                        ml="-1.5"
-                        fontSize="sm"
-                        key={index}
-                      >
-                        {value}
-                      </SliderMark>
-                    ))}
-                    <SliderTrack bg={"blue.100"} height={3}>
-                      <SliderFilledTrack bg={palatte.bgGradient} />
-                    </SliderTrack>
-                    <SliderThumb boxSize={4} className="!bg-red-300" />
-                  </Slider>
-                </Box>
-                <Text className="text-end mt-4 text-secondary text-sm underline ">
-                  Clear my rating
-                </Text>
-              </Stack>
-            </ModalBody>
+        <RatingModal
+          handleOnSubmit={handleOnSubmit}
+          isOpen={isOpen}
+          onClose={onClose}
+          rating={rating}
+          setRating={setRating}
+          title={media.title}
+          isLoading={isLoading}
+          handleOnClearRating={handleOnClearRating}
+        />
+        // <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        //   <ModalOverlay />
+        //   <ModalContent>
+        //     <ModalHeader>Rating</ModalHeader>
+        //     <ModalCloseButton />
+        //     <ModalBody>
+        //       <Stack direction={"column"}>
+        //         <Text>
+        //           What you think about{" "}
+        //           <span className="font-semibold">{media.title}</span>
+        //         </Text>
+        //         <Box className="px-2">
+        //           <Slider
+        //             defaultValue={rating}
+        //             min={0}
+        //             max={10}
+        //             step={1}
+        //             size="lg"
+        //             onChange={(v) => setRating(v)}
+        //           >
+        //             {scale.map((value, index: number) => (
+        //               <SliderMark
+        //                 value={value}
+        //                 mt="4"
+        //                 ml="-1.5"
+        //                 fontSize="sm"
+        //                 key={index}
+        //               >
+        //                 {value}
+        //               </SliderMark>
+        //             ))}
+        //             <SliderTrack bg={"blue.100"} height={3}>
+        //               <SliderFilledTrack bg={palatte.bgGradient} />
+        //             </SliderTrack>
+        //             <SliderThumb boxSize={4} className="!bg-red-300" />
+        //           </Slider>
+        //         </Box>
+        //         <Text className="text-end mt-4 text-secondary text-sm underline ">
+        //           Clear my rating
+        //         </Text>
+        //       </Stack>
+        //     </ModalBody>
 
-            <ModalFooter className="space-x-2 mt-4">
-              <Button
-                bgColor={palatte.darkBlue}
-                mr={3}
-                onClick={onClose}
-                size={"sm"}
-                color={"white"}
-              >
-                CANCLE
-              </Button>
-              <Button
-                size={"sm"}
-                color={"white"}
-                bgColor={palatte.darkBlue}
-                mr={3}
-                isLoading={isLoading}
-                onClick={handleOnSubmit}
-              >
-                SUBMIT
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+        //     <ModalFooter className="space-x-2 mt-4">
+        //       <Button
+        //         bgColor={palatte.darkBlue}
+        //         mr={3}
+        //         onClick={onClose}
+        //         size={"sm"}
+        //         color={"white"}
+        //       >
+        //         CANCLE
+        //       </Button>
+        //       <Button
+        //         size={"sm"}
+        //         color={"white"}
+        //         bgColor={palatte.darkBlue}
+        //         mr={3}
+        //         isLoading={isLoading}
+        //         onClick={handleOnSubmit}
+        //       >
+        //         SUBMIT
+        //       </Button>
+        //     </ModalFooter>
+        //   </ModalContent>
+        // </Modal>
       )}
     </>
   );

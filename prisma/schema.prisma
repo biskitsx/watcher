@@ -12,6 +12,7 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String @db.ObjectId
@@ -38,12 +39,31 @@ model Media {
   mediaPoster String
   mediaBackDrop String?
   mediaReleaseDate String?
+  mediaOverview String?
+  mediaVoteAverage Float?
+  mediaGenres Json[]
   status Status @default(NOTHING)
   point Int @default(-1) // -1 mean no point given
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  watchListAt DateTime?
+  favoriteAt DateTime?
+  ratedAt DateTime?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
   @@unique([userId, mediaId, mediaType])
 }
+
+// model MediaItem {
+//   id String @id @default(auto()) @map("_id") @db.ObjectId
+//   userId String @db.ObjectId
+//   mediaId String @db.ObjectId
+//   ratedAt DateTime?
+//   watchListAt DateTime?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   media Media @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+// }
 
 model User {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId

@@ -36,7 +36,7 @@ export const HomeCarousel = ({ items }: HomeCarouselProps) => {
         </Carousel>
       </div>
       <div className="absolute w-full top-1/2 text-base-100 max-h-[60vh] text-center tracking-wider">
-        <div className="text-5xl font-extrabold flex justify-center items-end gap-2">
+        <div className="text-5xl font-extrabold flex justify-center items-end gap-2 text-white">
           <h1 className="text-2xl md:text-5xl font-extrabold">Welcome to</h1>
           <span className="">
             <div className="h-1 md:h-2 w-1/2 bg-custom"></div>
@@ -47,7 +47,8 @@ export const HomeCarousel = ({ items }: HomeCarouselProps) => {
         </div>
         {/* <Logo /> */}
         <p className="font-semibold text-slate-300">
-          Entertainment Media Recommendation System and Community 📀.
+          Entertainment Media Recommendation System <br className="sm:hidden" />
+          and Community 📀.
         </p>
       </div>
     </div>

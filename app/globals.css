@@ -109,3 +109,30 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+@property --_value {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+.animate-value {
+  animation-name: grow;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 1000ms;
+  animation-fill-mode: forwards;
+}
+
+@keyframes grow {
+  from {
+      --_value: 0;
+  }
+  to {
+      --_value:100;
+  }
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;}}
+

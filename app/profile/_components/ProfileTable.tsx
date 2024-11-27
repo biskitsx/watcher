@@ -10,6 +10,7 @@ import { toastConfig } from "@/components/toast/ToastConfig";
 import { Container } from "@/components/layout/Container";
 import { palatte } from "@/constant/palatte";
 import { cn } from "@/util/cn";
+import { MediaCardHorizontal } from "@/app/components/MediaCardHorizontal";
 
 interface TitleTableProps {
   title: string;

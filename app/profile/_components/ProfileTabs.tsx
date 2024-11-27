@@ -2,11 +2,13 @@
 import React from "react";
 import { ConfigProvider, Tabs } from "antd";
 import type { TabsProps } from "antd";
-import { MediaInfoProps } from "@/wrapper/media-info";
-import Search from "antd/es/input/Search";
 import { Media } from "@prisma/client";
 import { ProfileTable } from "./ProfileTable";
 import ProfileCalendar from "./ProfileCalendar";
+import { RatingTabs } from "./Ratings";
+import { Watchlist } from "./Watchlist";
+import { MediaByYear } from "@/app/api/media/chart/actions";
+import Overview from "./Overview";
 
 const onChange = (key: string) => {
   console.log(key);
@@ -15,20 +17,42 @@ const onChange = (key: string) => {
 interface ProfileTabsProps {
   watchlist: Media[];
   ratings: Media[];
+  initialRatingCountByYear: MediaByYear[];
+  initialWatchlistCountByYear: MediaByYear[];
 }
 
 // TODO - ทำให้ component ใชช้งานได้โดยยส่ง props เข้ามาเป็น TabsProps
-export const ProfileTabs = ({ watchlist, ratings }: ProfileTabsProps) => {
+export const ProfileTabs = ({
+  watchlist,
+  ratings,
+  initialRatingCountByYear,
+  initialWatchlistCountByYear,
+}: ProfileTabsProps) => {
   const items: TabsProps["items"] = [
+    // {
+    //   key: "1",
+    //   label: "Overview",
+    //   children: <Overview />,
+    // },
     {
       key: "1",
-      label: "Watchlist",
-      children: <ProfileTable media={watchlist} title="Watchlist" />,
+      label: "Ratings",
+      children: (
+        <RatingTabs
+          medias={ratings}
+          initialRatingCountByYear={initialRatingCountByYear}
+        />
+      ),
     },
     {
       key: "2",
-      label: "Ratings",
-      children: <ProfileTable media={ratings} title="Ratings" />,
+      label: "Watchlist",
+      children: (
+        <Watchlist
+          medias={watchlist}
+          initialWatchlistCountByYear={initialWatchlistCountByYear}
+        />
+      ),
     },
     {
       key: "3",

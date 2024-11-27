@@ -31,7 +31,11 @@ export const InfiniteMedia = ({
 
   return (
     <div className="flex flex-col gap-6">
-      {title && <h1 className="font-bold text-2xl">{title}</h1>}
+      <div className="flex gap-2 items-center">
+        <div className="bg-secondary h-6 w-[5px] " />
+
+        {title && <h1 className="font-bold text-2xl">{title}</h1>}
+      </div>
       <InfiniteScroll
         dataLength={medias.length}
         hasMore={hasMore}

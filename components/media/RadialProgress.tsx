@@ -26,6 +26,7 @@ export const RadialProgress = ({
   const [cssColor, setCssColor] = useState<string>("");
   const [roundedValue, setRoundedValue] = useState<number>(Math.round(value));
   const [valueString, setValueString] = useState<string>("");
+
   useEffect(() => {
     setRoundedValue(Math.round(value));
     const color = calculateColor(roundedValue);
@@ -40,7 +41,7 @@ export const RadialProgress = ({
   return (
     <div
       className={cn(
-        `radial-progress bg-black border-2 border-black text-[10px] font-bold`,
+        `radial-progress bg-black border-2 border-black text-[10px] font-bold animate-value`,
         className
       )}
       style={
