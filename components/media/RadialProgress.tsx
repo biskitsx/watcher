@@ -1,6 +1,5 @@
 import { cn } from "@/util/cn";
 import { useEffect, useState } from "react";
-import { useSpring, animated } from "react-spring";
 
 interface RadialProgressProps {
   value: number;
@@ -27,7 +26,6 @@ export const RadialProgress = ({
   const [cssColor, setCssColor] = useState<string>("");
   const [roundedValue, setRoundedValue] = useState<number>(Math.round(value));
   const [valueString, setValueString] = useState<string>("");
-  const props = useSpring({ value: value, from: { value: 0 } });
 
   useEffect(() => {
     setRoundedValue(Math.round(value));
