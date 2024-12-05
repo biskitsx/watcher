@@ -54,17 +54,15 @@ export function AreaChartByYear({
             return "";
           }}
         />
-        <ChartLegend
-          content={<ChartLegendContent verticalAlign="top" />}
-        />
-        {/* <YAxis scale={"auto"} /> */}
+        <ChartLegend content={<ChartLegendContent />} verticalAlign="top" />
+        {/* <YAxis /> */}
         <ChartTooltip
           cursor={false}
           content={<ChartTooltipContent indicator="dot" />}
         />
         <Area
           dataKey="serie"
-          type="basis"
+          type="monotone"
           fill="var(--color-serie)"
           fillOpacity={0.4}
           stroke="var(--color-serie)"
@@ -72,7 +70,7 @@ export function AreaChartByYear({
         />
         <Area
           dataKey="anime"
-          type="basis"
+          type="monotone"
           fill="var(--color-anime)"
           fillOpacity={0.4}
           stroke="var(--color-anime)"
@@ -80,7 +78,7 @@ export function AreaChartByYear({
         />
         <Area
           dataKey="movie"
-          type="basis"
+          type="monotone"
           fill="var(--color-movie)"
           fillOpacity={0.4}
           stroke="var(--color-movie)"

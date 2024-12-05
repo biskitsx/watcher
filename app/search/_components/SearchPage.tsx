@@ -122,7 +122,7 @@ export const SearchPage = ({ bannerMedia }: SearchPageProps) => {
             dataLength={result.length}
             next={loadMore}
             loader={
-              <div className="flex flex-wrap justify-between gap-6">
+              <div className="flex flex-wrap gap-6">
                 {skeletonArray.map((idx) => (
                   <SkeletonImage
                     key={idx}

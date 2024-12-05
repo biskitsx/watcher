@@ -55,6 +55,7 @@ export const getTMDbHelperList = async (
       return res;
     }
     const res = tmdbConvertToMediaInfoList(json.results, type);
+
     return res;
   } catch (error) {
     return [] as MediaInfoProps[];

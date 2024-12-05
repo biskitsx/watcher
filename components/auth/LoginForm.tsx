@@ -4,7 +4,6 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@chakra-ui/react";
-import { palatte } from "@/constant/palatte";
 import { toastConfig } from "../toast/ToastConfig";
 import Link from "next/link";
 type FieldType = {

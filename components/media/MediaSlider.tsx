@@ -42,7 +42,7 @@ export const MediaSlider = ({
           </div>
         </Link>
         <div className="py-2">
-          <div className="overflow-x-auto  whitespace-nowrap space-x-5 align-top bg-scroll scrollable-element overflow-y-hidden">
+          <div className="overflow-x-auto  whitespace-nowrap space-x-5 align-top bg-scroll scrollable-element overflow-y-hidden flex-nowrap flex">
             {items?.map((media, index: number) => {
               return <MediaCard media={media} key={index} isLong={isLong} />;
             })}
