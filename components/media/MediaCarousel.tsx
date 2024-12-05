@@ -1,7 +1,7 @@
 "use client";
 
 import { MediaInfoProps } from "@/wrapper/media-info";
-import { Badge, Box, Stack } from "@chakra-ui/react";
+import { Badge, Box, Stack, Text } from "@chakra-ui/react";
 import { Carousel, Button } from "antd";
 import { RadialProgress } from "./RadialProgress";
 
@@ -11,7 +11,7 @@ interface MediaCarouselProps {
 export const MediaCarousel = ({ items }: MediaCarouselProps) => {
   return (
     <Carousel className="overflow-hidden shadow-md max-h-[60vh]">
-      {items?.map((movie: MediaInfoProps, index: number) => {
+      {items?.slice(0, 5).map((movie: MediaInfoProps, index: number) => {
         if (movie.backdrop_path) {
           return (
             <Box key={index} className="relative">
@@ -30,25 +30,30 @@ export const MediaCarousel = ({ items }: MediaCarouselProps) => {
                     className="text-white"
                     spacing={10}
                   >
-                    <h1 className="text-4xl font-bold">{movie.title}</h1>
+                    <h1 className="text-4xl font-semibold">{movie.title}</h1>
                     <Stack direction={"row"}>
-                      <RadialProgress value={movie.vote_average * 10} />
+                      <RadialProgress
+                        value={movie.vote_average * 10}
+                        size="48px"
+                        className="text-sm"
+                      />
                       <Stack direction={"row"} placeItems={"center"}>
                         <Stack direction={"row"} placeItems={"center"}>
                           {movie.genres &&
                             movie.genres.map((genre, index) => (
-                              <Badge key={index}>{genre.name}</Badge>
+                              <Badge key={index} size="lg">
+                                {genre.name}
+                              </Badge>
                             ))}
                         </Stack>
                       </Stack>
                     </Stack>
-                    <Button
-                      type="primary"
-                      href="/auth/login"
-                      className=" tracking-wider w-fit"
-                    >
+                    <Text className="text-sm text-white line-clamp-4 font-medium">
+                      {movie.overview}
+                    </Text>
+                    {/* <Button type="primary" className=" tracking-wider w-fit">
                       MORE INFO
-                    </Button>
+                    </Button> */}
                   </Stack>
                 </Box>
               </Box>

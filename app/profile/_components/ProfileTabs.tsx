@@ -1,65 +1,122 @@
 "use client";
-import React from "react";
-import { ConfigProvider, Tabs } from "antd";
+import React, { useMemo, useState } from "react";
+import { ConfigProvider, Tabs, Spin } from "antd";
 import type { TabsProps } from "antd";
 import { Media } from "@prisma/client";
-import { ProfileTable } from "./ProfileTable";
-import ProfileCalendar from "./ProfileCalendar";
 import { RatingTabs } from "./Ratings";
 import { Watchlist } from "./Watchlist";
-import { MediaByYear } from "@/app/api/media/chart/actions";
+import ProfileCalendar from "./ProfileCalendar";
+import {
+  MediaByYear,
+  MediaTotal,
+  WatchlistStatusCountResponse,
+} from "@/app/api/media/chart/actions";
+import { getUserRatings, getUserWatchList } from "@/app/api/media/actions";
 import Overview from "./Overview";
-
-const onChange = (key: string) => {
-  console.log(key);
-};
+import { GenreStats } from "./Overview/GenreStatsRadarChart";
 
 interface ProfileTabsProps {
   watchlist: Media[];
   ratings: Media[];
   initialRatingCountByYear: MediaByYear[];
   initialWatchlistCountByYear: MediaByYear[];
+  initialGenreStats: GenreStats[];
+  initialMediaTotal: MediaTotal;
+  watchlistStatusCount: WatchlistStatusCountResponse;
 }
 
-// TODO - ทำให้ component ใชช้งานได้โดยยส่ง props เข้ามาเป็น TabsProps
 export const ProfileTabs = ({
   watchlist,
   ratings,
   initialRatingCountByYear,
   initialWatchlistCountByYear,
+  initialGenreStats,
+  initialMediaTotal,
+  watchlistStatusCount,
 }: ProfileTabsProps) => {
-  const items: TabsProps["items"] = [
-    // {
-    //   key: "1",
-    //   label: "Overview",
-    //   children: <Overview />,
-    // },
-    {
-      key: "1",
-      label: "Ratings",
-      children: (
-        <RatingTabs
-          medias={ratings}
-          initialRatingCountByYear={initialRatingCountByYear}
-        />
-      ),
-    },
-    {
-      key: "2",
-      label: "Watchlist",
-      children: (
-        <Watchlist
-          medias={watchlist}
-          initialWatchlistCountByYear={initialWatchlistCountByYear}
-        />
-      ),
-    },
-    {
-      key: "3",
-      label: "Calendar",
-      children: <ProfileCalendar media={watchlist} />,
-    },
-  ];
+  const [ratingsItems, setRatingsItems] = useState<Media[]>(ratings);
+  const [watchlistItems, setWatchlistItems] = useState<Media[]>(watchlist);
+  const [loading, setLoading] = useState(false);
+  const [genreStats, setGenreStats] = useState<GenreStats[]>(initialGenreStats);
+  const [mediaTotal, setMediaTotal] = useState<MediaTotal>(initialMediaTotal);
+  const onChange = async (key: string) => {
+    setLoading(true); // Show loading spinner during the data fetch
+    if (key === "ratings") {
+      const newRatings = await getUserRatings();
+      setRatingsItems(newRatings || []); // Update ratings or clear if empty
+    } else {
+      const newWatchlist = await getUserWatchList();
+      setWatchlistItems(newWatchlist || []); // Update watchlist or clear if empty
+    }
+    setLoading(false); // Hide loading spinner after update
+  };
+
+  const items: TabsProps["items"] = useMemo(
+    () => [
+      {
+        key: "overview",
+        label: "Overview",
+        children: loading ? (
+          <div className="flex justify-center items-center h-full pt-10">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <Overview
+            stats={genreStats}
+            mediaTotal={mediaTotal}
+            watchlistStatusCount={watchlistStatusCount}
+          />
+        ),
+      },
+      {
+        key: "ratings",
+        label: "Ratings",
+        children: loading ? (
+          <div className="flex justify-center items-center h-full pt-10">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <RatingTabs
+            medias={ratingsItems}
+            initialRatingCountByYear={initialRatingCountByYear}
+          />
+        ),
+      },
+      {
+        key: "watchlist",
+        label: "Watchlist",
+        children: loading ? (
+          <div className="flex justify-center items-center h-full pt-10">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <Watchlist
+            medias={watchlistItems}
+            initialWatchlistCountByYear={initialWatchlistCountByYear}
+          />
+        ),
+      },
+      {
+        key: "calendar",
+        label: "Calendar",
+        children: loading ? (
+          <div className="flex justify-center items-center h-full pt-10">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <ProfileCalendar media={watchlistItems} />
+        ),
+      },
+    ],
+    [
+      ratingsItems,
+      watchlistItems,
+      loading,
+      initialRatingCountByYear,
+      initialWatchlistCountByYear,
+      initialMediaTotal,
+    ]
+  );
 
   return (
     <ConfigProvider
@@ -75,7 +132,12 @@ export const ProfileTabs = ({
         },
       }}
     >
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} centered />
+      <Tabs
+        defaultActiveKey="overview"
+        items={items}
+        onChange={onChange}
+        centered
+      />
     </ConfigProvider>
   );
 };

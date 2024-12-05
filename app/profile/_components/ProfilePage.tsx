@@ -8,7 +8,12 @@ import { ProfileTabs } from "./ProfileTabs";
 import { Media } from "@prisma/client";
 import { RadialProgress } from "@/components/media/RadialProgress";
 import { MediaAverageScore } from "@/app/api/media/actions";
-import { MediaByYear } from "@/app/api/media/chart/actions";
+import {
+  MediaByYear,
+  MediaTotal,
+  WatchlistStatusCountResponse,
+} from "@/app/api/media/chart/actions";
+import { GenreStats } from "./Overview/GenreStatsRadarChart";
 
 interface ProfilePageProps {
   watchlist: Media[];
@@ -17,6 +22,9 @@ interface ProfilePageProps {
   initialAverageScore: MediaAverageScore;
   initialRatingCountByYear: MediaByYear[];
   initialWatchlistCountByYear: MediaByYear[];
+  initialGenreStats: GenreStats[];
+  initialMediaTotal: MediaTotal;
+  watchlistStatusCount: WatchlistStatusCountResponse;
 }
 
 export default function ProfilePage({
@@ -26,6 +34,9 @@ export default function ProfilePage({
   initialAverageScore,
   initialRatingCountByYear,
   initialWatchlistCountByYear,
+  initialGenreStats,
+  initialMediaTotal,
+  watchlistStatusCount,
 }: ProfilePageProps) {
   const movieAvgScore = initialAverageScore.movieAvg * 10;
   const serieAvgScore = initialAverageScore.serieAvg * 10;
@@ -104,10 +115,13 @@ export default function ProfilePage({
         </Container>
       </div>
       <ProfileTabs
+        watchlistStatusCount={watchlistStatusCount}
         watchlist={watchlist}
         ratings={ratings}
         initialRatingCountByYear={initialRatingCountByYear}
         initialWatchlistCountByYear={initialWatchlistCountByYear}
+        initialGenreStats={initialGenreStats}
+        initialMediaTotal={initialMediaTotal}
       />
     </PageContainer>
   );

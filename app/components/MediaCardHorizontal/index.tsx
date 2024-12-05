@@ -1,10 +1,7 @@
 import {
-  addRateTomedia,
-  addRateTomediaWithMedia,
+  addRating,
   toggleFavorite,
-  toggleWatchList,
-  toggleWatchListInRating,
-  updateMediaStatus,
+  updateWatchlistStatus,
 } from "@/app/api/media/actions";
 import { RadialProgress } from "@/components/media/RadialProgress";
 import { palatte } from "@/constant/palatte";
@@ -43,7 +40,12 @@ export const MediaCardHorizontal = ({
   const handleAddToWatchList = async () => {
     setIsAddToWatchListLoading(true);
     try {
-      await toggleWatchListInRating(media);
+      const newStatus =
+        watchlistStatus === Status.NOTHING
+          ? Status.PLAN_TO_WATCH
+          : Status.NOTHING;
+      await updateWatchlistStatus(media.mediaId, media.mediaType, newStatus);
+      setWatchlistStatus(newStatus);
       if (watchlistStatus !== Status.NOTHING) {
         setWatchlistStatus(Status.NOTHING);
         toast({
@@ -78,7 +80,7 @@ export const MediaCardHorizontal = ({
   const handleOnClearRating = async () => {
     try {
       setIsAddToWatchListLoading(true);
-      await addRateTomediaWithMedia(media, -1);
+      await addRating(media.mediaId, media.mediaType, -1);
       setIsAddToWatchListLoading(false);
       toast({
         title: "Rating changed successfully!",
@@ -95,9 +97,9 @@ export const MediaCardHorizontal = ({
   };
   const handleOnSubmit = async () => {
     try {
-      setIsAddToWatchListLoading(true);
-      await addRateTomediaWithMedia(media, rating);
-      setIsAddToWatchListLoading(false);
+      setIsRatingLoading(true);
+      await addRating(media.mediaId, media.mediaType, rating);
+      setIsRatingLoading(false);
       toast({
         title: "Rating changed successfully!",
         status: "success",
@@ -126,7 +128,7 @@ export const MediaCardHorizontal = ({
 
   const handleSelectStatusChange = async (value: Status) => {
     setWatchlistStatus(value);
-    await updateMediaStatus(media.mediaType, media.mediaId, value);
+    await updateWatchlistStatus(media.mediaId, media.mediaType, value);
     toast({
       title: "Status has changed successfully",
       status: "success",
@@ -137,7 +139,7 @@ export const MediaCardHorizontal = ({
   const handleOnFavorite = async () => {
     try {
       setIsFavorite(!isFavorite);
-      await toggleFavorite(media);
+      await toggleFavorite(media.mediaId, media.mediaType);
       toast({
         title: "Favorite has changed successfully",
         status: "success",

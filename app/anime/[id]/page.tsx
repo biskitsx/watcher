@@ -11,7 +11,6 @@ export default async function Home({
 }) {
   const media = await getAnimeById(id);
   const anime = await getTopAnime({ page: 1 });
-  console.log(media.genres);
   return (
     <PageContainer>
       <MediaDetail media={media} />

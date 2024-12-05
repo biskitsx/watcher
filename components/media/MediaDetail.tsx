@@ -9,31 +9,23 @@ import {
   Stack,
   Text,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderMark,
   useToast,
 } from "@chakra-ui/react";
 import { RadialProgress } from "./RadialProgress";
 import { palatte } from "@/constant/palatte";
 import { formatTheDate } from "@/util/formattedDate";
-import { addRateTomedia, toggleWatchList } from "@/app/api/media/actions";
+import {
+  addRating,
+  toggleFavorite,
+  updateWatchlistStatus,
+} from "@/app/api/media/actions";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toastConfig } from "../toast/ToastConfig";
 import { Status } from "@prisma/client";
 import { Image } from "antd";
-import { FaBookmark } from "react-icons/fa";
+import { FaBookmark, FaHeart } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 import { tmdbImagesURL } from "@/data/baseUrl";
 import { CastProps } from "@/app/api/media/types";
@@ -57,6 +49,10 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
   const [rating, setRating] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
   const [isAddToWatchListLoading, setIsAddToWatchListLoading] = useState(false);
+  const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(
+    media.userMediaData?.favoriteAt ? true : false
+  );
   const scale = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const ratingDescription = [
     "Dumpster Fire",
@@ -78,7 +74,7 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
   );
   const handleOnSubmit = async () => {
     setIsLoading(true);
-    await addRateTomedia(media, rating);
+    await addRating(media.id!, media.type!, rating);
     setIsLoading(false);
     toast({
       title: "Rating changed successfully!",
@@ -100,7 +96,8 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
       return router.push("/auth/login");
     }
     setIsAddToWatchListLoading(true);
-    await toggleWatchList(media);
+    const newStatus = watchList ? Status.NOTHING : Status.PLAN_TO_WATCH;
+    await updateWatchlistStatus(media.id!, media.type!, newStatus);
     toast({
       title: "Added to watch list",
       status: "success",
@@ -111,27 +108,29 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
   };
 
   const castsElement = useMemo(() => {
-    return casts?.map((cast, index) => (
-      <Box key={index} className="inline-block">
-        <Image
-          src={`${tmdbImagesURL}/${cast.profile_path}`}
-          alt={cast.name}
-          width={100}
-          height={150}
-          preview={false}
-        />
-        <Text className="text-white text-xs">
-          <span className="font-bold">{cast.name}</span> (
-          {cast.job ? cast.job : cast.known_for_department})
-        </Text>
-      </Box>
-    ));
+    return casts
+      ?.filter((cast) => cast.profile_path)
+      .map((cast, index) => (
+        <Box key={index} className="inline-block">
+          <Image
+            src={`${tmdbImagesURL}/${cast.profile_path}`}
+            alt={cast.name}
+            width={100}
+            height={150}
+            preview={false}
+          />
+          <Text className="text-white text-xs">
+            <span className="font-bold">{cast.name}</span> (
+            {cast.job ? cast.job : cast.known_for_department})
+          </Text>
+        </Box>
+      ));
   }, [casts]);
 
   const handleOnClearRating = async () => {
     try {
       setIsAddToWatchListLoading(true);
-      await addRateTomedia(media, -1);
+      await addRating(media.id!, media.type!, -1);
       setIsAddToWatchListLoading(false);
       toast({
         title: "Rating changed successfully!",
@@ -142,6 +141,28 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
       onClose();
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleOnFavorite = async () => {
+    try {
+      setIsFavoriteLoading(true);
+      await toggleFavorite(media.id!, media.type!);
+      toast({
+        title: "Added to favorite",
+        status: "success",
+        ...toastConfig,
+      });
+      setIsFavorite((prev) => !prev);
+      setIsFavoriteLoading(false);
+    } catch (error) {
+      toast({
+        title: "Failed to favorite",
+        status: "error",
+        ...toastConfig,
+      });
+    } finally {
+      setIsFavoriteLoading(false);
     }
   };
   return (
@@ -208,8 +229,20 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
                   rounded={"full"}
                   height={"40px"}
                   width={"40px"}
+                  padding={0}
                 >
                   <FaBookmark color={watchList ? palatte.primary : "white"} />
+                </Button>
+                <Button
+                  bgColor={palatte.darkBlue}
+                  onClick={handleOnFavorite}
+                  isLoading={isFavoriteLoading}
+                  rounded={"full"}
+                  height={"40px"}
+                  width={"40px"}
+                  padding={0}
+                >
+                  <FaHeart color={isFavorite ? "pink" : "white"} />
                 </Button>
                 <Button
                   bg={palatte.darkBlue}
@@ -245,72 +278,6 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
           isLoading={isLoading}
           handleOnClearRating={handleOnClearRating}
         />
-        // <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        //   <ModalOverlay />
-        //   <ModalContent>
-        //     <ModalHeader>Rating</ModalHeader>
-        //     <ModalCloseButton />
-        //     <ModalBody>
-        //       <Stack direction={"column"}>
-        //         <Text>
-        //           What you think about{" "}
-        //           <span className="font-semibold">{media.title}</span>
-        //         </Text>
-        //         <Box className="px-2">
-        //           <Slider
-        //             defaultValue={rating}
-        //             min={0}
-        //             max={10}
-        //             step={1}
-        //             size="lg"
-        //             onChange={(v) => setRating(v)}
-        //           >
-        //             {scale.map((value, index: number) => (
-        //               <SliderMark
-        //                 value={value}
-        //                 mt="4"
-        //                 ml="-1.5"
-        //                 fontSize="sm"
-        //                 key={index}
-        //               >
-        //                 {value}
-        //               </SliderMark>
-        //             ))}
-        //             <SliderTrack bg={"blue.100"} height={3}>
-        //               <SliderFilledTrack bg={palatte.bgGradient} />
-        //             </SliderTrack>
-        //             <SliderThumb boxSize={4} className="!bg-red-300" />
-        //           </Slider>
-        //         </Box>
-        //         <Text className="text-end mt-4 text-secondary text-sm underline ">
-        //           Clear my rating
-        //         </Text>
-        //       </Stack>
-        //     </ModalBody>
-
-        //     <ModalFooter className="space-x-2 mt-4">
-        //       <Button
-        //         bgColor={palatte.darkBlue}
-        //         mr={3}
-        //         onClick={onClose}
-        //         size={"sm"}
-        //         color={"white"}
-        //       >
-        //         CANCLE
-        //       </Button>
-        //       <Button
-        //         size={"sm"}
-        //         color={"white"}
-        //         bgColor={palatte.darkBlue}
-        //         mr={3}
-        //         isLoading={isLoading}
-        //         onClick={handleOnSubmit}
-        //       >
-        //         SUBMIT
-        //       </Button>
-        //     </ModalFooter>
-        //   </ModalContent>
-        // </Modal>
       )}
     </>
   );

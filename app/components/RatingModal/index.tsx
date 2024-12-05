@@ -44,6 +44,7 @@ export const RatingModal = ({
   handleOnClearRating,
 }: RatingModalProps) => {
   const scale = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  if (!isOpen) return null;
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />

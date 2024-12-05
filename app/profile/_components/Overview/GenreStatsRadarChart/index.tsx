@@ -18,58 +18,62 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { palatte } from "@/constant/palatte";
+import { useState } from "react";
 const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 273 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-  { month: "July", desktop: 214 },
+  { genre: "Action", score: 186 },
+  { genre: "Adventure", score: 305 },
+  { genre: "Comedy", score: 237 },
+  { genre: "Drama", score: 273 },
+  { genre: "Fantasy", score: 209 },
+  { genre: "Horror", score: 214 },
+  { genre: "Mystery", score: 214 },
+  { genre: "Romance", score: 214 },
+  { genre: "Sci-Fi", score: 214 },
+  { genre: "Thriller", score: 214 },
 ];
 
+export type GenreStats = {
+  genre: string;
+  score: number;
+};
+
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: palatte.primary,
+  score: {
+    label: "Score",
+    color: palatte.secondary,
     // color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
-export function GenreStatsRadarChart() {
+interface GenreStatsRadarChartProps {
+  stats: GenreStats[];
+}
+export function GenreStatsRadarChart({ stats }: GenreStatsRadarChartProps) {
   return (
-    <Card>
-      <CardHeader className="items-center pb-4">
-        <CardTitle>Genre</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <RadarChart data={chartData}>
+    <div className="flex flex-col gap-4 rounded-md shadow-md border p-4 w-full">
+      <h3 className="text-sm font-semibold">Your Genre Statistics</h3>
+      <div>
+        <ChartContainer config={chartConfig} className="mx-auto  max-h-[250px]">
+          <RadarChart data={stats}>
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <PolarAngleAxis dataKey="month" />
+            <PolarAngleAxis dataKey="genre" />
             <PolarGrid />
             <Radar
-              dataKey="desktop"
-              fill="var(--color-desktop)"
+              dataKey="score"
+              fill="var(--color-score)"
               fillOpacity={0.6}
             />
           </RadarChart>
         </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="flex items-center gap-2 leading-none text-muted-foreground">
-          January - June 2024
-        </div>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
+    // <CardFooter className="flex-col gap-2 text-sm">
+    //   <div className="flex items-center gap-2 font-medium leading-none">
+    //     Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+    //   </div>
+    //   <div className="flex items-center gap-2 leading-none text-muted-foreground">
+    //     January - June 2024
+    //   </div>
+    // </CardFooter>
   );
 }

@@ -12,9 +12,10 @@ import { PaginationProps, SearchProps } from "../media/types";
 const SERIES = "serie";
 
 export const getAiringTodaySeries = async ({ page = 1 }: PaginationProps) => {
-  const json = await getTMDb(`tv/airing_today?language=en-US&page=${page}`);
-  const res = tmdbConvertToMediaInfoList(json.results, SERIES);
-  return res as MediaInfoProps[];
+  return await getTMDbHelperList(
+    `tv/airing_today?language=en-US&page=${page}`,
+    SERIES
+  );
 };
 
 export const getSeriesById = async (id: string) => {
