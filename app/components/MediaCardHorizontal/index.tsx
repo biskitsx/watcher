@@ -154,8 +154,11 @@ export const MediaCardHorizontal = ({
     }
   };
 
-  const handleOnInputChange = async (value: number) => {
+  const handleOnInputChange = async (value: number | null) => {
     try {
+      if (value === null) {
+        throw new Error("Value is not valid");
+      }
       setWatchedEpisode(value);
       await handleOnUpdateEpisode(value);
     } catch (error) {
