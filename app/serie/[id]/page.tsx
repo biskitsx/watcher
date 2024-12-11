@@ -7,6 +7,7 @@ import {
   getSeriesById,
   getTrendingSeries,
 } from "@/app/api/serie/actions";
+import { onClickMedia } from "@/app/api/media/actions";
 
 export default async function Home({
   params: { id },
@@ -16,6 +17,8 @@ export default async function Home({
   const media = await getSeriesById(id);
   const series = await getTrendingSeries({ page: 1 });
   const credits = await getCreditsBySerieId(id);
+  await onClickMedia(media.id!, media.type);
+
   return (
     <PageContainer>
       <MediaDetail media={media} casts={credits.cast} />

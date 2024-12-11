@@ -8,6 +8,7 @@ import { MediaSlider } from "@/components/media/MediaSlider";
 import { Container } from "@/components/layout/Container";
 import { MediaDetail } from "@/components/media/MediaDetail";
 import { PageContainer } from "@/components/layout/PageContainer";
+import { onClickMedia } from "@/app/api/media/actions";
 
 export default async function Home({
   params: { id },
@@ -18,6 +19,8 @@ export default async function Home({
     const media = await getMovieById(id);
     const movies = await getUpcomingMovies({ page: 1 });
     const credits = await getCreditsByMovieId(id);
+    await onClickMedia(media.id!, media.type);
+
     return (
       <PageContainer>
         <MediaDetail media={media} casts={credits.cast} />

@@ -49,6 +49,9 @@ model Media {
   watchListAt DateTime?
   favoriteAt DateTime?
   ratedAt DateTime?
+  clickCount Int @default(0)
+  episodes Int?
+  watchedEpisodes Int? @default(0)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId, mediaId, mediaType])
 }

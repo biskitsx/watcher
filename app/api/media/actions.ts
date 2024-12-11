@@ -1,8 +1,7 @@
 "use server";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOption";
 import prisma from "@/prisma";
-import { MediaInfoProps } from "@/wrapper/media-info";
-import { Media, Role, Status } from "@prisma/client";
+import { Media, Status } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { getMovieById } from "../movie/actions";
 import { getSeriesById } from "../serie/actions";
@@ -45,7 +44,12 @@ export const addRating = async (
     if (existingMedia) {
       await prisma.media.update({
         where: { id: existingMedia.id },
-        data: { point: rating, ratedAt: new Date() },
+        data: {
+          point: rating,
+          ratedAt: new Date(),
+          mediaVoteAverage: mediaInfo.vote_average,
+          episodes: mediaInfo.episodes,
+        },
       });
     } else {
       await prisma.media.create({
@@ -64,6 +68,7 @@ export const addRating = async (
           point: rating,
           ratedAt: new Date(),
           mediaGenres: mediaInfo.genres,
+          episodes: mediaInfo.episodes,
         },
       });
     }
@@ -196,17 +201,19 @@ export const updateWatchlistStatus = async (
   const existingMedia = await prisma.media.findFirst({
     where: { userId: session?.user.id, mediaId: mediaId, mediaType: mediaType },
   });
+  const mediaInfo = await getMediaInfo(mediaId, mediaType);
   if (existingMedia) {
     await prisma.media.update({
       where: { id: existingMedia.id },
       data: {
         status: status,
         watchListAt: status !== Status.NOTHING ? new Date() : null,
+        mediaVoteAverage: mediaInfo.vote_average,
+        episodes: mediaInfo.episodes,
       },
     });
     return existingMedia;
   } else {
-    const mediaInfo = await getMediaInfo(mediaId, mediaType);
     await prisma.media.create({
       data: {
         userId: session?.user.id!,
@@ -224,6 +231,7 @@ export const updateWatchlistStatus = async (
         watchListAt: new Date(),
         status: Status.PLAN_TO_WATCH,
         mediaGenres: mediaInfo.genres,
+        episodes: mediaInfo.episodes,
       },
     });
   }
@@ -284,15 +292,17 @@ export const toggleFavorite = async (mediaID: string, mediaType: string) => {
       },
     });
 
+    const mediaInfo = await getMediaInfo(mediaID, mediaType);
     if (existingMedia) {
       await prisma.media.update({
         where: { id: existingMedia.id },
         data: {
           favoriteAt: !!existingMedia.favoriteAt ? null : new Date(),
+          mediaVoteAverage: mediaInfo.vote_average,
+          episodes: mediaInfo.episodes,
         },
       });
     } else {
-      const mediaInfo = await getMediaInfo(mediaID, mediaType);
       await prisma.media.create({
         data: {
           userId: session?.user.id!,
@@ -309,11 +319,92 @@ export const toggleFavorite = async (mediaID: string, mediaType: string) => {
           status: Status.NOTHING,
           favoriteAt: new Date(),
           mediaGenres: mediaInfo.genres,
+          episodes: mediaInfo.episodes,
         },
       });
     }
 
     return existingMedia;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const onClickMedia = async (mediaID: string, mediaType: string) => {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return null;
+    }
+
+    const mediaInfo = await getMediaInfo(mediaID, mediaType);
+    const existingMedia = await prisma.media.findFirst({
+      where: {
+        userId: session?.user.id,
+        mediaId: mediaID,
+        mediaType: mediaType,
+      },
+    });
+
+    if (existingMedia) {
+      const updatedMedia = await prisma.media.update({
+        where: { id: existingMedia.id },
+        data: {
+          clickCount: existingMedia.clickCount + 1,
+          mediaVoteAverage: mediaInfo.vote_average,
+          episodes: mediaInfo.episodes,
+        },
+      });
+
+      return updatedMedia;
+    } else {
+      const newMedia = await prisma.media.create({
+        data: {
+          userId: session?.user.id!,
+          mediaId: mediaID,
+          mediaType: mediaType,
+          mediaTitle: mediaInfo.title,
+          mediaPoster: mediaInfo.poster_path,
+          mediaBackDrop: mediaInfo.backdrop_path
+            ? mediaInfo.backdrop_path
+            : mediaInfo.poster_path,
+          mediaReleaseDate: mediaInfo.release_date,
+          mediaOverview: mediaInfo.overview,
+          mediaVoteAverage: mediaInfo.vote_average,
+          clickCount: 1,
+          mediaGenres: mediaInfo.genres,
+          episodes: mediaInfo.episodes,
+        },
+      });
+    }
+
+    return existingMedia;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const onUpdateWatchedEpisodes = async (
+  mediaID: string,
+  count: number
+) => {
+  try {
+    const media = await prisma.media.findFirst({
+      where: { id: mediaID },
+    });
+
+    if (media?.episodes && count > media.episodes) {
+      throw new Error("Invalid episode count");
+    }
+
+    const updatedMedia = await prisma.media.update({
+      where: { id: mediaID },
+      data: {
+        watchedEpisodes: count,
+      },
+    });
+
+    return updatedMedia;
   } catch (error) {
     throw error;
   }

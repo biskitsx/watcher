@@ -29,7 +29,7 @@ export const Watchlist = ({
     mediaID: string
   ) => {
     try {
-      await updateWatchlistStatus(mediaType, mediaID, "NOTHING");
+      await updateWatchlistStatus(mediaID, mediaType, "NOTHING");
       setMediaWatchlist(
         mediaWatchlist.filter(
           (media) =>
@@ -108,7 +108,7 @@ export const Watchlist = ({
           mediaWatchlist.map((media, idx) => (
             <MediaCardHorizontal
               media={media}
-              key={idx}
+              key={media.id}
               removeMedia={removeMediaFromWatchlist}
             />
           ))
