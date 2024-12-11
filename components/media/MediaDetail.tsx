@@ -46,7 +46,9 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
     onOpen();
   };
   const toast = useToast();
-  const [rating, setRating] = useState(5);
+
+  const [isRated, setIsRated] = useState(!!media.userMediaData?.ratedAt);
+  const [rating, setRating] = useState(media.userMediaData?.point || 1);
   const [isLoading, setIsLoading] = useState(false);
   const [isAddToWatchListLoading, setIsAddToWatchListLoading] = useState(false);
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
@@ -81,15 +83,9 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
       status: "success",
       ...toastConfig,
     });
-    router.refresh();
+    setIsRated(true);
     onClose();
   };
-
-  useEffect(() => {
-    if (media.userMediaData && media.userMediaData?.point !== -1) {
-      setRating(media.userMediaData?.point);
-    }
-  }, [media]);
 
   const handleAddToWatchList = async () => {
     if (!session.data) {
@@ -138,6 +134,7 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
         ...toastConfig,
       });
       setRating(-1);
+      setIsRated(false);
       onClose();
     } catch (error) {
       console.error(error);
@@ -249,7 +246,7 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
                   textColor={"white"}
                   onClick={handleOnOpen}
                 >
-                  {media.userMediaData && media.userMediaData?.point !== -1
+                  {isRated
                     ? `Your vibe: ${media.userMediaData?.point}/10`
                     : "What's your vibe"}
                 </Button>

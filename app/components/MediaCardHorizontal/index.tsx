@@ -1,5 +1,6 @@
 import {
   addRating,
+  onUpdateWatchedEpisodes,
   toggleFavorite,
   updateWatchlistStatus,
 } from "@/app/api/media/actions";
@@ -8,15 +9,15 @@ import { palatte } from "@/constant/palatte";
 import { formatTheDate } from "@/util/formattedDate";
 import { useToast } from "@chakra-ui/react";
 import { Media, Status } from "@prisma/client";
-import { Button } from "@chakra-ui/react";
 import clsx from "clsx";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { FaBookmark, FaHeart, FaStar } from "react-icons/fa";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { FaBookmark, FaHeart, FaPlus, FaStar } from "react-icons/fa";
 import { toastConfig } from "@/components/toast/ToastConfig";
 import { RatingModal } from "../RatingModal";
-import { Badge, Select } from "antd";
-
+import { Badge, InputNumber, Select } from "antd";
+import { IoIosClose } from "react-icons/io";
+import { debounce } from "lodash";
 interface MediaCardHorizontalProps {
   media: Media;
   removeMedia: (mediaType: string, mediaID: string) => void;
@@ -36,6 +37,9 @@ export const MediaCardHorizontal = ({
   const [isAddToWatchListLoading, setIsAddToWatchListLoading] = useState(false);
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
   const [isRatingLoading, setIsRatingLoading] = useState(false);
+  const [watchedEpisode, setWatchedEpisode] = useState(
+    media.watchedEpisodes ? media.watchedEpisodes : 0
+  );
 
   const handleAddToWatchList = async () => {
     setIsAddToWatchListLoading(true);
@@ -150,6 +154,59 @@ export const MediaCardHorizontal = ({
     }
   };
 
+  const handleOnInputChange = async (value: number | null) => {
+    try {
+      if (value === null) {
+        throw new Error("Value is not valid");
+      }
+      setWatchedEpisode(value);
+      await handleOnUpdateEpisode(value);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleOnAddEpisode = async () => {
+    try {
+      let val = 0;
+
+      if (!media.episodes) {
+        throw new Error("Episode count is not available");
+      }
+      if (watchedEpisode < media.episodes) {
+        val = watchedEpisode + 1;
+      }
+      setWatchedEpisode(val);
+      await handleOnUpdateEpisode(val);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleOnUpdateEpisode = useMemo(
+    () =>
+      debounce(async (value: number) => {
+        try {
+          await onUpdateWatchedEpisodes(media.id, value);
+          toast({
+            title: "Episode has changed successfully",
+            status: "success",
+            ...toastConfig,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }, 500),
+    [media.id, toast]
+  );
+
+  // clean up
+  useEffect(() => {
+    return () => {
+      handleOnUpdateEpisode.cancel();
+    };
+  }, [handleOnUpdateEpisode]);
+
   let color = "";
 
   if (media.mediaType === "movie") {
@@ -259,12 +316,32 @@ export const MediaCardHorizontal = ({
               </div>
               <h5>Favorite</h5>
             </div>
+            {!!media.episodes && (
+              <div className="flex items-center gap-1">
+                <div
+                  className="rounded-full size-8 grid place-items-center font-semibold text-sm border cursor-pointer bg-green-600"
+                  onClick={handleOnAddEpisode}
+                >
+                  <FaPlus color={"white"} />
+                </div>
+                <InputNumber
+                  max={media.episodes}
+                  min={0}
+                  className="!w-12"
+                  controls={false}
+                  value={watchedEpisode}
+                  onChange={handleOnInputChange}
+                />
+                /{media.episodes}
+                <h5>Episode</h5>
+              </div>
+            )}
             <div className="flex items-center gap-1 w-32">
               <div
                 className="rounded-full size-8 grid place-items-center font-semibold text-sm border cursor-pointer"
                 onClick={handleOnRemove}
               >
-                X
+                <IoIosClose size={28} />
               </div>
               <h5>Remove</h5>
             </div>

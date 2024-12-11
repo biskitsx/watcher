@@ -11,4 +11,5 @@ export interface MediaInfoProps {
   overview: string;
   userMediaData?: Media;
   genres: { id: number; name: string }[];
+  episodes?: number;
 }

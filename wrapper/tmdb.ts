@@ -8,6 +8,7 @@ export const tmdbConvertToMediaInfo = (
   type: "movie" | "serie",
   userDataMedia?: MediaMap
 ): MediaInfoProps => {
+  console.log(item.title, item);
   let media: MediaInfoProps = {
     id: String(item.id),
     poster_path: `${tmdbImagesURL}/${item.poster_path}`,
