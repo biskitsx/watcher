@@ -12,7 +12,7 @@ export default async function Home({
 }) {
   const media = await getAnimeById(id);
   const anime = await getTopAnime({ page: 1 });
-  await onClickMedia(media.id!, media.type);
+  await onClickMedia(media.id!, "anime");
   return (
     <PageContainer>
       <MediaDetail media={media} />

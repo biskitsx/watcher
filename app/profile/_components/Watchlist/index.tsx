@@ -8,7 +8,7 @@ import { AreaChartByYear } from "@/app/components/AreaChartByYear";
 import { MediaCardHorizontal } from "@/app/components/MediaCardHorizontal";
 import { Container } from "@/components/layout/Container";
 import { Media } from "@prisma/client";
-import { Button, Empty, Tooltip } from "antd";
+import { Button, Empty, Spin, Tooltip } from "antd";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -102,7 +102,9 @@ export const Watchlist = ({
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {mediaWatchlist.length === 0 ? (
+        {isFilteredLoading ? (
+          <Spin size="large" />
+        ) : mediaWatchlist.length === 0 ? (
           <Empty description="No watchlist yet" className="mt-4" />
         ) : (
           mediaWatchlist.map((media, idx) => (

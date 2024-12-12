@@ -1,7 +1,6 @@
 "use client";
 import { MediaInfoProps } from "@/wrapper/media-info";
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Badge,
   Box,
@@ -77,6 +76,7 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
   const handleOnSubmit = async () => {
     setIsLoading(true);
     await addRating(media.id!, media.type!, rating);
+    setRating(rating);
     setIsLoading(false);
     toast({
       title: "Rating changed successfully!",
@@ -239,16 +239,14 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
                   width={"40px"}
                   padding={0}
                 >
-                  <FaHeart color={isFavorite ? "pink" : "white"} />
+                  <FaHeart color={isFavorite ? "red" : "white"} />
                 </Button>
                 <Button
                   bg={palatte.darkBlue}
                   textColor={"white"}
                   onClick={handleOnOpen}
                 >
-                  {isRated
-                    ? `Your vibe: ${media.userMediaData?.point}/10`
-                    : "What's your vibe"}
+                  {isRated ? `Your vibe: ${rating}/10` : "What's your vibe"}
                 </Button>
               </Stack>
               <Text textColor={"white"}>

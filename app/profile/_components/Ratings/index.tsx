@@ -1,4 +1,4 @@
-import { MediaByYear } from "@/app/api/media/chart/actions";
+import { MediaByYear, getGenreStats } from "@/app/api/media/chart/actions";
 import { AreaChartByYear } from "@/app/components/AreaChartByYear";
 import { MediaCardHorizontal } from "@/app/components/MediaCardHorizontal";
 import { Container } from "@/components/layout/Container";
@@ -45,6 +45,7 @@ export const RatingTabs = ({
         status: value,
         mediaType: mediaType || "",
       });
+      await getGenreStats();
       setMediaRating(medias);
     } catch (error) {
       console.log(error);

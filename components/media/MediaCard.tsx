@@ -16,6 +16,7 @@ import {
 import { toastConfig } from "../toast/ToastConfig";
 import { useToast } from "@chakra-ui/react";
 import { RatingModal } from "@/app/components/RatingModal";
+import { useSession } from "next-auth/react";
 
 interface MediaCardProps {
   media: MediaInfoProps;
@@ -24,6 +25,8 @@ interface MediaCardProps {
 }
 
 export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
+  const session = useSession();
+  const isLogged = session.status === "authenticated";
   const formattedDate = formatTheDate(media.release_date);
   const { favoriteAt, watchListAt, point } = media.userMediaData || {};
   const [isFavorite, setIsFavorite] = useState(favoriteAt ? true : false);
@@ -120,6 +123,7 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
           </div>
         ),
         key: "0",
+        disabled: !isLogged,
       },
       {
         label: (
@@ -132,6 +136,7 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
           </div>
         ),
         key: "1",
+        disabled: !isLogged,
       },
       {
         label: (
@@ -144,6 +149,7 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
           </div>
         ),
         key: "2",
+        disabled: !isLogged,
       },
     ];
   }, [isFavorite, isWatchlist, rating]);

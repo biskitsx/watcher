@@ -5,7 +5,6 @@ export const jikanConvertToMediaInfo = (
   item: any,
   userDataMedia?: MediaMap
 ): MediaInfoProps => {
-  console.log(item.title, item.episodes);
   const genres = item.genres.map((genre: any) => {
     return {
       id: genre.mal_id,

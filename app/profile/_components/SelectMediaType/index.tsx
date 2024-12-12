@@ -4,11 +4,11 @@ import { useState } from "react";
 export function SelectMediaType({
   onChange,
 }: {
-  onChange: (value: string) => void;
+  onChange: (value: string) => Promise<void>;
 }) {
   const options = [
     { value: "movie", label: "Movie" },
-    { value: "series", label: "Series" },
+    { value: "serie", label: "Serie" },
     { value: "anime", label: "Anime" },
   ];
   const [mediaType, setMediaType] = useState<string | null>(null);
@@ -21,9 +21,9 @@ export function SelectMediaType({
         style={{ width: 130 }}
         value={mediaType}
         placeholder="Media Type"
-        onChange={(value) => {
+        onChange={async (value) => {
           setMediaType(value);
-          onChange(value);
+          await onChange(value);
         }}
         allowClear
       />

@@ -6,6 +6,8 @@ import { Label, Pie, PieChart } from "recharts";
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -113,6 +115,7 @@ export function WatchlistStatusPieChart({
               }}
             />
           </Pie>
+          <ChartLegend content={<ChartLegendContent />} />
         </PieChart>
       </ChartContainer>
     </div>

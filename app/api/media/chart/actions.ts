@@ -1,3 +1,4 @@
+"use server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/authOption";
 import prisma from "@/prisma";
@@ -20,7 +21,7 @@ export const getRatingCountByYearOfMediaReleaseDate = async () => {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
-      return null;
+      throw new Error("No session found");
     }
 
     const startYear = 1980;
@@ -76,7 +77,7 @@ export const getWatchlistCountByYearOfMediaReleaseDate = async () => {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
-      return null;
+      throw new Error("No session found");
     }
 
     const startYear = 1980;
@@ -132,11 +133,11 @@ function capitalizeFirstLetter(val: string) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
 
-export const getGenreStats = async () => {
+export const getGenreStats = async (type?: string) => {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
-      return null;
+      throw new Error("No session found");
     }
 
     const watchlistWeight = 0.5;
@@ -157,7 +158,7 @@ export const getGenreStats = async () => {
     ];
 
     const medias = await prisma.media.findMany({
-      where: { userId: session.user.id },
+      where: { userId: session.user.id, mediaType: type ? type : undefined },
     });
 
     type Genre = {
@@ -175,7 +176,12 @@ export const getGenreStats = async () => {
       if (media.mediaGenres) {
         (media.mediaGenres as Genre[]).forEach((genre: Genre) => {
           if (coreGenre.includes(genre.name.toLowerCase())) {
-            const genreName = genre.name;
+            let genreName = genre.name;
+
+            if (["Sci-Fi", "Sci-fi"].includes(genreName)) {
+              genreName = "Sci-fi";
+            }
+            // Sci-Fi , Sci-fi
 
             // your logic to compute the score
             if (!!media.watchListAt) {
@@ -215,25 +221,37 @@ export interface MediaTotal {
   favoriteTotal: number;
 }
 
-export const getMediaTotal = async (): Promise<MediaTotal> => {
+export const getMediaTotal = async (type?: string): Promise<MediaTotal> => {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
       throw new Error("No session found");
     }
-
+    //
     const userID = session.user.id;
 
     const watchlistTotal = await prisma.media.count({
-      where: { userId: userID, watchListAt: { not: null } },
+      where: {
+        userId: userID,
+        watchListAt: { not: null },
+        mediaType: type ? type : undefined,
+      },
     });
 
     const ratingTotal = await prisma.media.count({
-      where: { userId: userID, ratedAt: { not: null } },
+      where: {
+        userId: userID,
+        ratedAt: { not: null },
+        mediaType: type ? type : undefined,
+      },
     });
 
     const favoriteTotal = await prisma.media.count({
-      where: { userId: userID, favoriteAt: { not: null } },
+      where: {
+        userId: userID,
+        favoriteAt: { not: null },
+        mediaType: type ? type : undefined,
+      },
     });
 
     return { watchlistTotal, ratingTotal, favoriteTotal };
@@ -249,34 +267,51 @@ export interface WatchlistStatusCountResponse {
   dropped: number;
 }
 
-export const getWatchlistStatusCount =
-  async (): Promise<WatchlistStatusCountResponse> => {
-    try {
-      const session = await getServerSession(authOptions);
-      if (!session) {
-        throw new Error("No session found");
-      }
-
-      const userID = session.user.id;
-
-      const planToWatch = await prisma.media.count({
-        where: { userId: userID, status: "PLAN_TO_WATCH" },
-      });
-
-      const watching = await prisma.media.count({
-        where: { userId: userID, status: "WATCHING" },
-      });
-
-      const watched = await prisma.media.count({
-        where: { userId: userID, status: "WATCHED" },
-      });
-
-      const dropped = await prisma.media.count({
-        where: { userId: userID, status: "DROPPED" },
-      });
-
-      return { planToWatch, watching, watched, dropped };
-    } catch (error) {
-      throw error;
+export const getWatchlistStatusCount = async (
+  type?: string
+): Promise<WatchlistStatusCountResponse> => {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      throw new Error("No session found");
     }
-  };
+
+    const userID = session.user.id;
+
+    const planToWatch = await prisma.media.count({
+      where: {
+        userId: userID,
+        status: "PLAN_TO_WATCH",
+        mediaType: type ? type : undefined,
+      },
+    });
+
+    const watching = await prisma.media.count({
+      where: {
+        userId: userID,
+        status: "WATCHING",
+        mediaType: type ? type : undefined,
+      },
+    });
+
+    const watched = await prisma.media.count({
+      where: {
+        userId: userID,
+        status: "WATCHED",
+        mediaType: type ? type : undefined,
+      },
+    });
+
+    const dropped = await prisma.media.count({
+      where: {
+        userId: userID,
+        status: "DROPPED",
+        mediaType: type ? type : undefined,
+      },
+    });
+
+    return { planToWatch, watching, watched, dropped };
+  } catch (error) {
+    throw error;
+  }
+};
