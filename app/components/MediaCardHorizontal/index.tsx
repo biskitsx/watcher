@@ -21,6 +21,7 @@ import { debounce } from "lodash";
 interface MediaCardHorizontalProps {
   media: Media;
   removeMedia: (mediaType: string, mediaID: string) => void;
+  isLoading?: boolean;
 }
 export const MediaCardHorizontal = ({
   media,

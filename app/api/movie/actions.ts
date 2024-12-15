@@ -5,7 +5,7 @@ import {
   getTMDbHelper,
   getTMDbHelperList,
 } from "../../../wrapper/tmdb";
-import { CastProps, PaginationProps, SearchProps } from "../media/types";
+import { PaginationProps, SearchProps } from "../media/types";
 
 const MOVIE = "movie";
 
@@ -31,4 +31,22 @@ export const getMovieById = async (id: string) => {
 
 export const getCreditsByMovieId = async (id: string) => {
   return await getTMDb(`movie/${id}/credits?language=en-US`);
+};
+
+export const getNowPlayingMovies = async () => {
+  return await getTMDbHelperList(
+    "movie/now_playing?language=en-US&page=1'",
+    MOVIE
+  );
+};
+
+export const getPopularMovies = async () => {
+  return await getTMDbHelperList("movie/popular?language=en-US&page=1'", MOVIE);
+};
+
+export const getTopRatedMovies = async () => {
+  return await getTMDbHelperList(
+    "movie/top_rated?language=en-US&page=1'",
+    MOVIE
+  );
 };

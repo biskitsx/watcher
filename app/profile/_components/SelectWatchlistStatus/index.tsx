@@ -4,8 +4,10 @@ import { useState } from "react";
 
 export function SelectWatchlistStatus({
   onChange,
+  className
 }: {
   onChange: (value: string) => void;
+  className?: string;
 }) {
   const options = [
     // { value: "", label: "All" },
@@ -17,19 +19,21 @@ export function SelectWatchlistStatus({
   const [watchlistStatus, setWatchlistStatus] = useState<string | null>(null);
 
   return (
-    <Tooltip title="Select Watchlist Status">
-      <Select
-        options={options}
-        size="middle"
-        style={{ width: 130 }}
-        value={watchlistStatus}
-        placeholder="Status"
-        onChange={(value) => {
-          setWatchlistStatus(value);
-          onChange(value);
-        }}
-        allowClear
-      />
-    </Tooltip>
+    <div className={className}>
+      <Tooltip title="Select Watchlist Status">
+        <Select
+          options={options}
+          size="middle"
+          style={{ width: 130 }}
+          value={watchlistStatus}
+          placeholder="Status"
+          onChange={(value) => {
+            setWatchlistStatus(value);
+            onChange(value);
+          }}
+          allowClear
+        />
+      </Tooltip>
+    </div>
   );
 }

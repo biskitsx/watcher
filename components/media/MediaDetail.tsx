@@ -1,7 +1,6 @@
 "use client";
 import { MediaInfoProps } from "@/wrapper/media-info";
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Badge,
   Box,
@@ -28,14 +27,19 @@ import { Image } from "antd";
 import { FaBookmark, FaHeart } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
 import { tmdbImagesURL } from "@/data/baseUrl";
-import { CastProps } from "@/app/api/media/types";
+import { CastProps, Character } from "@/app/api/media/types";
 import { RatingModal } from "@/app/components/RatingModal";
 
 interface MediaDetailProps {
   media: MediaInfoProps;
   casts?: CastProps[];
+  aniemeCasts?: Character[];
 }
-export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
+export const MediaDetail = ({
+  media,
+  casts,
+  aniemeCasts,
+}: MediaDetailProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const session = useSession();
@@ -77,6 +81,7 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
   const handleOnSubmit = async () => {
     setIsLoading(true);
     await addRating(media.id!, media.type!, rating);
+    setRating(rating);
     setIsLoading(false);
     toast({
       title: "Rating changed successfully!",
@@ -104,24 +109,40 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
   };
 
   const castsElement = useMemo(() => {
-    return casts
-      ?.filter((cast) => cast.profile_path)
-      .map((cast, index) => (
-        <Box key={index} className="inline-block">
-          <Image
-            src={`${tmdbImagesURL}/${cast.profile_path}`}
-            alt={cast.name}
-            width={100}
-            height={150}
-            preview={false}
-          />
-          <Text className="text-white text-xs">
-            <span className="font-bold">{cast.name}</span> (
-            {cast.job ? cast.job : cast.known_for_department})
-          </Text>
-        </Box>
-      ));
-  }, [casts]);
+    if (casts) {
+      return casts
+        ?.filter((cast) => cast.profile_path)
+        .map((cast, index) => (
+          <Box key={index} className="inline-block">
+            <Image
+              src={`${tmdbImagesURL}/${cast.profile_path}`}
+              alt={cast.name}
+              width={100}
+              height={150}
+              preview={false}
+            />
+            <Text className="text-white text-xs">
+              <span className="font-bold">{cast.name}</span> (
+              {cast.job ? cast.job : cast.known_for_department})
+            </Text>
+          </Box>
+        ));
+    }
+    return aniemeCasts?.map((cast, index) => (
+      <Box key={index} className="inline-block">
+        <Image
+          src={`${cast.image}`}
+          alt={cast.name}
+          width={100}
+          height={150}
+          preview={false}
+        />
+        <Text className="text-white text-xs">
+          <span className="font-bold">{cast.name}</span>
+        </Text>
+      </Box>
+    ));
+  }, [casts, aniemeCasts]);
 
   const handleOnClearRating = async () => {
     try {
@@ -239,16 +260,14 @@ export const MediaDetail = ({ media, casts }: MediaDetailProps) => {
                   width={"40px"}
                   padding={0}
                 >
-                  <FaHeart color={isFavorite ? "pink" : "white"} />
+                  <FaHeart color={isFavorite ? "red" : "white"} />
                 </Button>
                 <Button
                   bg={palatte.darkBlue}
                   textColor={"white"}
                   onClick={handleOnOpen}
                 >
-                  {isRated
-                    ? `Your vibe: ${media.userMediaData?.point}/10`
-                    : "What's your vibe"}
+                  {isRated ? `Your vibe: ${rating}/10` : "What's your vibe"}
                 </Button>
               </Stack>
               <Text textColor={"white"}>
