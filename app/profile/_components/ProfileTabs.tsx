@@ -56,43 +56,34 @@ export const ProfileTabs = ({
       {
         key: "overview",
         label: "Overview",
-        children: loading ? (
-          <div className="flex justify-center items-center h-full pt-10">
-            <Spin size="large" />
-          </div>
-        ) : (
+        children: (
           <Overview
             stats={genreStats}
             mediaTotal={mediaTotal}
             watchlistStatusCount={watchlistStatusCount}
+            isTabsLoading={loading}
           />
         ),
       },
       {
         key: "ratings",
         label: "Ratings",
-        children: loading ? (
-          <div className="flex justify-center items-center h-full pt-10">
-            <Spin size="large" />
-          </div>
-        ) : (
+        children: (
           <RatingTabs
             medias={ratingsItems}
             initialRatingCountByYear={initialRatingCountByYear}
+            isTabsLoading={loading}
           />
         ),
       },
       {
         key: "watchlist",
         label: "Watchlist",
-        children: loading ? (
-          <div className="flex justify-center items-center h-full pt-10">
-            <Spin size="large" />
-          </div>
-        ) : (
+        children: (
           <Watchlist
             medias={watchlistItems}
             initialWatchlistCountByYear={initialWatchlistCountByYear}
+            isTabsLoading={loading}
           />
         ),
       },

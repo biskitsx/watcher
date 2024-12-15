@@ -14,14 +14,17 @@ import Link from "next/link";
 import { useState } from "react";
 import { SelectMediaType } from "../SelectMediaType";
 import { SelectWatchlistStatus } from "../SelectWatchlistStatus";
+import { MediaCardHorizontalLoading } from "@/app/components/MediaCardHorizontal/loading";
 
 interface WatchlistProps {
   medias: Media[];
   initialWatchlistCountByYear: MediaByYear[];
+  isTabsLoading?: boolean;
 }
 export const Watchlist = ({
   medias,
   initialWatchlistCountByYear,
+  isTabsLoading,
 }: WatchlistProps) => {
   const [mediaWatchlist, setMediaWatchlist] = useState<Media[]>(medias);
   const removeMediaFromWatchlist = async (
@@ -87,7 +90,7 @@ export const Watchlist = ({
           <SelectWatchlistStatus onChange={handleWatchlistStatusChange} />
           <SelectMediaType onChange={handleMediaTypeChange} />
           <div className="w-px h-8 bg-gray-300 hidden sm:block" />
-          <Link href="/search">
+          <Link href="/search" className="hidden sm:block">
             <Tooltip title="Find new media to watch now !!">
               <Button
                 icon={<PlusIcon />}
@@ -102,8 +105,13 @@ export const Watchlist = ({
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {isFilteredLoading ? (
-          <Spin size="large" />
+        {isTabsLoading || isFilteredLoading ? (
+          <>
+            <MediaCardHorizontalLoading />
+            <MediaCardHorizontalLoading />
+            <MediaCardHorizontalLoading />
+            <MediaCardHorizontalLoading />
+          </>
         ) : mediaWatchlist.length === 0 ? (
           <Empty description="No watchlist yet" className="mt-4" />
         ) : (

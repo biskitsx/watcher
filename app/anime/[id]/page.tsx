@@ -2,7 +2,11 @@ import { MediaSlider } from "@/components/media/MediaSlider";
 import { Container } from "@/components/layout/Container";
 import { MediaDetail } from "@/components/media/MediaDetail";
 import { PageContainer } from "@/components/layout/PageContainer";
-import { getAnimeById, getTopAnime } from "@/app/api/anime/actions";
+import {
+  getAnimeById,
+  getAnimeCharacters,
+  getTopAnime,
+} from "@/app/api/anime/actions";
 import { onClickMedia } from "@/app/api/media/actions";
 
 export default async function Home({
@@ -12,10 +16,10 @@ export default async function Home({
 }) {
   const media = await getAnimeById(id);
   const anime = await getTopAnime({ page: 1 });
-  await onClickMedia(media.id!, "anime");
+  const casts = await getAnimeCharacters(id);
   return (
     <PageContainer>
-      <MediaDetail media={media} />
+      <MediaDetail media={media} aniemeCasts={casts} />
       <Container>
         <MediaSlider
           name="You may also like"

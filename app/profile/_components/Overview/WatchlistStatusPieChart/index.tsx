@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Label, Pie, PieChart } from "recharts";
+import { Label, Pie, PieChart, Sector } from "recharts";
 
 import {
   ChartConfig,
@@ -13,7 +13,14 @@ import {
 } from "@/components/ui/chart";
 import { palatte } from "@/constant/palatte";
 import { WatchlistStatusCountResponse } from "@/app/api/media/chart/actions";
-
+import { PieSectorDataItem } from "recharts/types/polar/Pie";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 const chartConfig = {
   count: {
     label: "count",
@@ -38,8 +45,10 @@ const chartConfig = {
 
 export function WatchlistStatusPieChart({
   watchlistStatusCount,
+  total,
 }: {
   watchlistStatusCount: WatchlistStatusCountResponse;
+  total: number;
 }) {
   const chartData = [
     {
@@ -63,12 +72,53 @@ export function WatchlistStatusPieChart({
       fill: palatte.quaternary,
     },
   ];
-  const totalcount = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.count, 0);
-  }, []);
+  // const totalcount = React.useMemo(() => {
+  //   return chartData.reduce((acc, curr) => acc + curr.count, 0);
+  // }, []);
+
+  // const id = "pie-interactive"
+  // const [activeStatus, setActiveStatus] = React.useState(chartData[0].status)
+  // const activeIndex = React.useMemo(
+  //   () => chartData.findIndex((item) => item.status === activeStatus),
+  //   [activeStatus]
+  // )
+  // const status = React.useMemo(() => chartData.map((item) => item.status), [])
 
   return (
     <div className="w-full">
+      {/* <Select value={activeStatus} onValueChange={setActiveStatus}>
+        <SelectTrigger
+          className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
+          aria-label="Select a value"
+        >
+          <SelectValue placeholder="Select month" />
+        </SelectTrigger>
+        <SelectContent align="end" className="rounded-xl">
+          {months.map((key) => {
+            const config = chartConfig[key as keyof typeof chartConfig];
+            if (!config) {
+              return null;
+            }
+            return (
+              <SelectItem
+                key={key}
+                value={key}
+                className="rounded-lg [&_span]:flex"
+              >
+                <div className="flex items-center gap-2 text-xs">
+                  <span
+                    className="flex h-3 w-3 shrink-0 rounded-sm"
+                    style={{
+                      backgroundColor: `var(--color-${key})`,
+                    }}
+                  />
+                  {config?.label}
+                </div>
+              </SelectItem>
+            );
+          })}
+        </SelectContent>
+      </Select> */}
       <ChartContainer
         config={chartConfig}
         className="mx-auto aspect-square max-h-[250px]"
@@ -84,6 +134,10 @@ export function WatchlistStatusPieChart({
             nameKey="status"
             innerRadius={60}
             strokeWidth={5}
+            // activeIndex={1}
+            activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
+              <Sector {...props} outerRadius={outerRadius + 10} />
+            )}
           >
             <Label
               content={({ viewBox }) => {
@@ -100,7 +154,7 @@ export function WatchlistStatusPieChart({
                         y={viewBox.cy}
                         className="fill-foreground text-3xl font-bold"
                       >
-                        {totalcount.toLocaleString()}
+                        {total.toLocaleString()}
                       </tspan>
                       <tspan
                         x={viewBox.cx}

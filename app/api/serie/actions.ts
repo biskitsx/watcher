@@ -18,6 +18,25 @@ export const getAiringTodaySeries = async ({ page = 1 }: PaginationProps) => {
   );
 };
 
+export const getOnTheAirSeries = async ({ page = 1 }: PaginationProps) => {
+  return await getTMDbHelperList(
+    `tv/on_the_air?language=en-US&page=${page}`,
+    SERIES
+  );
+};
+export const getPopularSeries = async ({ page = 1 }: PaginationProps) => {
+  return await getTMDbHelperList(
+    `tv/popular?language=en-US&page=${page}`,
+    SERIES
+  );
+};
+export const getTopRatedSeries = async ({ page = 1 }: PaginationProps) => {
+  return await getTMDbHelperList(
+    `tv/top_rated?language=en-US&page=${page}`,
+    SERIES
+  );
+};
+
 export const getSeriesById = async (id: string) => {
   return await getTMDbHelper(`tv/${id}?language=en-US`, SERIES);
 };

@@ -10,14 +10,17 @@ import { addRating, getUserRatings } from "@/app/api/media/actions";
 import { useState } from "react";
 import { SelectWatchlistStatus } from "../SelectWatchlistStatus";
 import { SelectMediaType } from "../SelectMediaType";
+import { MediaCardHorizontalLoading } from "@/app/components/MediaCardHorizontal/loading";
 
 interface RatingTabsProps {
   medias: Media[];
   initialRatingCountByYear: MediaByYear[];
+  isTabsLoading?: boolean;
 }
 export const RatingTabs = ({
   medias,
   initialRatingCountByYear,
+  isTabsLoading,
 }: RatingTabsProps) => {
   const [mediaRating, setMediaRating] = useState<Media[]>(medias);
   const [isFilteredLoading, setIsFilteredLoading] = useState(false);
@@ -95,10 +98,13 @@ export const RatingTabs = ({
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {isFilteredLoading ? (
-          <div className="flex justify-center items-center h-full">
-            <Spin size="large" />
-          </div>
+        {isTabsLoading || isFilteredLoading ? (
+          <>
+            <MediaCardHorizontalLoading />
+            <MediaCardHorizontalLoading />
+            <MediaCardHorizontalLoading />
+            <MediaCardHorizontalLoading />
+          </>
         ) : mediaRating.length === 0 ? (
           <Empty description="No ratings yet" className="mt-4" />
         ) : (

@@ -23,3 +23,10 @@ export interface CastProps {
   credit_id: string;
   order: number;
 }
+
+export interface Character {
+  name: string;
+  image: string;
+  job?: string;
+  url: string;
+}

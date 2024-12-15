@@ -13,25 +13,29 @@ import {
 import { WatchlistStatusPieChart } from "./WatchlistStatusPieChart";
 import { SelectMediaType } from "../SelectMediaType";
 import { useMemo, useState } from "react";
+import { Skeleton } from "antd";
 
 interface OverviewProps {
   stats: GenreStats[];
   mediaTotal: MediaTotal;
   watchlistStatusCount: WatchlistStatusCountResponse;
+  isTabsLoading?: boolean;
 }
 export default function Overview({
   stats,
   mediaTotal,
   watchlistStatusCount,
+  isTabsLoading,
 }: OverviewProps) {
   const [statsState, setStatsState] = useState<GenreStats[]>(stats);
   const [mediaTotalState, setMediaTotalState] =
     useState<MediaTotal>(mediaTotal);
   const [watchlistStatusCountState, setWatchlistStatusCountState] =
     useState<WatchlistStatusCountResponse>(watchlistStatusCount);
-
+  const [isLoading, setIsLoading] = useState(false);
   const onSelectMediaTypeChange = async (mediaType: string) => {
     try {
+      setIsLoading(true);
       const newStats = await getGenreStats(mediaType);
       const newMediaTotal = await getMediaTotal(mediaType);
       const newWatchlistStatusCount = await getWatchlistStatusCount(mediaType);
@@ -42,6 +46,7 @@ export default function Overview({
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   };
 
   const total = useMemo(
@@ -81,7 +86,11 @@ export default function Overview({
               <h3 className="text-sm font-semibold">{item.title}</h3>
               <span className="text-gray-400">{item.icon}</span>
             </div>
-            <p className="text-2xl font-bold text-primary">{item.value}</p>
+            {isTabsLoading || isLoading ? (
+              <Skeleton.Button active className="!w-1" style={{ width: 10 }} />
+            ) : (
+              <p className="text-2xl font-bold text-primary">{item.value}</p>
+            )}
           </div>
         ))}
       </div>
@@ -96,6 +105,7 @@ export default function Overview({
           </div>
           <WatchlistStatusPieChart
             watchlistStatusCount={watchlistStatusCountState}
+            total={mediaTotalState.watchlistTotal}
           />
         </div>
       </div>
