@@ -128,7 +128,7 @@ export const LoginForm = ({ bgImage }: LoginFormProps) => {
             Sign in
           </Button>
           <div className="mt-4">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/auth/signup" className="text-[#1CBEC8] font-semibold">
               Sign Up
             </Link>
