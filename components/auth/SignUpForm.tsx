@@ -8,40 +8,51 @@ import { useRouter } from "next/navigation";
 import { Box, useToast } from "@chakra-ui/react";
 import { toastConfig } from "../toast/ToastConfig";
 import Link from "next/link";
+import { SignUp } from "@/app/api/auth/actions";
 import { useState } from "react";
 type FieldType = {
   email?: string;
   password?: string;
+  name?: string;
+  confirmPassword?: string;
 };
 
-interface LoginFormProps {
+interface SignUpFormProps {
   bgImage: string;
 }
-export const LoginForm = ({ bgImage }: LoginFormProps) => {
+export const SignUpForm = ({ bgImage }: SignUpFormProps) => {
   const router = useRouter();
   const toast = useToast();
   const [buttonLoading, setButtonLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const [form] = Form.useForm();
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
       setButtonLoading(true);
-      const result = await signIn("credentials", {
-        redirect: false,
-        email: values.email,
-        password: values.password,
-      });
+      if (values.email && values.password && values.name) {
+        const signUpResponse = await SignUp({
+          email: values.email,
+          password: values.password,
+          name: values.name,
+        });
 
-      if (result) {
-        if (result.error) {
-          throw new Error(result.error);
-        } else {
-          toast({
-            title: "Login Successfully",
-            status: "success",
-            ...toastConfig,
-          });
-          router.push("/");
+        const result = await signIn("credentials", {
+          redirect: false,
+          email: values.email,
+          password: values.password,
+        });
+
+        if (result) {
+          if (result.error) {
+            throw new Error(result.error);
+          } else {
+            toast({
+              title: "Signup Successfully",
+              status: "success",
+              ...toastConfig,
+            });
+            router.push("/");
+          }
         }
       }
     } catch (error) {
@@ -78,6 +89,7 @@ export const LoginForm = ({ bgImage }: LoginFormProps) => {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
           layout="vertical"
+          form={form}
           className="!w-full !flex !flex-col"
         >
           <span className="self-center mb-6">
@@ -86,11 +98,24 @@ export const LoginForm = ({ bgImage }: LoginFormProps) => {
               Watcher
             </h1>
           </span>
-          <h1 className="text-xl  text-center">Welcom back!</h1>
+          <h1 className="text-xl text-center">Create new account</h1>
           <Form.Item<FieldType>
             label="Email"
             name="email"
-            rules={[{ required: true, message: "Please input your email!" }]}
+            rules={[
+              { required: true, message: "Please input your email!" },
+              {
+                type: "email",
+                message: "Please input a valid email",
+              },
+            ]}
+          >
+            <Input size="large" />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: "Please input your name" }]}
           >
             <Input size="large" />
           </Form.Item>
@@ -104,10 +129,40 @@ export const LoginForm = ({ bgImage }: LoginFormProps) => {
                 message: "Please input your password!",
                 type: "string",
               },
+              {
+                min: 6,
+                message: "Password must be at least 6 characters",
+              },
             ]}
           >
             <Input.Password size="large" />
           </Form.Item>
+          <Form.Item<FieldType>
+            label="Confirm Your Password"
+            name="confirmPassword"
+            rules={[
+              {
+                required: true,
+                message: "Please confirm your password!",
+                type: "string",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(
+                      "The two passwords that you entered do not match!"
+                    )
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input.Password size="large" />
+          </Form.Item>
+
           {error && (
             <Alert
               message={error}
@@ -123,14 +178,13 @@ export const LoginForm = ({ bgImage }: LoginFormProps) => {
             className="w-full"
             size="large"
             style={{ padding: "14px", height: "auto" }}
-            loading={buttonLoading}
           >
-            Sign in
+            Sign Up
           </Button>
           <div className="mt-4">
-            Don't have an account?{" "}
-            <Link href="/auth/signup" className="text-[#1CBEC8] font-semibold">
-              Sign Up
+            Already have an account?{" "}
+            <Link href="/auth/login" className="text-[#1CBEC8] font-semibold">
+              Sign In
             </Link>
           </div>
           <div className="flex items-center gap-2 py-6">
@@ -146,6 +200,7 @@ export const LoginForm = ({ bgImage }: LoginFormProps) => {
                 size="large"
                 style={{ padding: "14px", height: "auto" }}
                 onClick={onGoogleSignIn}
+                loading={buttonLoading}
               >
                 <div className="w-full flex flex-row items-center justify-center gap-2">
                   <FcGoogle size={"24"} />

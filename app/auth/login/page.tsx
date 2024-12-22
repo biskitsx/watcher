@@ -1,15 +1,10 @@
-"use client";
-
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Container } from "@/components/layout/Container";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { LoginPage } from "./components/LoginPage";
+import { getPopularMovies } from "@/app/api/movie/actions";
 
-export default function SignIn() {
-  return (
-    <Container>
-      <LoginForm />
-    </Container>
-  );
+export default async function SignIn() {
+  const medias = await getPopularMovies();
+  const firstMedia = medias[0];
+  return <LoginForm bgImage={firstMedia.backdrop_path} />;
 }

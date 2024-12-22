@@ -22,7 +22,7 @@ export const Navbar = ({}: NavbarProps) => {
     "bg-transparent text-base-100"
   );
   const OtherClassName = "bg-base-100 shadow-md";
-
+  const isAuthPage = ["/auth/login", "/auth/signup"].includes(currentPathname);
   const shouldTransparent = navbarTranparentPath.includes(currentPathname);
   if (shouldTransparent) {
     if (typeof window !== "undefined") {
@@ -50,6 +50,11 @@ export const Navbar = ({}: NavbarProps) => {
       ...toastConfig,
     });
   };
+
+  if (isAuthPage) {
+    return null;
+  }
+
   return (
     <header className="">
       {!shouldTransparent && <div className="navbar bg-transparent"></div>}

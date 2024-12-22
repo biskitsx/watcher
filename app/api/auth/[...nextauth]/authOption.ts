@@ -1,5 +1,4 @@
 import prisma from "@/prisma";
-import { connectToDatabase } from "@/prisma/connect";
 import bcrypt from "bcryptjs";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
