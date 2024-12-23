@@ -1,7 +1,9 @@
-name: Deploy Next.js site to Pages
+name: NextJS CI
 
 on:
   push:
+    branches: ["main"]
+  pull_request:
     branches: ["main"]
 
 jobs:
@@ -17,7 +19,8 @@ jobs:
         with:
           node-version: "20"
       
+      - name: Install packages
+        run: npm install
+
       - name: Test
         run: npm run test
-
-
