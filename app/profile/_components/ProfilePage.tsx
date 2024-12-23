@@ -3,7 +3,7 @@
 import { Container } from "@/components/layout/Container";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Avatar } from "antd";
-import { useSession } from "next-auth/react";
+
 import { ProfileTabs } from "./ProfileTabs";
 import { Media } from "@prisma/client";
 import { RadialProgress } from "@/components/media/RadialProgress";
@@ -14,6 +14,8 @@ import {
   WatchlistStatusCountResponse,
 } from "@/app/api/media/chart/actions";
 import { GenreStats } from "./Overview/GenreStatsRadarChart";
+import { avatarProfile } from "@/constant/auth";
+import { FaPencilAlt } from "react-icons/fa";
 
 interface ProfilePageProps {
   watchlist: Media[];
@@ -48,11 +50,13 @@ export default function ProfilePage({
       <div className=" bg-custom">
         <Container className="py-12 md:py-24 flex flex-col md:flex-row items-center">
           <div>
-            <Avatar size={120} src={image} />
+            <Avatar size={120} src={image || avatarProfile} />
           </div>
           <div className="flex flex-col gap-6 w-full">
-            <div className="text-3xl font-semibold text-center md:text-start">
-              hello, {user?.name}
+            <div>
+              <div className="text-3xl font-semibold text-center md:text-start">
+                hello, {user?.name}
+              </div>
             </div>
             <div className="flex gap-4 justify-center md:justify-start w-full">
               {/* {scores.map((score, index) => ( */}
