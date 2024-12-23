@@ -1,0 +1,23 @@
+name: Deploy Next.js site to Pages
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  # Build job
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      
+      - name: Test
+        run: npm run test
+
+
