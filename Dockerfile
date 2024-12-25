@@ -1,4 +1,4 @@
-FROM node:20-alpine as base
+FROM --platform=linux/arm64 node:20-alpine as base
 
 # Install OpenSSL and other dependencies
 RUN apk upgrade --update-cache --available && \
@@ -16,7 +16,7 @@ RUN npm run build
 CMD ["npm", "run", "start"]
 
 # run stage
-FROM node:20-alpine as run
+FROM --platform=linux/arm64 node:20-alpine as run
 
 # Copy OpenSSL libraries from base stage
 RUN apk upgrade --update-cache --available && \
