@@ -8,6 +8,7 @@ import {
   getTopAnime,
 } from "@/app/api/anime/actions";
 import { onClickMedia } from "@/app/api/media/actions";
+import { Suspense } from "react";
 
 export default async function Home({
   params: { id },
@@ -19,7 +20,9 @@ export default async function Home({
   const casts = await getAnimeCharacters(id);
   return (
     <PageContainer>
-      <MediaDetail media={media} aniemeCasts={casts} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MediaDetail media={media} aniemeCasts={casts} />
+      </Suspense>
       <Container>
         <MediaSlider
           name="You may also like"
