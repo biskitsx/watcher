@@ -103,10 +103,11 @@ export const getUserWatchList = async (
   if (!session) {
     throw new Error("User not authenticated");
   }
+  const isWatchlist = props?.status === undefined;
   const userMedia = await prisma.media.findMany({
     where: {
       userId: session?.user.id,
-      status: props?.status === "" ? undefined : (props?.status as Status),
+      status: isWatchlist ? { not: Status.NOTHING } : (props?.status as Status),
       mediaType: props?.mediaType === "" ? undefined : props?.mediaType,
     },
     orderBy: { watchListAt: "desc" },
