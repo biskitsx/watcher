@@ -86,7 +86,7 @@ export const LoginForm = ({ bgImage }: LoginFormProps) => {
               Watcher
             </h1>
           </span>
-          <h1 className="text-xl  text-center">Welcom back!</h1>
+          <h1 className="text-xl  text-center">Welcome back!</h1>
           <Form.Item<FieldType>
             label="Email"
             name="email"

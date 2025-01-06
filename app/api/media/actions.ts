@@ -96,6 +96,51 @@ export interface MediaMap {
   userAnimeMap: Map<string, Media>;
 }
 
+export type SortBy =
+  | "rating"
+  | "last_rated"
+  | "last_watchlist"
+  | "title"
+  | "popularity"
+  | "";
+interface GetMediaProps {
+  status?: string;
+  mediaType?: string;
+  sortBy?: SortBy;
+}
+
+const getOrderByForRating = (sortBy: SortBy) => {
+  switch (sortBy) {
+    case "rating":
+      return { point: "desc" };
+    case "last_rated":
+      return { ratedAt: "desc" };
+    case "last_watchlist":
+      return { watchListAt: "desc" };
+    case "title":
+      return { mediaTitle: "asc" };
+    case "popularity":
+      return { mediaVoteAverage: "desc" };
+    default:
+      return { ratedAt: "desc" };
+  }
+};
+const getOrderByForWatchlist = (sortBy: SortBy) => {
+  switch (sortBy) {
+    case "rating":
+      return { point: "desc" };
+    case "last_rated":
+      return { ratedAt: "desc" };
+    case "last_watchlist":
+      return { watchListAt: "desc" };
+    case "title":
+      return { mediaTitle: "asc" };
+    case "popularity":
+      return { mediaVoteAverage: "desc" };
+    default:
+      return { watchListAt: "desc" };
+  }
+};
 export const getUserWatchList = async (
   props?: GetMediaProps
 ): Promise<Media[]> => {
@@ -103,22 +148,19 @@ export const getUserWatchList = async (
   if (!session) {
     throw new Error("User not authenticated");
   }
-  const isWatchlist = props?.status === undefined;
+  const isWatchlist = props?.status === undefined || props?.status === "";
+  const { status = "", mediaType = "", sortBy = "" } = props || {};
+  const orderBy = getOrderByForWatchlist(sortBy);
   const userMedia = await prisma.media.findMany({
     where: {
       userId: session?.user.id,
       status: isWatchlist ? { not: Status.NOTHING } : (props?.status as Status),
-      mediaType: props?.mediaType === "" ? undefined : props?.mediaType,
+      mediaType: mediaType === "" ? undefined : mediaType,
     },
-    orderBy: { watchListAt: "desc" },
+    orderBy: orderBy as any,
   });
   return userMedia as Media[];
 };
-
-interface GetMediaProps {
-  status?: string;
-  mediaType?: string;
-}
 
 export const getUserRatings = async (
   props?: GetMediaProps
@@ -127,15 +169,17 @@ export const getUserRatings = async (
   if (!session) {
     throw new Error("User not authenticated");
   }
-  const { status = "", mediaType = "" } = props || {};
+  const isWatchlist = props?.status === undefined || props?.status === "";
+  const { status = "", mediaType = "", sortBy = "" } = props || {};
+  const orderBy = getOrderByForRating(sortBy);
   const userMedia = await prisma.media.findMany({
     where: {
       userId: session?.user.id,
       point: { not: -1 },
-      status: status === "" ? undefined : (status as Status),
+      status: isWatchlist ? { not: Status.NOTHING } : (props?.status as Status),
       mediaType: mediaType === "" ? undefined : mediaType,
     },
-    orderBy: { ratedAt: "desc" },
+    orderBy: orderBy as any,
   });
   return userMedia as Media[];
 };

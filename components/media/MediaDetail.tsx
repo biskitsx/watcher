@@ -121,27 +121,30 @@ export const MediaDetail = ({
               height={150}
               preview={false}
             />
-            <Text className="text-white text-xs">
-              <span className="font-bold">{cast.name}</span> (
+            <Text className="text-white text-xs text-wrap">
+              <span className="font-bold text-wrap">{cast.name}</span> (
               {cast.job ? cast.job : cast.known_for_department})
             </Text>
           </Box>
         ));
     }
-    return aniemeCasts?.map((cast, index) => (
-      <Box key={index} className="inline-block">
-        <Image
-          src={`${cast.image}`}
-          alt={cast.name}
-          width={100}
-          height={150}
-          preview={false}
-        />
-        <Text className="text-white text-xs">
-          <span className="font-bold">{cast.name}</span>
-        </Text>
-      </Box>
-    ));
+    if (aniemeCasts) {
+      return aniemeCasts?.map((cast, index) => (
+        <Box key={index} className="inline-block">
+          <Image
+            src={`${cast.image}`}
+            alt={cast.name}
+            width={100}
+            height={150}
+            preview={false}
+          />
+          <Text className="text-white text-xs text-wrap">
+            <span className="font-bold text-wrap">{cast.name}</span>
+          </Text>
+        </Box>
+      ));
+    }
+    return [];
   }, [casts, aniemeCasts]);
 
   const handleOnClearRating = async () => {
@@ -238,7 +241,6 @@ export const MediaDetail = ({
                     ))}
                 </Stack>
               </Stack>
-
               <Stack direction={"row"} className="uppercase">
                 <Button
                   bgColor={palatte.darkBlue}
@@ -267,7 +269,7 @@ export const MediaDetail = ({
                   textColor={"white"}
                   onClick={handleOnOpen}
                 >
-                  {isRated ? `Your vibe: ${rating}/10` : "What's your vibe"}
+                  {isRated ? `Your vibe: ${rating}/10` : "What's your vibe ?"}
                 </Button>
               </Stack>
               <Text textColor={"white"}>
@@ -275,10 +277,16 @@ export const MediaDetail = ({
                   ? media.overview
                   : "We don't have an overview translated in English."}
               </Text>
-              <Text className="text-white text-lg font-semibold ">Cast</Text>
-              <Box className="flex gap-4 overflow-x-scroll hide-scrollbar">
-                {castsElement}
-              </Box>
+              {!!castsElement.length && (
+                <>
+                  <Text className="text-white text-lg font-semibold ">
+                    Cast
+                  </Text>
+                  <Box className="flex gap-4 overflow-x-scroll hide-scrollbar">
+                    {castsElement}
+                  </Box>
+                </>
+              )}{" "}
             </Stack>
           </Stack>
         </Box>

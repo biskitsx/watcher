@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export function SelectWatchlistStatus({
   onChange,
-  className
+  className,
 }: {
   onChange: (value: string) => void;
   className?: string;
