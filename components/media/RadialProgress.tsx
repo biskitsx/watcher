@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/util/cn";
 import { useEffect, useState } from "react";
 

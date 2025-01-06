@@ -1,6 +1,7 @@
 import {
   getUserRatings,
   getUserWatchList,
+  SortBy,
   updateWatchlistStatus,
 } from "@/app/api/media/actions";
 import { MediaByYear } from "@/app/api/media/chart/actions";
@@ -15,6 +16,7 @@ import { useState } from "react";
 import { SelectMediaType } from "../SelectMediaType";
 import { SelectWatchlistStatus } from "../SelectWatchlistStatus";
 import { MediaCardHorizontalLoading } from "@/app/components/MediaCardHorizontal/loading";
+import { SortingMedia } from "../SortingMedia";
 
 interface WatchlistProps {
   medias: Media[];
@@ -47,7 +49,7 @@ export const Watchlist = ({
   const [isFilteredLoading, setIsFilteredLoading] = useState(false);
   const [watchlistStatus, setWatchlistStatus] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<string | null>(null);
-
+  const [sorting, setSorting] = useState<SortBy>("");
   const handleWatchlistStatusChange = async (value: string) => {
     try {
       setIsFilteredLoading(true);
@@ -55,6 +57,7 @@ export const Watchlist = ({
       const medias = await getUserWatchList({
         status: value,
         mediaType: mediaType || "",
+        sortBy: sorting,
       });
       setMediaWatchlist(medias);
     } catch (error) {
@@ -71,6 +74,23 @@ export const Watchlist = ({
       const medias = await getUserWatchList({
         status: watchlistStatus || "",
         mediaType: value,
+        sortBy: sorting,
+      });
+      setMediaWatchlist(medias);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      false;
+    }
+  };
+  const handleSortingChange = async (value: string) => {
+    try {
+      setIsFilteredLoading(true);
+      setSorting(value as SortBy);
+      const medias = await getUserWatchList({
+        status: watchlistStatus || "",
+        mediaType: mediaType || "",
+        sortBy: value as SortBy,
       });
       setMediaWatchlist(medias);
     } catch (error) {
@@ -84,13 +104,14 @@ export const Watchlist = ({
     <Container className="py-6">
       <h1 className="text-xl font-bold">Watchlist By Year</h1>
       <AreaChartByYear initialRatingCountByYear={initialWatchlistCountByYear} />
-      <div className="flex justify-between items-center">
+      <div className="flex gap-2 justify-between sm:items-center flex-col sm:flex-row">
         <h1 className="text-xl font-bold">My Watchlist</h1>
         <div className="flex items-center gap-2 flex-row">
           <SelectWatchlistStatus onChange={handleWatchlistStatusChange} />
           <SelectMediaType onChange={handleMediaTypeChange} />
-          <div className="w-px h-8 bg-gray-300 hidden sm:block" />
-          <Link href="/search" className="hidden sm:block">
+          <SortingMedia onChange={handleSortingChange} type="watchlist" />
+          <div className="w-px h-8 bg-gray-300" />
+          <Link href="/search">
             <Tooltip title="Find new media to watch now !!">
               <Button
                 icon={<PlusIcon />}

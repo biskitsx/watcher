@@ -18,11 +18,10 @@ export default async function Home({
   const media = await getAnimeById(id);
   const anime = await getTopAnime({ page: 1 });
   const casts = await getAnimeCharacters(id);
+  onClickMedia(media.id!, media.type);
   return (
     <PageContainer>
-      <Suspense fallback={<div>Loading...</div>}>
-        <MediaDetail media={media} aniemeCasts={casts} />
-      </Suspense>
+      <MediaDetail media={media} aniemeCasts={casts} />
       <Container>
         <MediaSlider
           name="You may also like"

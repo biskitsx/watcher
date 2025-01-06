@@ -4,13 +4,14 @@ import { MediaCardHorizontal } from "@/app/components/MediaCardHorizontal";
 import { Container } from "@/components/layout/Container";
 import { Media } from "@prisma/client";
 import { PlusIcon } from "lucide-react";
-import { Button, Empty, Result, Select, Skeleton, Spin, Tooltip } from "antd";
+import { Button, Empty, Tooltip } from "antd";
 import Link from "next/link";
-import { addRating, getUserRatings } from "@/app/api/media/actions";
+import { addRating, getUserRatings, SortBy } from "@/app/api/media/actions";
 import { useState } from "react";
 import { SelectWatchlistStatus } from "../SelectWatchlistStatus";
 import { SelectMediaType } from "../SelectMediaType";
 import { MediaCardHorizontalLoading } from "@/app/components/MediaCardHorizontal/loading";
+import { SortingMedia } from "../SortingMedia";
 
 interface RatingTabsProps {
   medias: Media[];
@@ -26,6 +27,7 @@ export const RatingTabs = ({
   const [isFilteredLoading, setIsFilteredLoading] = useState(false);
   const [mediaType, setMediaType] = useState<string | null>(null);
   const [watchlistStatus, setWatchlistStatus] = useState<string | null>(null);
+  const [sorting, setSorting] = useState<SortBy>("");
   const removeMediaFromRating = async (mediaType: string, mediaID: string) => {
     try {
       await addRating(mediaID, mediaType, -1);
@@ -47,6 +49,7 @@ export const RatingTabs = ({
       const medias = await getUserRatings({
         status: value,
         mediaType: mediaType || "",
+        sortBy: sorting,
       });
       await getGenreStats();
       setMediaRating(medias);
@@ -63,7 +66,25 @@ export const RatingTabs = ({
       setMediaType(value);
       const medias = await getUserRatings({
         status: watchlistStatus || "",
-        mediaType: value,
+        mediaType: mediaType || "",
+        sortBy: sorting,
+      });
+      setMediaRating(medias);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFilteredLoading(false);
+    }
+  };
+
+  const handleSortingChange = async (value: string) => {
+    try {
+      setIsFilteredLoading(true);
+      setSorting(value as SortBy);
+      const medias = await getUserRatings({
+        status: watchlistStatus || "",
+        mediaType: mediaType || "",
+        sortBy: value as SortBy,
       });
       setMediaRating(medias);
     } catch (error) {
@@ -77,13 +98,14 @@ export const RatingTabs = ({
     <Container className="py-6">
       <h1 className="text-xl font-bold">Ratings By Year</h1>
       <AreaChartByYear initialRatingCountByYear={initialRatingCountByYear} />
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between gap-2 sm:items-center">
         <h1 className="text-xl font-bold">My Ratings</h1>
         <div className="flex items-center gap-2 flex-row">
           <SelectWatchlistStatus onChange={handleWatchlistStatusChange} />
           <SelectMediaType onChange={handleMediaTypeChange} />
-          <div className="w-px h-8 bg-gray-300 hidden sm:block" />
-          <Link href="/search" className="hidden sm:block">
+          <SortingMedia onChange={handleSortingChange} type="rating" />
+          <div className="w-px h-8 bg-gray-300" />
+          <Link href="/search">
             <Tooltip title="Find new media to rate now !!!">
               <Button
                 icon={<PlusIcon />}
