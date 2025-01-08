@@ -13,7 +13,7 @@ import {
 import { WatchlistStatusPieChart } from "./WatchlistStatusPieChart";
 import { SelectMediaType } from "../SelectMediaType";
 import { useMemo, useState } from "react";
-import { Skeleton } from "antd";
+import { Empty, Skeleton } from "antd";
 
 interface OverviewProps {
   stats: GenreStats[];
@@ -103,10 +103,14 @@ export default function Overview({
               <FaStar />
             </span>
           </div>
-          <WatchlistStatusPieChart
-            watchlistStatusCount={watchlistStatusCountState}
-            total={mediaTotalState.watchlistTotal}
-          />
+          {mediaTotalState.watchlistTotal !== 0 ? (
+            <WatchlistStatusPieChart
+              watchlistStatusCount={watchlistStatusCountState}
+              total={mediaTotalState.watchlistTotal}
+            />
+          ) : (
+            <Empty description="No watchlist yet" className="mt-4" />
+          )}
         </div>
       </div>
     </Container>

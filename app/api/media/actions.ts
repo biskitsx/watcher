@@ -42,11 +42,12 @@ export const addRating = async (
     const mediaInfo = await getMediaInfo(mediaID, mediaType);
 
     if (existingMedia) {
+      const removeFromRating = rating === -1;
       await prisma.media.update({
         where: { id: existingMedia.id },
         data: {
           point: rating,
-          ratedAt: new Date(),
+          ratedAt: removeFromRating ? null : new Date(),
           mediaVoteAverage: mediaInfo.vote_average,
           episodes: mediaInfo.episodes,
         },
@@ -154,6 +155,7 @@ export const getUserWatchList = async (
   const userMedia = await prisma.media.findMany({
     where: {
       userId: session?.user.id,
+      watchListAt: { not: null },
       status: isWatchlist ? { not: Status.NOTHING } : (props?.status as Status),
       mediaType: mediaType === "" ? undefined : mediaType,
     },
@@ -169,14 +171,13 @@ export const getUserRatings = async (
   if (!session) {
     throw new Error("User not authenticated");
   }
-  const isWatchlist = props?.status === undefined || props?.status === "";
   const { status = "", mediaType = "", sortBy = "" } = props || {};
   const orderBy = getOrderByForRating(sortBy);
   const userMedia = await prisma.media.findMany({
     where: {
       userId: session?.user.id,
-      point: { not: -1 },
-      status: isWatchlist ? { not: Status.NOTHING } : (props?.status as Status),
+      ratedAt: { not: null },
+      status: status === "" ? undefined : (props?.status as Status),
       mediaType: mediaType === "" ? undefined : mediaType,
     },
     orderBy: orderBy as any,

@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { MediaInfoProps } from "@/wrapper/media-info";
 
-interface MediaSliderProps {
+export interface MediaSliderProps {
   items: MediaInfoProps[];
   name: string;
   type: "movie" | "serie" | "anime";
