@@ -30,7 +30,7 @@ const Loading = () => {
             allowClear
           />
         </div>
-        <MediaSliderLoading />
+        <MediaSliderLoading isLong />
         <MediaSliderLoading />
         <MediaSliderLoading />
         <MediaSliderLoading />
