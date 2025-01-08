@@ -2,7 +2,6 @@ import {
   getNowPlayingMovies,
   getPopularMovies,
   getTopRatedMovies,
-  getTrendingAll,
   getUpcomingMovies,
 } from "@/app/api/movie/actions";
 import { MediaSlider } from "@/components/media/MediaSlider";
@@ -14,7 +13,6 @@ import { InfiniteMedia } from "@/components/infinite-media";
 
 export default async function Home() {
   const upcomingMovies = await getUpcomingMovies({ page: 1 });
-  // const recommendMovies = await getTrendingAll();
   const popularMovies = await getPopularMovies();
   const topRatedMovies = await getTopRatedMovies();
   const nowPlayingMovies = await getNowPlayingMovies();
@@ -48,12 +46,12 @@ export default async function Home() {
             name="Now Playing Movies"
             type="movie"
           />
+          <InfiniteMedia
+            title="Upcoming Movies"
+            initialData={upcomingMovies}
+            fetchData={getUpcomingMovies}
+          />
         </Suspense>
-        <InfiniteMedia
-          title="Upcoming Movies"
-          initialData={upcomingMovies}
-          fetchData={getUpcomingMovies}
-        />
       </Container>
     </PageContainer>
   );

@@ -77,7 +77,7 @@ export const Navbar = ({}: NavbarProps) => {
               <LiLink currentPathname={currentPathname} pathname="profile" />
             </ul>
             <div className="flex">
-              <Link href={"/search"}>
+              <Link href={"/browse/movie"}>
                 <button className="btn btn-ghost btn-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

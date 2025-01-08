@@ -1,7 +1,6 @@
 import {
   getCreditsByMovieId,
   getMovieById,
-  getTrendingAll,
   getUpcomingMovies,
 } from "@/app/api/movie/actions";
 import { MediaSlider } from "@/components/media/MediaSlider";
