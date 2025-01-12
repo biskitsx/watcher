@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth";
 import { getMovieById } from "../movie/actions";
 import { getSeriesById } from "../serie/actions";
 import { getAnimeById } from "../anime/actions";
+import { getTMDb } from "@/wrapper/tmdb";
+import { SeriesEpisode } from "./types";
 
 export const getMediaInfo = async (mediaID: string, mediaType: string) => {
   switch (mediaType) {
@@ -451,6 +453,64 @@ export const onUpdateWatchedEpisodes = async (
     });
 
     return updatedMedia;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getSerieNextEpisode = async () => {
+  try {
+    const session = await getServerSession(authOptions);
+    const serieMedias = await prisma.media.findMany({
+      where: {
+        mediaType: "serie",
+        userId: session?.user.id,
+        watchListAt: { not: null },
+      },
+    });
+
+    const nextEpisodes = await Promise.all(
+      serieMedias.map(async (media) => {
+        const res = await getTMDb(`tv/${media.mediaId}?language=en-US`);
+        const nextEpisodeToAir = res.next_episode_to_air;
+        const lastEpisodeToAir = res.last_episode_to_air;
+
+        const episodes: SeriesEpisode[] = [];
+        if (nextEpisodeToAir) {
+          episodes.push({
+            media_type: "serie",
+            media_id: media.mediaId,
+            title: media.mediaTitle,
+            id: nextEpisodeToAir.id,
+            name: nextEpisodeToAir.name,
+            overview: nextEpisodeToAir.overview,
+            air_date: nextEpisodeToAir.air_date,
+            episode_number: nextEpisodeToAir.episode_number,
+            episode_type: nextEpisodeToAir.episode_type,
+            season_number: nextEpisodeToAir.season_number,
+          });
+        }
+        if (lastEpisodeToAir) {
+          episodes.push({
+            media_id: media.mediaId,
+            media_type: "serie",
+            title: media.mediaTitle,
+            id: lastEpisodeToAir.id,
+            name: lastEpisodeToAir.name,
+            overview: lastEpisodeToAir.overview,
+            air_date: lastEpisodeToAir.air_date,
+            episode_number: lastEpisodeToAir.episode_number,
+            episode_type: lastEpisodeToAir.episode_type,
+            season_number: lastEpisodeToAir.season_number,
+          });
+        }
+        return episodes;
+      })
+    );
+
+    // Flatten the array of episodes
+    const flattenedEpisodes = nextEpisodes.flat();
+
+    return flattenedEpisodes;
   } catch (error) {
     throw error;
   }

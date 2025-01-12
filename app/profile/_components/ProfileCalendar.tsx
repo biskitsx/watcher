@@ -1,29 +1,32 @@
 import React from "react";
 import type { BadgeProps, CalendarProps } from "antd";
-import { Badge, Calendar, Tag } from "antd";
+import { Badge, Calendar } from "antd";
 import type { Dayjs } from "dayjs";
 import { Container } from "@/components/layout/Container";
 import { Media } from "@prisma/client";
 import dayjs from "dayjs"; // Import dayjs for date manipulation
 import Link from "next/link";
+import { SeriesEpisode } from "@/app/api/media/types";
 
 interface ProfileCalendarProps {
   media?: Media[];
+  episodes?: SeriesEpisode[];
 }
 
-const ProfileCalendar = ({ media }: ProfileCalendarProps) => {
+const ProfileCalendar = ({ media, episodes }: ProfileCalendarProps) => {
   const getDateData = (value: Dayjs, type: "day" | "month") => {
-    let listData: { type: "success" | "error" | "warning"; media: Media }[] =
-      [];
-
+    let listData: {
+      type: "success" | "error" | "warning" | "default" | "processing";
+      episode: SeriesEpisode;
+    }[] = [];
     // Check if media array is provided and filter events for the current date
-    if (media) {
-      media.forEach((item) => {
-        const releaseDate = dayjs(item.mediaReleaseDate);
+    if (episodes) {
+      episodes.forEach((item) => {
+        const releaseDate = dayjs(item.air_date);
         if (value.isSame(releaseDate, type)) {
           listData.push({
-            type: "success",
-            media: item,
+            type: "processing",
+            episode: item,
           });
         }
       });
@@ -40,7 +43,8 @@ const ProfileCalendar = ({ media }: ProfileCalendarProps) => {
           <li key={index}>
             <Badge
               status={item.type as BadgeProps["status"]}
-              text={item.media.mediaTitle}
+              text={`${item.episode.title} (${item.episode.name})`}
+              size="small"
             />
           </li>
         ))}
@@ -54,10 +58,10 @@ const ProfileCalendar = ({ media }: ProfileCalendarProps) => {
       <ul className="events">
         {listData.map((item, index) => (
           <li key={index}>
-            <Link href={`/${item.media.mediaType}/${item.media.mediaId}`}>
+            <Link href={`/${item.episode.media_id}`}>
               <Badge
                 status={item.type as BadgeProps["status"]}
-                text={item.media.mediaTitle}
+                text={`${item.episode.title} (${item.episode.name})`}
                 size="small"
               />
             </Link>

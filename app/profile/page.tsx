@@ -1,5 +1,6 @@
 import {
   getMediaAverage,
+  getSerieNextEpisode,
   getUserRatings,
   getUserWatchList,
 } from "@/app/api/media/actions";
@@ -16,9 +17,11 @@ import {
 
 export default async function Profile() {
   try {
+    const res = await getSerieNextEpisode();
     const userWatchList = await getUserWatchList();
     const userRatings = await getUserRatings();
     const session = await getServerSession(authOptions);
+
     if (!session) {
       return {
         redirect: {

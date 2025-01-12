@@ -1,7 +1,5 @@
 "use client";
-import { Card } from "antd";
 import { MediaCard } from "./MediaCard";
-import { Container } from "../layout/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleChevronRight } from "@fortawesome/free-solid-svg-icons/faCircleChevronRight";
 import Link from "next/link";

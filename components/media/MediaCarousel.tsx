@@ -2,7 +2,7 @@
 
 import { MediaInfoProps } from "@/wrapper/media-info";
 import { Badge, Box, Stack, Text } from "@chakra-ui/react";
-import { Carousel, Button } from "antd";
+import { Carousel } from "antd";
 import { RadialProgress } from "./RadialProgress";
 
 interface MediaCarouselProps {
@@ -51,9 +51,6 @@ export const MediaCarousel = ({ items }: MediaCarouselProps) => {
                     <Text className="text-sm text-white line-clamp-4 font-medium">
                       {movie.overview}
                     </Text>
-                    {/* <Button type="primary" className=" tracking-wider w-fit">
-                      MORE INFO
-                    </Button> */}
                   </Stack>
                 </Box>
               </Box>

@@ -10,10 +10,16 @@ import {
   MediaByYear,
   MediaTotal,
   WatchlistStatusCountResponse,
+  getGenreStats,
 } from "@/app/api/media/chart/actions";
-import { getUserRatings, getUserWatchList } from "@/app/api/media/actions";
+import {
+  getSerieNextEpisode,
+  getUserRatings,
+  getUserWatchList,
+} from "@/app/api/media/actions";
 import Overview from "./Overview";
 import { GenreStats } from "./Overview/GenreStatsRadarChart";
+import { SeriesEpisode } from "@/app/api/media/types";
 
 interface ProfileTabsProps {
   watchlist: Media[];
@@ -39,14 +45,18 @@ export const ProfileTabs = ({
   const [loading, setLoading] = useState(false);
   const [genreStats, setGenreStats] = useState<GenreStats[]>(initialGenreStats);
   const [mediaTotal, setMediaTotal] = useState<MediaTotal>(initialMediaTotal);
+  const [episodesItems, setEpisodesItems] = useState<SeriesEpisode[]>([]);
   const onChange = async (key: string) => {
     setLoading(true); // Show loading spinner during the data fetch
     if (key === "ratings") {
       const newRatings = await getUserRatings();
       setRatingsItems(newRatings || []); // Update ratings or clear if empty
-    } else {
+    } else if (key === "watchlist") {
       const newWatchlist = await getUserWatchList();
       setWatchlistItems(newWatchlist || []); // Update watchlist or clear if empty
+    } else {
+      const newEpisodes = await getSerieNextEpisode();
+      setEpisodesItems(newEpisodes); // Update genre stats or clear if empty
     }
     setLoading(false); // Hide loading spinner after update
   };
@@ -95,7 +105,7 @@ export const ProfileTabs = ({
             <Spin size="large" />
           </div>
         ) : (
-          <ProfileCalendar media={watchlistItems} />
+          <ProfileCalendar media={watchlistItems} episodes={episodesItems} />
         ),
       },
     ],

@@ -1,3 +1,4 @@
+import { getUserBaseRecommendations } from "@/app/api/recommend/actions";
 import { BrowsePage } from "../components/BrowsePage";
 import { getInitialDataByMediaType } from "./actions";
 
@@ -13,6 +14,7 @@ const Page = async ({
     }
 
     const initialData = await getInitialDataByMediaType(mediaType);
+    const recommendMedia = await getUserBaseRecommendations(mediaType as any);
 
     return <BrowsePage mediaType={mediaType} initialData={initialData} />;
   } catch (error) {

@@ -1,5 +1,4 @@
 import {
-  getUserRatings,
   getUserWatchList,
   SortBy,
   updateWatchlistStatus,
@@ -9,7 +8,7 @@ import { AreaChartByYear } from "@/app/components/AreaChartByYear";
 import { MediaCardHorizontal } from "@/app/components/MediaCardHorizontal";
 import { Container } from "@/components/layout/Container";
 import { Media } from "@prisma/client";
-import { Button, Empty, Spin, Tooltip } from "antd";
+import { Button, Empty, Tooltip } from "antd";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -73,14 +72,14 @@ export const Watchlist = ({
       setMediaType(value);
       const medias = await getUserWatchList({
         status: watchlistStatus || "",
-        mediaType: value,
+        mediaType: value || "",
         sortBy: sorting,
       });
       setMediaWatchlist(medias);
     } catch (error) {
       console.log(error);
     } finally {
-      false;
+      setIsFilteredLoading(false);
     }
   };
   const handleSortingChange = async (value: string) => {
