@@ -38,7 +38,7 @@ const getModelRecommendations = async (
     const convertedData: MediaInfoProps[] = data.map((media) => {
       let imageURL, voteAverage, title, releaseDate;
       if (mediaType === "movie") {
-        imageURL = tmdbImagesURL + media.image_url;
+        imageURL = tmdbImagesURL + media.poster_path;
         voteAverage = media.vote_average;
         title = media.title;
         releaseDate = media.release_date;

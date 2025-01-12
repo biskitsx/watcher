@@ -23,7 +23,6 @@ export const getInitialDataByMediaType = async (mediaType: string) => {
   let initialData: MediaSliderProps[] = [];
   if (mediaType === "movie") {
     const recommendMovies = await getUserBaseRecommendations("movie");
-    const upcomingMovies = await getUpcomingMovies({ page: 1 });
     const popularMovies = await getPopularMovies();
     const topRatedMovies = await getTopRatedMovies();
     const nowPlayingMovies = await getNowPlayingMovies();
@@ -56,6 +55,7 @@ export const getInitialDataByMediaType = async (mediaType: string) => {
       },
     ];
   } else if (mediaType === "serie") {
+    const recommendSeries = await getUserBaseRecommendations("serie");
     const airingTodaySeries = await getAiringTodaySeries({ page: 1 });
     const onTheAirSeries = await getOnTheAirSeries({ page: 1 });
     const popularSeries = await getPopularSeries({ page: 1 });
@@ -63,6 +63,12 @@ export const getInitialDataByMediaType = async (mediaType: string) => {
     const trendingSeries = await getTrendingSeries({ page: 1 });
 
     initialData = [
+      {
+        href: "#",
+        items: recommendSeries,
+        name: "Recommend For You",
+        type: "serie",
+      },
       {
         href: "#",
         items: airingTodaySeries.slice(0, 12),
@@ -96,8 +102,15 @@ export const getInitialDataByMediaType = async (mediaType: string) => {
       },
     ];
   } else if (mediaType === "anime") {
+    const recommendAnime = await getUserBaseRecommendations("anime");
     const topAnime = await getTopAnime({ page: 1 });
     initialData = [
+      {
+        href: "#",
+        items: recommendAnime,
+        name: "Recommend For You",
+        type: "anime",
+      },
       {
         href: "#",
         items: topAnime,

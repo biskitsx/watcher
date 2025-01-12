@@ -20,7 +20,7 @@ export const Navbar = ({}: NavbarProps) => {
   const mediaTypeGroups = ["movie", "serie", "anime"];
   const mediaTypeGroup = currentPathname.split("/")[1];
   const isMediaTypeGroup = mediaTypeGroups.includes(mediaTypeGroup);
-  const browsePath = isMediaTypeGroup ? `browse/${mediaTypeGroup}` : "movie";
+  const browsePath = isMediaTypeGroup ? `/browse/${mediaTypeGroup}` : "movie";
   const navbarTranparentPath = ["/", "/search"];
   const [homeClassName, setHomeClassName] = useState(
     "bg-transparent text-base-100"

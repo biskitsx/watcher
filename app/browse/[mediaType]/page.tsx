@@ -14,7 +14,6 @@ const Page = async ({
     }
 
     const initialData = await getInitialDataByMediaType(mediaType);
-    const recommendMedia = await getUserBaseRecommendations(mediaType as any);
 
     return <BrowsePage mediaType={mediaType} initialData={initialData} />;
   } catch (error) {
