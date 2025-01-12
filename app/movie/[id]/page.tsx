@@ -8,6 +8,7 @@ import { Container } from "@/components/layout/Container";
 import { MediaDetail } from "@/components/media/MediaDetail";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { onClickMedia } from "@/app/api/media/actions";
+import { getContentBaseRecommendations } from "@/app/api/recommend/actions";
 
 export default async function Home({
   params: { id },
@@ -15,10 +16,11 @@ export default async function Home({
   params: { id: string };
 }) {
   try {
+    const idInt = parseInt(id);
+    const recommendMedia = await getContentBaseRecommendations(idInt, "movie");
     const media = await getMovieById(id);
-    const movies = await getUpcomingMovies({ page: 1 });
     const credits = await getCreditsByMovieId(id);
-    await onClickMedia(media.id!, media.type);
+    onClickMedia(media.id!, media.type);
 
     return (
       <PageContainer>
@@ -26,7 +28,7 @@ export default async function Home({
         <Container>
           <MediaSlider
             name="You may also like"
-            items={movies}
+            items={recommendMedia}
             type="movie"
             href=""
           />
@@ -34,6 +36,7 @@ export default async function Home({
       </PageContainer>
     );
   } catch (error) {
+    console.log(error);
     return <div>Something went wrong</div>;
   }
 }

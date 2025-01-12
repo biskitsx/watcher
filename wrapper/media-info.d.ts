@@ -10,6 +10,6 @@ export interface MediaInfoProps {
   vote_average: number;
   overview: string;
   userMediaData?: Media;
-  genres: { id: number; name: string }[];
+  genres?: { id: number; name: string }[];
   episodes?: number;
 }

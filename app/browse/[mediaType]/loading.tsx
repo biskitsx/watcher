@@ -18,6 +18,7 @@ const Loading = () => {
                 className="!gap-2 !font-bold"
                 style={{ width: 120 }}
                 variant="filled"
+                disabled
               />
             </div>
           </div>
@@ -26,6 +27,7 @@ const Loading = () => {
             prefix={<SearchIcon size={14} stroke="gray" />}
             placeholder="Search"
             size="large"
+            disabled
             className="!gap-2 !flex !shadow-md bg"
             allowClear
           />

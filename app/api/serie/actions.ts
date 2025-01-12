@@ -1,11 +1,9 @@
 "use server";
 
-import { MediaInfoProps } from "@/wrapper/media-info";
 import {
   getTMDb,
   getTMDbHelper,
   getTMDbHelperList,
-  tmdbConvertToMediaInfoList,
 } from "../../../wrapper/tmdb";
 import { PaginationProps, SearchProps } from "../media/types";
 
@@ -38,7 +36,7 @@ export const getTopRatedSeries = async ({ page = 1 }: PaginationProps) => {
 };
 
 export const getSeriesById = async (id: string) => {
-  return await getTMDbHelper(`tv/${id}?language=en-US`, SERIES);
+  return await getTMDbHelper(`tv/${id}?language=en-us`, SERIES);
 };
 
 export const getTrendingSeries = async ({ page = 1 }: PaginationProps) => {

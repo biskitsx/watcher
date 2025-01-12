@@ -66,7 +66,7 @@ export const RatingTabs = ({
       setMediaType(value);
       const medias = await getUserRatings({
         status: watchlistStatus || "",
-        mediaType: mediaType || "",
+        mediaType: value || "",
         sortBy: sorting,
       });
       setMediaRating(medias);

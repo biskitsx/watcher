@@ -17,6 +17,10 @@ export const Navbar = ({}: NavbarProps) => {
   const { data: session, status } = useSession();
   const toast = useToast();
   const currentPathname = usePathname();
+  const mediaTypeGroups = ["movie", "serie", "anime"];
+  const mediaTypeGroup = currentPathname.split("/")[1];
+  const isMediaTypeGroup = mediaTypeGroups.includes(mediaTypeGroup);
+  const browsePath = isMediaTypeGroup ? mediaTypeGroup : "movie";
   const navbarTranparentPath = ["/", "/search"];
   const [homeClassName, setHomeClassName] = useState(
     "bg-transparent text-base-100"
@@ -77,7 +81,7 @@ export const Navbar = ({}: NavbarProps) => {
               <LiLink currentPathname={currentPathname} pathname="profile" />
             </ul>
             <div className="flex">
-              <Link href={"/browse/movie"}>
+              <Link href={browsePath}>
                 <button className="btn btn-ghost btn-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

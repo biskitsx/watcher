@@ -14,9 +14,15 @@ import {
 } from "@/app/api/movie/actions";
 import { MediaSliderProps } from "@/components/media/MediaSlider";
 import { getTopAnime } from "@/app/api/anime/actions";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOption";
+import { getUserBaseRecommendations } from "@/app/api/recommend/actions";
 export const getInitialDataByMediaType = async (mediaType: string) => {
+  const session = await getServerSession(authOptions);
+  const isLogin = session?.user ? true : false;
   let initialData: MediaSliderProps[] = [];
   if (mediaType === "movie") {
+    const recommendMovies = await getUserBaseRecommendations("movie");
     const upcomingMovies = await getUpcomingMovies({ page: 1 });
     const popularMovies = await getPopularMovies();
     const topRatedMovies = await getTopRatedMovies();
@@ -25,16 +31,16 @@ export const getInitialDataByMediaType = async (mediaType: string) => {
     initialData = [
       {
         href: "#",
-        items: upcomingMovies?.slice(12, 24),
+        items: recommendMovies,
         name: "Recommend For You",
         type: "movie",
-        isLong: true,
       },
       {
         href: "#",
         items: popularMovies,
         name: "Popular Movies",
         type: "movie",
+        isLong: true,
       },
       {
         href: "#",

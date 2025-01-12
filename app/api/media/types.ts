@@ -30,3 +30,16 @@ export interface Character {
   job?: string;
   url: string;
 }
+
+export interface SeriesEpisode {
+  media_id: string;
+  title: string;
+  id: number;
+  media_type: string;
+  name: string;
+  overview: string;
+  air_date: string;
+  episode_number: number;
+  episode_type: string;
+  season_number: string;
+}
