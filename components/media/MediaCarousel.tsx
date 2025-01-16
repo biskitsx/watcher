@@ -1,10 +1,8 @@
 "use client";
 
 import { MediaInfoProps } from "@/wrapper/media-info";
-import { Badge, Box, Stack, Text } from "@chakra-ui/react";
+import { Box, Stack, Text } from "@chakra-ui/react";
 import { Carousel } from "antd";
-import { RadialProgress } from "./RadialProgress";
-import { MediaCard } from "./MediaCard";
 import { Container } from "../layout/Container";
 import Link from "next/link";
 import { MotionFaded } from "../motion/MotionFaded";
@@ -30,7 +28,9 @@ export const MediaCarousel = ({ items }: MediaCarouselProps) => {
               <Box className="absolute w-full h-full top-1/2 left-0 px-[10px] md:px-20 lg:px-40 ">
                 <Container>
                   <MotionFaded className="rounded-md overflow-hidden bg-[rgba(0,0,0,0.6)] text-white flex flex-row gap-4">
-                    <div className="w-[6px] bg-secondary" />
+                    <div className="bg-secondary">
+                      <div className="w-[12px] " />
+                    </div>
                     <div className="space-y-2 p-2">
                       <Link
                         href={`/${movie.type}/${movie.id}`}

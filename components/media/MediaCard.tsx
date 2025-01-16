@@ -157,8 +157,7 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
     <div className="">
       <div
         className={cn("rounded-md  inline-block align-top space-y-3", {
-          "w-[100px] md:w-[140px] ": !isLong,
-          "w-[150px] md:w-[210px]": size === "lg" && !isLong,
+          "w-[140px] md:w-[160px] ": !isLong,
           "w-[240px]": isLong,
         })}
       >
@@ -174,9 +173,8 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
                 }}
                 className={cn("hover:scale-105 transition-all object-cover", {
+                  "h-[210px] md:h-[238px]": !isLong,
                   "w-[240px] h-[135px]": isLong,
-                  "h-[150px] md:h-[210px]": !isLong,
-                  "w-[225px] md:w-[315px]": size === "lg" && !isLong,
                 })}
               />
             </Link>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { MediaInfoProps } from "@/wrapper/media-info";
 import { cn } from "@/util/cn";
+import { Box } from "@chakra-ui/react";
 
 export interface MediaSliderProps {
   items: MediaInfoProps[];
@@ -28,7 +29,7 @@ export const MediaSlider = ({
   const isLink = href !== "#";
   return (
     <>
-      <div
+      <Box
         className={cn("flex flex-col gap-2 z-20  rounded-md bg-transparent", {
           hidden: !shouldRender,
         })}
@@ -82,7 +83,7 @@ export const MediaSlider = ({
             })}
           </div>
         </div>
-      </div>
+      </Box>
     </>
   );
 };

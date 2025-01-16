@@ -50,7 +50,7 @@ interface GenreStatsRadarChartProps {
 }
 export function GenreStatsRadarChart({ stats }: GenreStatsRadarChartProps) {
   return (
-    <div className="flex flex-col gap-4 rounded-md shadow-md border p-4 w-full">
+    <div className="flex flex-col bg-white gap-4 rounded-md shadow-md border p-4 w-full">
       <h3 className="text-sm font-semibold">Your Favorite Genre</h3>
       <div>
         <ChartContainer config={chartConfig} className="mx-auto  max-h-[250px]">

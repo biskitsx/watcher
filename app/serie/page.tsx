@@ -13,6 +13,8 @@ import { InfiniteMedia } from "@/components/infinite-media";
 import { getUserBaseRecommendations } from "../api/recommend/actions";
 import { JoinToday } from "../components/JoinToday";
 import { shouldRenderUserbased } from "../api/media/actions";
+import { Shape1 } from "../components/svg/shape-1";
+import { Shape2 } from "../components/svg/shape-2";
 
 export default async function Home() {
   const [
@@ -35,7 +37,7 @@ export default async function Home() {
   return (
     <PageContainer>
       <MediaCarousel items={trendingSeries} />
-      <Container>
+      <Container className="relative">
         <MediaSlider
           href="#"
           items={recommendsSeries}
@@ -50,9 +52,12 @@ export default async function Home() {
           type="serie"
           isLong
         />
+
+        <Shape1 className="absolute z-10 top-36 -left-20" />
       </Container>
       <JoinToday media={airingTodaySeries[3]} />
-      <Container>
+      <Container className="relative">
+        <Shape2 className="absolute z-10 top-36 -right-20" />
         <MediaSlider
           href="#"
           items={onTheAirSeries}
