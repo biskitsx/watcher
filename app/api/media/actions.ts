@@ -545,6 +545,7 @@ export const shouldRenderUserbased = async () => {
     const healthCheck = await checkRecommendServiceAvailability();
     const isLogin = !!session?.user;
     const shouldRender = isLogin && healthCheck;
+    console.log({ healthCheck, isLogin, shouldRender });
     return shouldRender;
   } catch (error) {
     throw error;

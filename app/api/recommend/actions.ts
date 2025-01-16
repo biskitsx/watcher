@@ -96,6 +96,7 @@ export const getContentBaseRecommendations = async (
 
     return recommendations;
   } catch (error) {
+    console.log(error);
     let someMedias = [];
     if (type === "serie") {
       someMedias = await getSerieRecommendationsFromTMDB(id);
@@ -126,6 +127,7 @@ export const getUserBaseRecommendations = async (
     );
     return recommendations;
   } catch (error) {
+    console.log(error);
     return [];
   }
 };
