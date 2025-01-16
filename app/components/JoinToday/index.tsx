@@ -18,7 +18,7 @@ export const JoinToday = ({ media }: JoinTodayProps) => {
 
   const title = isLogin ? "Welcome Back to Your Entermaint Hub" : "Join Today";
   const joinTodayText =
-    "Join today and take full control of your entertainment journey. Track all the media you love, from movies and TV shows to music and more, all in one place. Unlock personalized recommendations based on your interests and viewing habits, helping you discover new favorites effortlessly. Start your adventure now and never miss a moment of entertainment tailored just for you!";
+    "Join today and take full control of your entertainment journey. Track all the media you love, from movies and TV shows, all in one place. Unlock personalized recommendations based on your interests and viewing habits, helping you discover new favorites effortlessly. Start your adventure now and never miss a moment of entertainment tailored just for you!";
   const loginText =
     "Welcome back! Dive into your personalized entertainment hub, where you can track your favorite movies, TV shows, music, and more. Explore tailored recommendations crafted just for you, and discover new content that matches your unique tastes. Start browsing now and make every moment of entertainment unforgettable!";
   const description = isLogin ? loginText : joinTodayText;

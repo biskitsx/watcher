@@ -71,12 +71,12 @@ export default function Overview({
   );
 
   return (
-    <Container className="py-6">
-      <div className="flex justify-between">
+    <Container className="py-6 relative">
+      <div className="flex justify-between z-20">
         <h1 className="text-xl font-bold">Overview</h1>
         <SelectMediaType onChange={onSelectMediaTypeChange} />
       </div>
-      <div className="flex gap-4 justify-between">
+      <div className="flex gap-4 justify-between z-20">
         {total.map((item, idx) => (
           <div
             className="flex rounded-md shadow-md border p-4 flex-col w-full gap-4"
@@ -94,7 +94,7 @@ export default function Overview({
           </div>
         ))}
       </div>
-      <div className="flex gap-4 w-full flex-col sm:flex-row">
+      <div className="flex gap-4 w-full flex-col sm:flex-row z-20">
         <GenreStatsRadarChart stats={statsState} />
         <div className="flex rounded-md shadow-md border p-4 flex-col w-full gap-4">
           <div className="flex items-center justify-between">

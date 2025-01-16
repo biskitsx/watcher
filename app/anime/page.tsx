@@ -7,6 +7,7 @@ import { MediaCarousel } from "@/components/media/MediaCarousel";
 import { getUserBaseRecommendations } from "../api/recommend/actions";
 import { JoinToday } from "../components/JoinToday";
 import { shouldRenderUserbased } from "../api/media/actions";
+import { Shape2 } from "../components/svg/shape-2";
 
 export default async function Home() {
   const topAnime = await getTopAnime({ page: 1 });
@@ -15,7 +16,7 @@ export default async function Home() {
   return (
     <PageContainer>
       <MediaCarousel items={topAnime.slice(0, 5)} />
-      <Container>
+      <Container className="relative">
         <MediaSlider
           href="#"
           items={recommed}
@@ -30,6 +31,7 @@ export default async function Home() {
           type="anime"
           isLong
         />
+        <Shape2 className="absolute z-10 top-36 -right-20" />
       </Container>
       <JoinToday media={topAnime[3]} />
       <Container>

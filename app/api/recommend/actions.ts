@@ -126,16 +126,7 @@ export const getUserBaseRecommendations = async (
     );
     return recommendations;
   } catch (error) {
-    throw error;
-    // let someMedias = [];
-    // if (type === "serie") {
-    //   someMedias = await getTopRatedSeries({ page: 1 });
-    // } else if (type === "movie") {
-    //   someMedias = await getTopRatedMovies();
-    // } else {
-    //   someMedias = await getTopAnime({ page: 1 });
-    // }
-    // return someMedias;
+    return [];
   }
 };
 
