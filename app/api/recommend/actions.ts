@@ -5,9 +5,15 @@ import { RecommendMedia } from "./types";
 import { authOptions } from "../auth/[...nextauth]/authOption";
 import { getServerSession } from "next-auth";
 import { tmdbImagesURL } from "@/data/baseUrl";
-import { getTopRatedSeries } from "../serie/actions";
-import { getTopRatedMovies } from "../movie/actions";
-import { getTopAnime } from "../anime/actions";
+import {
+  getSerieRecommendationsFromTMDB,
+  getTopRatedSeries,
+} from "../serie/actions";
+import {
+  getMovieRecommendationsFromTMDB,
+  getTopRatedMovies,
+} from "../movie/actions";
+import { getAnimeRecommendationsByJikan, getTopAnime } from "../anime/actions";
 
 const getModelRecommendations = async (
   mediaType: "movie" | "serie" | "anime",
@@ -92,11 +98,11 @@ export const getContentBaseRecommendations = async (
   } catch (error) {
     let someMedias = [];
     if (type === "serie") {
-      someMedias = await getTopRatedSeries({ page: 1 });
+      someMedias = await getSerieRecommendationsFromTMDB(id);
     } else if (type === "movie") {
-      someMedias = await getTopRatedMovies();
+      someMedias = await getMovieRecommendationsFromTMDB(id);
     } else {
-      someMedias = await getTopAnime({ page: 1 });
+      someMedias = await getAnimeRecommendationsByJikan(id);
     }
     return someMedias;
   }
@@ -120,14 +126,37 @@ export const getUserBaseRecommendations = async (
     );
     return recommendations;
   } catch (error) {
-    let someMedias = [];
-    if (type === "serie") {
-      someMedias = await getTopRatedSeries({ page: 1 });
-    } else if (type === "movie") {
-      someMedias = await getTopRatedMovies();
-    } else {
-      someMedias = await getTopAnime({ page: 1 });
+    throw error;
+    // let someMedias = [];
+    // if (type === "serie") {
+    //   someMedias = await getTopRatedSeries({ page: 1 });
+    // } else if (type === "movie") {
+    //   someMedias = await getTopRatedMovies();
+    // } else {
+    //   someMedias = await getTopAnime({ page: 1 });
+    // }
+    // return someMedias;
+  }
+};
+
+export const checkRecommendServiceAvailability = async () => {
+  try {
+    const baseURL = process.env.APIMODEL_URL;
+    const url = `${baseURL}/docs`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch");
     }
-    return someMedias;
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 };

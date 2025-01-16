@@ -5,18 +5,20 @@ import {
   getJikanHelper,
   getJikanHelperList,
 } from "../../../wrapper/jikan";
-import { getTVDB } from "../../../wrapper/tvdb";
+import { getUserDataMedia } from "../media/actions";
 import { Character, PaginationProps, SearchProps } from "../media/types";
-const ANIME_ID = 27;
 
 export const getTopAnime = async ({ page }: PaginationProps) => {
   return await getJikanHelperList("top/anime?page=" + page);
 };
 
+export const getRecommendAnime = async () => {
+  return await getJikanHelperList("recommend/anime");
+};
+
 export const searchAnime = async ({ page, query }: SearchProps) => {
   return await getJikanHelperList(`anime?q=${query}&page=${page}`);
 };
-
 export const getAnimeById = async (id: string) => {
   return await getJikanHelper(`anime/${id}`);
 };
@@ -33,4 +35,55 @@ export const getAnimeCharacters = async (id: string) => {
     return char;
   });
   return res;
+};
+
+const jikanConvertToMediaInfoListRecommend = (
+  items: any[],
+  userDataMedia?: any
+) => {
+  return items?.map((item) => {
+    const { entry, votes } = item;
+    let media: MediaInfoProps = {
+      id: String(entry.mal_id),
+      poster_path: entry?.images?.jpg.image_url
+        ? entry?.images?.jpg?.image_url
+        : "",
+      backdrop_path: entry?.trailer?.images?.maximum_image_url
+        ? entry?.trailer?.images?.maximum_image_url
+        : entry?.images?.jpg?.image_url,
+      release_date: "",
+      title: entry.title,
+      type: "anime",
+      vote_average: 0,
+      overview: "",
+      episodes: 0,
+    };
+
+    if (userDataMedia) {
+      if (userDataMedia.userAnimeMap.has(String(media.id))) {
+        media.userMediaData = userDataMedia.userAnimeMap.get(String(media.id));
+      }
+    }
+
+    return media;
+  });
+};
+
+export const getAnimeRecommendationsByJikan = async (id: number) => {
+  try {
+    const json = await getJikan(`anime/${id}/recommendations`);
+    const userDataMedia = await getUserDataMedia();
+    if (userDataMedia) {
+      const res = jikanConvertToMediaInfoListRecommend(
+        json.data as any[],
+        userDataMedia
+      );
+      return res;
+    }
+    const res = jikanConvertToMediaInfoListRecommend(json.data);
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };

@@ -10,22 +10,29 @@ import {
   getNowPlayingMovies,
   getPopularMovies,
   getTopRatedMovies,
-  getUpcomingMovies,
 } from "@/app/api/movie/actions";
 import { MediaSliderProps } from "@/components/media/MediaSlider";
 import { getTopAnime } from "@/app/api/anime/actions";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOption";
-import { getUserBaseRecommendations } from "@/app/api/recommend/actions";
+import {
+  checkRecommendServiceAvailability,
+  getUserBaseRecommendations,
+} from "@/app/api/recommend/actions";
+import { shouldRenderUserbased } from "@/app/api/media/actions";
 export const getInitialDataByMediaType = async (mediaType: string) => {
-  const session = await getServerSession(authOptions);
-  const isLogin = session?.user ? true : false;
+  const shouldRender = await shouldRenderUserbased();
   let initialData: MediaSliderProps[] = [];
+
   if (mediaType === "movie") {
-    const recommendMovies = await getUserBaseRecommendations("movie");
-    const popularMovies = await getPopularMovies();
-    const topRatedMovies = await getTopRatedMovies();
-    const nowPlayingMovies = await getNowPlayingMovies();
+    // Run all movie-related async calls in parallel
+    const [recommendMovies, popularMovies, topRatedMovies, nowPlayingMovies] =
+      await Promise.all([
+        getUserBaseRecommendations("movie"),
+        getPopularMovies(),
+        getTopRatedMovies(),
+        getNowPlayingMovies(),
+      ]);
 
     initialData = [
       {
@@ -33,6 +40,7 @@ export const getInitialDataByMediaType = async (mediaType: string) => {
         items: recommendMovies,
         name: "Recommend For You",
         type: "movie",
+        shouldRender: shouldRender,
       },
       {
         href: "#",
@@ -55,12 +63,22 @@ export const getInitialDataByMediaType = async (mediaType: string) => {
       },
     ];
   } else if (mediaType === "serie") {
-    const recommendSeries = await getUserBaseRecommendations("serie");
-    const airingTodaySeries = await getAiringTodaySeries({ page: 1 });
-    const onTheAirSeries = await getOnTheAirSeries({ page: 1 });
-    const popularSeries = await getPopularSeries({ page: 1 });
-    const topRatedSeries = await getTopRatedSeries({ page: 1 });
-    const trendingSeries = await getTrendingSeries({ page: 1 });
+    // Run all series-related async calls in parallel
+    const [
+      recommendSeries,
+      airingTodaySeries,
+      onTheAirSeries,
+      popularSeries,
+      topRatedSeries,
+      trendingSeries,
+    ] = await Promise.all([
+      getUserBaseRecommendations("serie"),
+      getAiringTodaySeries({ page: 1 }),
+      getOnTheAirSeries({ page: 1 }),
+      getPopularSeries({ page: 1 }),
+      getTopRatedSeries({ page: 1 }),
+      getTrendingSeries({ page: 1 }),
+    ]);
 
     initialData = [
       {
@@ -68,6 +86,7 @@ export const getInitialDataByMediaType = async (mediaType: string) => {
         items: recommendSeries,
         name: "Recommend For You",
         type: "serie",
+        shouldRender: shouldRender,
       },
       {
         href: "#",
@@ -102,22 +121,29 @@ export const getInitialDataByMediaType = async (mediaType: string) => {
       },
     ];
   } else if (mediaType === "anime") {
-    const recommendAnime = await getUserBaseRecommendations("anime");
-    const topAnime = await getTopAnime({ page: 1 });
+    // Run all anime-related async calls in parallel
+    const [recommendAnime, topAnime] = await Promise.all([
+      getUserBaseRecommendations("anime"),
+      getTopAnime({ page: 1 }),
+    ]);
+
     initialData = [
       {
         href: "#",
         items: recommendAnime,
         name: "Recommend For You",
         type: "anime",
+        shouldRender: shouldRender,
       },
       {
         href: "#",
         items: topAnime,
         name: "Top Anime",
         type: "anime",
+        isLong: true,
       },
     ];
   }
+
   return initialData;
 };

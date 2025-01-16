@@ -20,7 +20,9 @@ export const Navbar = ({}: NavbarProps) => {
   const mediaTypeGroups = ["movie", "serie", "anime"];
   const mediaTypeGroup = currentPathname.split("/")[1];
   const isMediaTypeGroup = mediaTypeGroups.includes(mediaTypeGroup);
-  const browsePath = isMediaTypeGroup ? `/browse/${mediaTypeGroup}` : "movie";
+  const browsePath = isMediaTypeGroup
+    ? `/browse/${mediaTypeGroup}`
+    : "/browse/movie";
   const navbarTranparentPath = ["/", "/search"];
   const [homeClassName, setHomeClassName] = useState(
     "bg-transparent text-base-100"
@@ -60,10 +62,10 @@ export const Navbar = ({}: NavbarProps) => {
   }
 
   return (
-    <header className="">
+    <header className="z-50">
       {!shouldTransparent && <div className="navbar bg-transparent"></div>}
       <div
-        className={`fixed top-0 w-full z-10  transition-colors  ${
+        className={`fixed top-0 w-full z-50  transition-colors  ${
           shouldTransparent ? homeClassName : OtherClassName
         }`}
       >

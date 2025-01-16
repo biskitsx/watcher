@@ -6,8 +6,9 @@ import { getServerSession } from "next-auth";
 import { getMovieById } from "../movie/actions";
 import { getSeriesById } from "../serie/actions";
 import { getAnimeById } from "../anime/actions";
-import { getTMDb } from "@/wrapper/tmdb";
+import { getTMDb, getTMDbHelperList } from "@/wrapper/tmdb";
 import { SeriesEpisode } from "./types";
+import { checkRecommendServiceAvailability } from "../recommend/actions";
 
 export const getMediaInfo = async (mediaID: string, mediaType: string) => {
   switch (mediaType) {
@@ -509,8 +510,42 @@ export const getSerieNextEpisode = async () => {
 
     // Flatten the array of episodes
     const flattenedEpisodes = nextEpisodes.flat();
+    const mediasWithOutSeries = await prisma.media.findMany({
+      where: {
+        mediaType: { not: "serie" },
+        userId: session?.user.id,
+        watchListAt: { not: null },
+      },
+    });
+
+    mediasWithOutSeries.forEach((media) => {
+      flattenedEpisodes.push({
+        media_id: media.mediaId,
+        media_type: media.mediaType,
+        title: media.mediaTitle,
+        id: 0,
+        name: media.mediaTitle,
+        air_date: media.mediaReleaseDate ? media.mediaReleaseDate : "",
+        episode_number: 1,
+        episode_type: "normal",
+        season_number: "1",
+        overview: media.mediaOverview ? media.mediaOverview : "",
+      });
+    });
 
     return flattenedEpisodes;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const shouldRenderUserbased = async () => {
+  try {
+    const session = await getServerSession(authOptions);
+    const healthCheck = await checkRecommendServiceAvailability();
+    const isLogin = !!session?.user;
+    const shouldRender = isLogin && healthCheck;
+    return shouldRender;
   } catch (error) {
     throw error;
   }
