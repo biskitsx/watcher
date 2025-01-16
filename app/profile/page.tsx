@@ -1,6 +1,5 @@
 import {
   getMediaAverage,
-  getSerieNextEpisode,
   getUserRatings,
   getUserWatchList,
 } from "@/app/api/media/actions";
@@ -17,9 +16,6 @@ import {
 
 export default async function Profile() {
   try {
-    const res = await getSerieNextEpisode();
-    const userWatchList = await getUserWatchList();
-    const userRatings = await getUserRatings();
     const session = await getServerSession(authOptions);
 
     if (!session) {
@@ -31,23 +27,35 @@ export default async function Profile() {
       };
     }
 
+    const [
+      userWatchlist,
+      userRatings,
+      avgs,
+      genreStats,
+      mediaTotal,
+      watchlistStatusCount,
+      initialRatingCountByYear,
+      initialWatchlistCountByYear,
+    ] = await Promise.all([
+      getUserWatchList(),
+      getUserRatings(),
+      getMediaAverage(),
+      getGenreStats(),
+      getMediaTotal(),
+      getWatchlistStatusCount(),
+      getRatingCountByYearOfMediaReleaseDate(),
+      getWatchlistCountByYearOfMediaReleaseDate(),
+    ]);
     const user = session.user;
-    const avgs = await getMediaAverage();
-    const ratingCountByYear = await getRatingCountByYearOfMediaReleaseDate();
-    const watchlistCountByYear =
-      await getWatchlistCountByYearOfMediaReleaseDate();
-    const genreStats = await getGenreStats();
-    const mediaTotal = await getMediaTotal();
-    const watchlistStatusCount = await getWatchlistStatusCount();
     return (
       <ProfilePage
         watchlistStatusCount={watchlistStatusCount}
-        watchlist={userWatchList || []}
+        watchlist={userWatchlist || []}
         ratings={userRatings || []}
         user={user}
         initialAverageScore={avgs}
-        initialRatingCountByYear={ratingCountByYear || []}
-        initialWatchlistCountByYear={watchlistCountByYear || []}
+        initialRatingCountByYear={initialRatingCountByYear || []}
+        initialWatchlistCountByYear={initialWatchlistCountByYear || []}
         initialGenreStats={genreStats || []}
         initialMediaTotal={mediaTotal}
       />

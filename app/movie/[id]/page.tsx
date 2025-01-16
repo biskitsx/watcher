@@ -17,9 +17,11 @@ export default async function Home({
 }) {
   try {
     const idInt = parseInt(id);
-    const recommendMedia = await getContentBaseRecommendations(idInt, "movie");
-    const media = await getMovieById(id);
-    const credits = await getCreditsByMovieId(id);
+    const [recommendMedia, media, credits] = await Promise.all([
+      getContentBaseRecommendations(idInt, "movie"),
+      getMovieById(id),
+      getCreditsByMovieId(id),
+    ]);
     onClickMedia(media.id!, media.type);
 
     return (
@@ -30,7 +32,7 @@ export default async function Home({
             name="You may also like"
             items={recommendMedia}
             type="movie"
-            href=""
+            href="#"
           />
         </Container>
       </PageContainer>

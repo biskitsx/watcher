@@ -10,12 +10,26 @@ import { Container } from "@/components/layout/Container";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Suspense } from "react";
 import { InfiniteMedia } from "@/components/infinite-media";
+import { JoinToday } from "../components/JoinToday";
+import { getUserBaseRecommendations } from "../api/recommend/actions";
+import { shouldRenderUserbased } from "../api/media/actions";
 
 export default async function Home() {
-  const upcomingMovies = await getUpcomingMovies({ page: 1 });
-  const popularMovies = await getPopularMovies();
-  const topRatedMovies = await getTopRatedMovies();
-  const nowPlayingMovies = await getNowPlayingMovies();
+  const [
+    recommend,
+    upcomingMovies,
+    popularMovies,
+    topRatedMovies,
+    nowPlayingMovies,
+  ] = await Promise.all([
+    getUserBaseRecommendations("movie"),
+    getUpcomingMovies({ page: 1 }),
+    getPopularMovies(),
+    getTopRatedMovies(),
+    getNowPlayingMovies(),
+  ]);
+
+  const shouldRender = await shouldRenderUserbased();
   return (
     <PageContainer>
       <MediaCarousel items={upcomingMovies} />
@@ -23,10 +37,10 @@ export default async function Home() {
         <Suspense fallback={<div>Loading...</div>}>
           <MediaSlider
             href="#"
-            items={upcomingMovies?.slice(12, 24)}
+            items={recommend}
             name="Recommend For You"
             type="movie"
-            isLong
+            shouldRender={shouldRender}
           />
           <MediaSlider
             href="#"
@@ -34,6 +48,11 @@ export default async function Home() {
             name="Popular Movies"
             type="movie"
           />
+        </Suspense>
+      </Container>
+      <JoinToday media={popularMovies[0]} />
+      <Container>
+        <Suspense fallback={<div>Loading...</div>}>
           <MediaSlider
             href="#"
             items={topRatedMovies}

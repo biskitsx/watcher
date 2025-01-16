@@ -7,7 +7,6 @@ import { cn } from "@/util/cn";
 import { Dropdown, MenuProps } from "antd";
 import { FaBookmark, FaEllipsisV, FaHeart, FaStar } from "react-icons/fa";
 import { useMemo, useState } from "react";
-import { FcBookmark } from "react-icons/fc";
 import {
   addRating,
   toggleFavorite,
@@ -155,7 +154,6 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
   }, [isFavorite, isWatchlist, rating]);
 
   return (
-    // <Link href={`/${media.type}/${media.id}`}>
     <div className="">
       <div
         className={cn("rounded-md  inline-block align-top space-y-3", {
@@ -205,7 +203,7 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
               {media.title}
             </h3>
           </Link>
-          <p className="truncate text-xs font-medium">{formattedDate}</p>
+          <p className="truncate italic text-xs font-medium">{formattedDate}</p>
         </div>
       </div>
       <RatingModal
@@ -219,7 +217,5 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
         handleOnClearRating={handleOnClearRating}
       />
     </div>
-
-    // </Link>
   );
 };

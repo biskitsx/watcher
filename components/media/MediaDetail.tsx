@@ -29,6 +29,7 @@ import { IconContext } from "react-icons/lib";
 import { tmdbImagesURL } from "@/data/baseUrl";
 import { CastProps, Character } from "@/app/api/media/types";
 import { RatingModal } from "@/app/components/RatingModal";
+import { MotionFaded } from "../motion/MotionFaded";
 
 interface MediaDetailProps {
   media: MediaInfoProps;
@@ -113,7 +114,7 @@ export const MediaDetail = ({
       return casts
         ?.filter((cast) => cast.profile_path)
         .map((cast, index) => (
-          <Box key={index} className="inline-block">
+          <Box key={index} className="inline-block w-[100px]">
             <Image
               src={`${tmdbImagesURL}/${cast.profile_path}`}
               alt={cast.name}
@@ -121,7 +122,7 @@ export const MediaDetail = ({
               height={150}
               preview={false}
             />
-            <Text className="text-white text-xs text-wrap">
+            <Text className="text-white text-xs !text-wrap">
               <span className="font-bold text-wrap">{cast.name}</span> (
               {cast.job ? cast.job : cast.known_for_department})
             </Text>
@@ -130,7 +131,7 @@ export const MediaDetail = ({
     }
     if (aniemeCasts) {
       return aniemeCasts?.map((cast, index) => (
-        <Box key={index} className="inline-block">
+        <Box key={index} className="inline-block w-[100px]">
           <Image
             src={`${cast.image}`}
             alt={cast.name}
@@ -194,101 +195,103 @@ export const MediaDetail = ({
         backgroundSize="cover"
       >
         <Box className="bg-[rgba(0,0,0,0.7)]">
-          <Stack
-            direction={{ base: "column", md: "row" }}
-            spacing={12}
-            className="container py-12"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={media.poster_path}
-              alt={media.poster_path}
-              width={300}
-              className="self-center"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
-              }}
-            />
+          <MotionFaded>
             <Stack
-              direction={"column"}
-              className="text-white w-full  overflow-x-hidden"
-              spacing={4}
+              direction={{ base: "column", md: "row" }}
+              spacing={12}
+              className="container py-12"
             >
-              <Heading as="h2" size="2xl">
-                {media.title}{" "}
-                <span className="text-[#e5e5e5] text-4xl">
-                  {formattedDate && `(${formattedDate.split(" ")[2]})`}
-                </span>
-              </Heading>
-              <Stack direction={"row"}>
-                <div>
-                  <RadialProgress
-                    value={media.vote_average * 10}
-                    size="48px"
-                    thickness="3px"
-                    className="text-sm"
-                  />
-                </div>
-                <Stack
-                  direction={"row"}
-                  placeItems={"center"}
-                  className="!overflow-x-scroll hide-scrollbar"
-                >
-                  {media.genres &&
-                    media.genres.map((genre, index) => (
-                      <Badge key={index}>{genre.name}</Badge>
-                    ))}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={media.poster_path}
+                alt={media.poster_path}
+                width={300}
+                className="self-center hover:scale-105 transition-all object-cover w-[240px]"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+                }}
+              />
+              <Stack
+                direction={"column"}
+                className="text-white w-full  overflow-x-hidden"
+                spacing={4}
+              >
+                <Heading as="h2" size="2xl">
+                  {media.title}{" "}
+                  <span className="text-[#e5e5e5] text-4xl">
+                    {formattedDate && `(${formattedDate.split(" ")[2]})`}
+                  </span>
+                </Heading>
+                <Stack direction={"row"}>
+                  <div>
+                    <RadialProgress
+                      value={media.vote_average * 10}
+                      size="48px"
+                      thickness="3px"
+                      className="text-sm"
+                    />
+                  </div>
+                  <Stack
+                    direction={"row"}
+                    placeItems={"center"}
+                    className="!overflow-x-scroll hide-scrollbar"
+                  >
+                    {media.genres &&
+                      media.genres.map((genre, index) => (
+                        <Badge key={index}>{genre.name}</Badge>
+                      ))}
+                  </Stack>
                 </Stack>
+                <Stack direction={"row"} className="uppercase">
+                  <Button
+                    bgColor={palatte.darkBlue}
+                    onClick={handleAddToWatchList}
+                    isLoading={isAddToWatchListLoading}
+                    rounded={"full"}
+                    height={"40px"}
+                    width={"40px"}
+                    padding={0}
+                  >
+                    <FaBookmark color={watchList ? palatte.primary : "white"} />
+                  </Button>
+                  <Button
+                    bgColor={palatte.darkBlue}
+                    onClick={handleOnFavorite}
+                    isLoading={isFavoriteLoading}
+                    rounded={"full"}
+                    height={"40px"}
+                    width={"40px"}
+                    padding={0}
+                  >
+                    <FaHeart color={isFavorite ? "red" : "white"} />
+                  </Button>
+                  <Button
+                    bg={palatte.darkBlue}
+                    textColor={"white"}
+                    onClick={handleOnOpen}
+                  >
+                    {isRated ? `Your vibe: ${rating}/10` : "What's your vibe ?"}
+                  </Button>
+                </Stack>
+                <Text textColor={"white"}>
+                  {media.overview
+                    ? media.overview
+                    : "We don't have an overview translated in English."}
+                </Text>
+                {!!castsElement.length && (
+                  <>
+                    <Text className="text-white text-lg font-semibold ">
+                      Cast
+                    </Text>
+                    <Box className="flex gap-4 overflow-x-scroll hide-scrollbar">
+                      {castsElement}
+                    </Box>
+                  </>
+                )}{" "}
               </Stack>
-              <Stack direction={"row"} className="uppercase">
-                <Button
-                  bgColor={palatte.darkBlue}
-                  onClick={handleAddToWatchList}
-                  isLoading={isAddToWatchListLoading}
-                  rounded={"full"}
-                  height={"40px"}
-                  width={"40px"}
-                  padding={0}
-                >
-                  <FaBookmark color={watchList ? palatte.primary : "white"} />
-                </Button>
-                <Button
-                  bgColor={palatte.darkBlue}
-                  onClick={handleOnFavorite}
-                  isLoading={isFavoriteLoading}
-                  rounded={"full"}
-                  height={"40px"}
-                  width={"40px"}
-                  padding={0}
-                >
-                  <FaHeart color={isFavorite ? "red" : "white"} />
-                </Button>
-                <Button
-                  bg={palatte.darkBlue}
-                  textColor={"white"}
-                  onClick={handleOnOpen}
-                >
-                  {isRated ? `Your vibe: ${rating}/10` : "What's your vibe ?"}
-                </Button>
-              </Stack>
-              <Text textColor={"white"}>
-                {media.overview
-                  ? media.overview
-                  : "We don't have an overview translated in English."}
-              </Text>
-              {!!castsElement.length && (
-                <>
-                  <Text className="text-white text-lg font-semibold ">
-                    Cast
-                  </Text>
-                  <Box className="flex gap-4 overflow-x-scroll hide-scrollbar">
-                    {castsElement}
-                  </Box>
-                </>
-              )}{" "}
             </Stack>
-          </Stack>
+          </MotionFaded>
         </Box>
       </Box>
       {isOpen && (

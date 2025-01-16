@@ -1,11 +1,12 @@
 import { RadialProgress } from "@/components/media/RadialProgress";
+import { MotionFaded } from "@/components/motion/MotionFaded";
 import { Badge, Skeleton } from "antd";
 
 interface MediaCardHorizontalLoadingProps {}
 export const MediaCardHorizontalLoading =
   ({}: MediaCardHorizontalLoadingProps) => {
     return (
-      <div className="flex rounded-md shadow-md border overflow-hidden transition-all duration-300 ">
+      <MotionFaded className="flex rounded-md shadow-md border overflow-hidden transition-all duration-300 ">
         <aside className="">
           <Skeleton.Image className="!w-[150px] !h-full" active />
         </aside>
@@ -51,6 +52,6 @@ export const MediaCardHorizontalLoading =
             </div>
           </div>
         </main>
-      </div>
+      </MotionFaded>
     );
   };

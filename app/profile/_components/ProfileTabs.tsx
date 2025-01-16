@@ -11,6 +11,10 @@ import {
   MediaTotal,
   WatchlistStatusCountResponse,
   getGenreStats,
+  getMediaTotal,
+  getRatingCountByYearOfMediaReleaseDate,
+  getWatchlistCountByYearOfMediaReleaseDate,
+  getWatchlistStatusCount,
 } from "@/app/api/media/chart/actions";
 import {
   getSerieNextEpisode,
@@ -28,7 +32,7 @@ interface ProfileTabsProps {
   initialWatchlistCountByYear: MediaByYear[];
   initialGenreStats: GenreStats[];
   initialMediaTotal: MediaTotal;
-  watchlistStatusCount: WatchlistStatusCountResponse;
+  initialWatchlistStatusCount: WatchlistStatusCountResponse;
 }
 
 export const ProfileTabs = ({
@@ -38,7 +42,7 @@ export const ProfileTabs = ({
   initialWatchlistCountByYear,
   initialGenreStats,
   initialMediaTotal,
-  watchlistStatusCount,
+  initialWatchlistStatusCount,
 }: ProfileTabsProps) => {
   const [ratingsItems, setRatingsItems] = useState<Media[]>(ratings);
   const [watchlistItems, setWatchlistItems] = useState<Media[]>(watchlist);
@@ -46,6 +50,8 @@ export const ProfileTabs = ({
   const [genreStats, setGenreStats] = useState<GenreStats[]>(initialGenreStats);
   const [mediaTotal, setMediaTotal] = useState<MediaTotal>(initialMediaTotal);
   const [episodesItems, setEpisodesItems] = useState<SeriesEpisode[]>([]);
+  const [watchlistStatusCount, setWatchlistStatusCount] =
+    useState<WatchlistStatusCountResponse>(initialWatchlistStatusCount);
   const onChange = async (key: string) => {
     setLoading(true); // Show loading spinner during the data fetch
     if (key === "ratings") {
@@ -54,9 +60,16 @@ export const ProfileTabs = ({
     } else if (key === "watchlist") {
       const newWatchlist = await getUserWatchList();
       setWatchlistItems(newWatchlist || []); // Update watchlist or clear if empty
-    } else {
+    } else if (key === "calendar") {
       const newEpisodes = await getSerieNextEpisode();
       setEpisodesItems(newEpisodes); // Update genre stats or clear if empty
+    } else {
+      const newWatchlistStatusCount = await getWatchlistStatusCount();
+      const newGenreStats = await getGenreStats();
+      const newMediaTotal = await getMediaTotal();
+      setGenreStats(newGenreStats);
+      setMediaTotal(newMediaTotal);
+      setWatchlistStatusCount(newWatchlistStatusCount);
     }
     setLoading(false); // Hide loading spinner after update
   };

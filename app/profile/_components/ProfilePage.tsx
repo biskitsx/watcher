@@ -115,7 +115,7 @@ export default function ProfilePage({
         </Container>
       </div>
       <ProfileTabs
-        watchlistStatusCount={watchlistStatusCount}
+        initialWatchlistStatusCount={watchlistStatusCount}
         watchlist={watchlist}
         ratings={ratings}
         initialRatingCountByYear={initialRatingCountByYear}

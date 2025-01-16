@@ -12,6 +12,8 @@ import { Spin } from "antd";
 import { useCallback, useState, useRef, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce } from "lodash";
+import { MediaCardLoading } from "@/app/components/Loading/MediaCard";
+import { MotionFaded } from "@/components/motion/MotionFaded";
 
 interface BrowsePageProps {
   mediaType: string;
@@ -109,7 +111,16 @@ export const BrowsePage = ({ mediaType, initialData }: BrowsePageProps) => {
             return <MediaSlider key={index} {...data} />;
           })}
         {searchLoading ? (
-          <Spin />
+          <div className="flex flex-wrap gap-6">
+            {[
+              0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+              1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            ].map((media, idx) => (
+              <MotionFaded key={idx}>
+                <MediaCardLoading key={idx} />
+              </MotionFaded>
+            ))}
+          </div>
         ) : (
           <InfiniteScroll
             dataLength={result.length}

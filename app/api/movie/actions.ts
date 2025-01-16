@@ -50,3 +50,15 @@ export const getTopRatedMovies = async () => {
     MOVIE
   );
 };
+
+export const getMovieRecommendationsFromTMDB = async (id: number) => {
+  try {
+    const res = await getTMDbHelperList(
+      `movie/${id}/recommendations?language=en-US&page=1`,
+      "movie"
+    );
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};

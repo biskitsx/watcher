@@ -3,8 +3,9 @@ import { MediaCard } from "./MediaCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleChevronRight } from "@fortawesome/free-solid-svg-icons/faCircleChevronRight";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { MediaInfoProps } from "@/wrapper/media-info";
+import { cn } from "@/util/cn";
 
 export interface MediaSliderProps {
   items: MediaInfoProps[];
@@ -13,6 +14,7 @@ export interface MediaSliderProps {
   href: string;
   isLong?: boolean;
   bgColor?: string;
+  shouldRender?: boolean;
 }
 export const MediaSlider = ({
   items,
@@ -20,12 +22,17 @@ export const MediaSlider = ({
   type,
   href,
   isLong,
+  shouldRender = true,
 }: MediaSliderProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const isLink = href !== "#";
   return (
     <>
-      <div className="flex flex-col gap-2  rounded-md">
+      <div
+        className={cn("flex flex-col gap-2 z-20  rounded-md bg-transparent", {
+          hidden: !shouldRender,
+        })}
+      >
         <div>
           {isLink ? (
             <Link

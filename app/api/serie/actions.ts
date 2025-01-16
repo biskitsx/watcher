@@ -56,3 +56,15 @@ export const searchSerie = async ({ query, page }: SearchProps) => {
 export const getCreditsBySerieId = async (id: string) => {
   return await getTMDb(`tv/${id}/credits?language=en-US`);
 };
+
+export const getSerieRecommendationsFromTMDB = async (id: number) => {
+  try {
+    const res = await getTMDbHelperList(
+      `tv/${id}/recommendations?language=en-US&page=1`,
+      SERIES
+    );
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};

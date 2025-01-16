@@ -5,6 +5,9 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import { Container } from "@/components/layout/Container";
 import { getTopAnime } from "@/app/api/anime/actions";
 import { getAiringTodaySeries } from "@/app/api/serie/actions";
+import { Shape1 } from "./components/svg/shape-1";
+import { Shape2 } from "./components/svg/shape-2";
+import { JoinToday } from "./components/JoinToday";
 
 export default async function Home() {
   const upcomingMovies = await getUpcomingMovies({ page: 1 });
@@ -13,7 +16,7 @@ export default async function Home() {
   return (
     <PageContainer>
       <HomeCarousel items={upcomingMovies.splice(0, 8)} />
-      <Container>
+      <Container className="relative">
         <MediaSlider
           href="/movie"
           items={upcomingMovies}
@@ -21,6 +24,7 @@ export default async function Home() {
           type="movie"
           key={0}
         />
+        {/* <Shape1 className="absolute z-10 -top-0 -right-20" /> */}
         <MediaSlider
           href="/series"
           items={series}
@@ -29,6 +33,11 @@ export default async function Home() {
           key={1}
           isLong
         />
+        <Shape1 className="absolute z-10 top-36 -left-20" />
+      </Container>
+      {/* <Shape2 className="absolute z-10 top-72 -right-20" /> */}
+      <JoinToday media={series[5]} />
+      <Container>
         <MediaSlider
           href="/anime"
           items={topAnimes}

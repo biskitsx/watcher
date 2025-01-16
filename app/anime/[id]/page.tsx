@@ -17,9 +17,11 @@ export default async function Home({
 }) {
   try {
     const idInt = parseInt(id);
-    const recommend = await getContentBaseRecommendations(idInt, "anime");
-    const media = await getAnimeById(id);
-    const casts = await getAnimeCharacters(id);
+    const [recommend, media, casts] = await Promise.all([
+      getContentBaseRecommendations(idInt, "anime"),
+      getAnimeById(id),
+      getAnimeCharacters(id),
+    ]);
     onClickMedia(media.id!, media.type);
     return (
       <PageContainer>
@@ -29,7 +31,7 @@ export default async function Home({
             name="You may also like"
             items={recommend}
             type="anime"
-            href=""
+            href="#"
           />
         </Container>
       </PageContainer>
