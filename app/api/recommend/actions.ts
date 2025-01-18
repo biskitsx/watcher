@@ -14,7 +14,19 @@ import {
   getTopRatedMovies,
 } from "../movie/actions";
 import { getAnimeRecommendationsByJikan, getTopAnime } from "../anime/actions";
+import prisma from "@/prisma";
 
+const getBaseModelAPI = async () => {
+  const config = await prisma.config.findUnique({
+    where: {
+      key: "base_model_api",
+    },
+  });
+  if (!config) {
+    throw new Error("Base model API is not set");
+  }
+  return config.value;
+};
 const getModelRecommendations = async (
   mediaType: "movie" | "serie" | "anime",
   predictType: string,
@@ -22,7 +34,7 @@ const getModelRecommendations = async (
 ) => {
   try {
     const correctMediaType = mediaType === "serie" ? "tv" : mediaType;
-    const baseURL = process.env.APIMODEL_URL;
+    const baseURL = await getBaseModelAPI();
     const url = `${baseURL}/${correctMediaType}/recommendations/${predictType}`;
     const response = await fetch(url, {
       method: "POST",
@@ -141,7 +153,7 @@ export const getUserBaseRecommendations = async (
 
 export const checkRecommendServiceAvailability = async () => {
   try {
-    const baseURL = process.env.APIMODEL_URL;
+    const baseURL = await getBaseModelAPI();
     const url = `${baseURL}/docs`;
     const response = await fetch(url, {
       method: "GET",
