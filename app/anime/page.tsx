@@ -13,6 +13,7 @@ export default async function Home() {
   const topAnime = await getTopAnime({ page: 1 });
   const recommed = await getUserBaseRecommendations("anime");
   const shouldRender = await shouldRenderUserbased();
+
   return (
     <PageContainer>
       <MediaCarousel items={topAnime.slice(0, 5)} />

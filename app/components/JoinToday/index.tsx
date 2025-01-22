@@ -1,5 +1,6 @@
 "use client";
 import { Container } from "@/components/layout/Container";
+import { MotionFaded } from "@/components/motion/MotionFaded";
 
 import { MediaInfoProps } from "@/wrapper/media-info";
 import { Box } from "@chakra-ui/react";
@@ -67,25 +68,27 @@ export const JoinToday = ({ media }: JoinTodayProps) => {
         backgroundSize="cover"
       >
         <div className="bg-[rgba(0,0,0,0.7)]">
-          <Container className="py-12 text-white">
-            <div className="flex gap-2 items-center">
-              <h1 className="text-2xl font-bold">{title}</h1>
-              <StarIcon fill="white" className="animate-spin delay-1000" />
-            </div>
-            <p className="text-white italic">{description}</p>
-            <div className="flex gap-2 flex-wrap">
-              {buttonGroups.map((button, index) => (
-                <Button
-                  key={index}
-                  type="primary"
-                  href={button.href}
-                  className=" tracking-wider"
-                >
-                  {button.title}
-                </Button>
-              ))}
-            </div>
-          </Container>
+          <MotionFaded>
+            <Container className="py-12 text-white">
+              <div className="flex gap-2 items-center">
+                <h1 className="text-2xl font-bold">{title}</h1>
+                <StarIcon fill="white" className="animate-spin delay-1000" />
+              </div>
+              <p className="text-white italic">{description}</p>
+              <div className="flex gap-2 flex-wrap">
+                {buttonGroups.map((button, index) => (
+                  <Button
+                    key={index}
+                    type="primary"
+                    href={button.href}
+                    className=" tracking-wider"
+                  >
+                    {button.title}
+                  </Button>
+                ))}
+              </div>
+            </Container>
+          </MotionFaded>
         </div>
       </Box>
     </Box>

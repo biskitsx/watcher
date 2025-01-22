@@ -9,6 +9,9 @@ import {
 } from "@/app/api/anime/actions";
 import { onClickMedia } from "@/app/api/media/actions";
 import { getContentBaseRecommendations } from "@/app/api/recommend/actions";
+import { Suspense } from "react";
+import { MediaDetailLoading } from "@/app/components/Loading/MediaID/MediaDetailLoading";
+import { MediaSliderLoading } from "@/app/components/Loading/MediaSlider";
 
 export default async function Home({
   params: { id },
@@ -25,14 +28,18 @@ export default async function Home({
     onClickMedia(media.id!, media.type);
     return (
       <PageContainer>
-        <MediaDetail media={media} aniemeCasts={casts} />
+        <Suspense fallback={<MediaDetailLoading />}>
+          <MediaDetail media={media} aniemeCasts={casts} />
+        </Suspense>
         <Container>
-          <MediaSlider
-            name="You may also like"
-            items={recommend}
-            type="anime"
-            href="#"
-          />
+          <Suspense fallback={<MediaSliderLoading />}>
+            <MediaSlider
+              name="You may also like"
+              items={recommend}
+              type="anime"
+              href="#"
+            />
+          </Suspense>
         </Container>
       </PageContainer>
     );

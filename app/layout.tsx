@@ -6,9 +6,10 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { getServerSession } from "next-auth";
 import SessionProvider from "./components/SessionProvider";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, FloatButton } from "antd";
 import { palatte } from "@/constant/palatte";
 import { ChakraProvider } from "@chakra-ui/react";
+import { FloatForm } from "@/components/FloatForm";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -55,6 +56,7 @@ export default async function RootLayout({
               <ChakraProvider>
                 <Navbar />
                 {children}
+                <FloatForm />
               </ChakraProvider>
             </body>
           </ConfigProvider>
