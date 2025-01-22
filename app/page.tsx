@@ -6,7 +6,6 @@ import { Container } from "@/components/layout/Container";
 import { getTopAnime } from "@/app/api/anime/actions";
 import { getAiringTodaySeries } from "@/app/api/serie/actions";
 import { Shape1 } from "./components/svg/shape-1";
-import { Shape2 } from "./components/svg/shape-2";
 import { JoinToday } from "./components/JoinToday";
 
 export default async function Home() {
