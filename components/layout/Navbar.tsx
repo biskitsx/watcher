@@ -12,6 +12,7 @@ import { toastConfig } from "../toast/ToastConfig";
 import { cn } from "@/util/cn";
 import { font } from "@/util/font";
 import { FiMoreVertical } from "react-icons/fi";
+import { getRandomAvatar } from "@/constant/random_avatar";
 interface NavbarProps {}
 export const Navbar = ({}: NavbarProps) => {
   const { data: session, status } = useSession();
@@ -110,7 +111,8 @@ export const Navbar = ({}: NavbarProps) => {
                   >
                     <div className="w-10 rounded-full">
                       <img
-                        src={session?.user?.image || avatarProfile}
+                        src={getRandomAvatar(session?.user?.id)}
+                        // src={session?.user?.image || avatarProfile}
                         onError={(e) => {
                           (e.target as HTMLImageElement).src =
                             "https://cdn-icons-png.freepik.com/512/219/219986.png";

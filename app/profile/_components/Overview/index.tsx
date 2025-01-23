@@ -15,6 +15,7 @@ import { SelectMediaType } from "../SelectMediaType";
 import { useMemo, useState } from "react";
 import { Empty, Skeleton } from "antd";
 
+import CountUp from "react-countup";
 interface OverviewProps {
   stats: GenreStats[];
   mediaTotal: MediaTotal;
@@ -89,7 +90,10 @@ export default function Overview({
             {isTabsLoading || isLoading ? (
               <Skeleton.Button active className="!w-1" style={{ width: 10 }} />
             ) : (
-              <p className="text-2xl font-bold text-primary">{item.value}</p>
+              <CountUp
+                className="text-2xl font-bold text-primary"
+                end={item.value}
+              />
             )}
           </div>
         ))}

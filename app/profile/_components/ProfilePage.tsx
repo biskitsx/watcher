@@ -3,7 +3,6 @@
 import { Container } from "@/components/layout/Container";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Avatar } from "antd";
-import { useSession } from "next-auth/react";
 import { ProfileTabs } from "./ProfileTabs";
 import { Media } from "@prisma/client";
 import { RadialProgress } from "@/components/media/RadialProgress";
@@ -14,6 +13,7 @@ import {
   WatchlistStatusCountResponse,
 } from "@/app/api/media/chart/actions";
 import { GenreStats } from "./Overview/GenreStatsRadarChart";
+import { getRandomAvatar } from "@/constant/random_avatar";
 
 interface ProfilePageProps {
   watchlist: Media[];
@@ -48,7 +48,7 @@ export default function ProfilePage({
       <div className=" bg-custom">
         <Container className="py-12 md:py-24 flex flex-col md:flex-row items-center">
           <div>
-            <Avatar size={120} src={image} />
+            <Avatar size={120} src={getRandomAvatar(user.id)} />
           </div>
           <div className="flex flex-col gap-6 w-full">
             <div className="text-3xl font-semibold text-center md:text-start">
