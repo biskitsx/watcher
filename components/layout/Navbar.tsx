@@ -18,7 +18,6 @@ interface NavbarProps {
   session: Session | null;
 }
 export const Navbar = ({ session }: NavbarProps) => {
-  console.log(session.user);
   const isLogin = session?.user ? true : false;
   const toast = useToast();
   const currentPathname = usePathname();
