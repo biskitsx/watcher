@@ -24,7 +24,7 @@ export function SelectWatchlistStatus({
         <Select
           options={options}
           size="middle"
-          style={{ width: 130 }}
+          style={{ minWidth: 130, width: "100%" }}
           value={watchlistStatus}
           placeholder="Status"
           onChange={(value) => {

@@ -30,6 +30,8 @@ import { tmdbImagesURL } from "@/data/baseUrl";
 import { CastProps, Character } from "@/app/api/media/types";
 import { RatingModal } from "@/app/components/RatingModal";
 import { MotionFaded } from "../motion/MotionFaded";
+import { CreateReviewModal } from "@/app/components/CreateReviewModal";
+import { ReviewModal } from "@/app/components/ReviewsModal";
 
 interface MediaDetailProps {
   media: MediaInfoProps;
@@ -79,6 +81,7 @@ export const MediaDetail = ({
     media.userMediaData?.status &&
       media.userMediaData?.status !== Status.NOTHING
   );
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const handleOnSubmit = async () => {
     setIsLoading(true);
     await addRating(media.id!, media.type!, rating);
@@ -187,6 +190,8 @@ export const MediaDetail = ({
       setIsFavoriteLoading(false);
     }
   };
+
+  const [isCreateReviewModalOpen, setIsCreateReviewModalOpen] = useState(false);
   return (
     <>
       <Box
@@ -273,6 +278,13 @@ export const MediaDetail = ({
                   >
                     {isRated ? `Your vibe: ${rating}/10` : "What's your vibe ?"}
                   </Button>
+                  <Button
+                    bg={palatte.darkBlue}
+                    textColor={"white"}
+                    onClick={() => setIsReviewsModalOpen(true)}
+                  >
+                    Reviews
+                  </Button>
                 </Stack>
                 <Text textColor={"white"}>
                   {media.overview
@@ -304,6 +316,26 @@ export const MediaDetail = ({
           title={media.title}
           isLoading={isLoading}
           handleOnClearRating={handleOnClearRating}
+        />
+      )}
+      {isCreateReviewModalOpen && (
+        <CreateReviewModal
+          isOpen={isCreateReviewModalOpen}
+          onClose={() => setIsCreateReviewModalOpen(false)}
+          media={media}
+        />
+      )}
+      {isReviewsModalOpen && (
+        <ReviewModal
+          isOpen={isReviewsModalOpen}
+          onClose={() => {
+            setIsReviewsModalOpen(false);
+          }}
+          media={media}
+          openCreateReviewModal={() => {
+            setIsReviewsModalOpen(false);
+            setIsCreateReviewModalOpen(true);
+          }}
         />
       )}
     </>

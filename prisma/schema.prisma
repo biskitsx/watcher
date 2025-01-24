@@ -81,6 +81,20 @@ model User {
   accounts  Account[]
   media    Media[]
   emailVerified DateTime?
+  Review Review[]
+}
+
+model Review {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  mediaId String 
+  mediaType String
+  point Int
+  title String
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Config {
