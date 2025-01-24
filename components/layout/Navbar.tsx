@@ -13,9 +13,13 @@ import { cn } from "@/util/cn";
 import { font } from "@/util/font";
 import { FiMoreVertical } from "react-icons/fi";
 import { getRandomAvatar } from "@/constant/random_avatar";
-interface NavbarProps {}
-export const Navbar = ({}: NavbarProps) => {
-  const { data: session, status } = useSession();
+import { Session } from "next-auth";
+interface NavbarProps {
+  session: Session | null;
+}
+export const Navbar = ({ session }: NavbarProps) => {
+  console.log(session.user);
+  const isLogin = session?.user ? true : false;
   const toast = useToast();
   const currentPathname = usePathname();
   const mediaTypeGroups = ["movie", "serie", "anime"];
@@ -102,7 +106,7 @@ export const Navbar = ({}: NavbarProps) => {
                   </svg>
                 </button>
               </Link>
-              {status === AuthStatus.AUTHENTICATED ? (
+              {isLogin && session?.user ? (
                 <div className="dropdown dropdown-end">
                   <div
                     tabIndex={0}
@@ -111,7 +115,7 @@ export const Navbar = ({}: NavbarProps) => {
                   >
                     <div className="w-10 rounded-full">
                       <img
-                        src={getRandomAvatar(session?.user?.id)}
+                        src={getRandomAvatar(session.user.id)}
                         // src={session?.user?.image || avatarProfile}
                         onError={(e) => {
                           (e.target as HTMLImageElement).src =

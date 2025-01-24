@@ -10,7 +10,7 @@ import { ConfigProvider, FloatButton } from "antd";
 import { palatte } from "@/constant/palatte";
 import { ChakraProvider } from "@chakra-ui/react";
 import { FloatForm } from "@/components/FloatForm";
-const inter = Inter({ subsets: ["latin"] });
+import { authOptions } from "./api/auth/[...nextauth]/authOption";
 
 export const metadata: Metadata = {
   title: "Watcher",
@@ -22,7 +22,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <head>
@@ -54,7 +54,7 @@ export default async function RootLayout({
           >
             <body>
               <ChakraProvider>
-                <Navbar />
+                <Navbar session={session} />
                 {children}
                 <FloatForm />
               </ChakraProvider>
