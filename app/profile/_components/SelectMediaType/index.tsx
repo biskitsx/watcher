@@ -21,7 +21,7 @@ export function SelectMediaType({
         <Select
           options={options}
           size="middle"
-          style={{ width: 130 }}
+          style={{ minWidth: 130, width: "100%" }}
           value={mediaType}
           placeholder="Media Type"
           onChange={async (value) => {

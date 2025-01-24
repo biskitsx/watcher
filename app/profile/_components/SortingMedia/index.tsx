@@ -36,7 +36,7 @@ export function SortingMedia({
           options={options}
           variant="filled"
           size="middle"
-          style={{ width: 130 }}
+          style={{ minWidth: 130, width: "100%" }}
           value={sorting}
           placeholder="Sort by"
           onChange={async (value) => {

@@ -9,8 +9,8 @@ const Loading = () => {
     <PageContainer>
       <MediaCarousel />
       <Container>
-        <MediaSliderLoading isLong />
         <MediaSliderLoading />
+        <MediaSliderLoading isLong />
         <MediaSliderLoading />
         <MediaSliderLoading />
       </Container>

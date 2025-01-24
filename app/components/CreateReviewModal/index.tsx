@@ -3,6 +3,8 @@ import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import { CreateReview } from "@/app/api/review/actions";
 import { MediaInfoProps } from "@/wrapper/media-info";
 import { useState } from "react";
+import { FileSpreadsheetIcon } from "lucide-react";
+import { palatte } from "@/constant/palatte";
 
 interface CreateReviewModalProps {
   isOpen: boolean;
@@ -57,7 +59,10 @@ export const CreateReviewModal = ({
         onFinish={onFinish}
       >
         <Form.Item>
-          <h1 className="text-3xl font-bold">Create a review</h1>
+          <span className="text-xl font-semibold items-center flex gap-2">
+            Make a Review{" "}
+            <FileSpreadsheetIcon fill={palatte.primary} size={24} />
+          </span>
         </Form.Item>
         <Form.Item name="title" label="Title" rules={[{ required: true }]}>
           <Input />

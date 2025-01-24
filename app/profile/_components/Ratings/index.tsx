@@ -100,23 +100,37 @@ export const RatingTabs = ({
       <AreaChartByYear initialRatingCountByYear={initialRatingCountByYear} />
       <div className="flex flex-col sm:flex-row justify-between gap-2 sm:items-center">
         <h1 className="text-xl font-bold">My Ratings</h1>
-        <div className="flex items-center gap-2 flex-row">
-          <SelectWatchlistStatus onChange={handleWatchlistStatusChange} />
-          <SelectMediaType onChange={handleMediaTypeChange} />
-          <SortingMedia onChange={handleSortingChange} type="rating" />
-          <div className="w-px h-8 bg-gray-300" />
-          <Link href="/search">
-            <Tooltip title="Find new media to rate now !!!">
-              <Button
-                icon={<PlusIcon />}
-                type="primary"
-                size="middle"
-                className="!flex  !font-bold !uppercase !items-center"
-              >
-                Add
-              </Button>
-            </Tooltip>
-          </Link>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex items-center gap-2 flex-row">
+            <SelectWatchlistStatus
+              onChange={handleWatchlistStatusChange}
+              className="w-full"
+            />
+            <SelectMediaType
+              onChange={handleMediaTypeChange}
+              className="w-full"
+            />
+          </div>
+          <div className="flex items-center gap-2 flex-row">
+            <SortingMedia
+              onChange={handleSortingChange}
+              type="watchlist"
+              className="w-full"
+            />
+            <div className="w-px h-8 bg-gray-300" />
+            <Link href="/search">
+              <Tooltip title="Find new media to watch now !!">
+                <Button
+                  icon={<PlusIcon />}
+                  type="primary"
+                  size="middle"
+                  className="!flex  !font-bold !uppercase !items-center"
+                >
+                  Add
+                </Button>
+              </Tooltip>
+            </Link>
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-4">

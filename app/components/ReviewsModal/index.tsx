@@ -5,25 +5,19 @@ import { Review } from "@prisma/client";
 import type { StatisticProps } from "antd";
 import CountUp from "react-countup";
 
-import {
-  Modal,
-  Avatar,
-  Card,
-  Empty,
-  Spin,
-  Button,
-  Col,
-  Row,
-  Statistic,
-} from "antd";
+import { Modal, Avatar, Card, Empty, Spin, Button } from "antd";
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
+import { StarIcon, Users, UsersIcon } from "lucide-react";
+import { palatte } from "@/constant/palatte";
+
 interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   openCreateReviewModal: () => void;
   media: MediaInfoProps;
 }
+
 const formatter: StatisticProps["formatter"] = (value) => (
   <CountUp end={value as number} separator="," />
 );
@@ -36,6 +30,7 @@ export const ReviewModal = ({
 }: ReviewModalProps) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     try {
       setLoading(true);
@@ -49,6 +44,7 @@ export const ReviewModal = ({
     }
     setLoading(false);
   }, [isOpen]);
+
   return (
     <Modal
       open={isOpen}
@@ -58,18 +54,17 @@ export const ReviewModal = ({
       centered
     >
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold">Reviews from communities</h1>
+        <span className="text-xl font-semibold items-center flex gap-2">
+          Reviews from communities{" "}
+          <StarIcon fill={palatte.primary} stroke={palatte.primary} size={24} />
+        </span>
+
         <div className="grid grid-cols-1 gap-4 max-h-64 overflow-y-scroll">
           {loading ? (
             <Spin />
           ) : reviews.length !== 0 ? (
             reviews.map((review) => (
               <Card style={{ minWidth: 300 }}>
-                {/* <Card.Meta
-                  avatar={<Avatar src={getRandomAvatar(review.userId)} />}
-                  title={review.title}
-                  description={<p>{review.content}</p>}
-                /> */}
                 <div className="w-full rounded-md flex gap-4 flex-col ">
                   <div className="flex flex-row gap-4 items-center">
                     <Avatar src={getRandomAvatar(review.userId)} />
@@ -87,7 +82,10 @@ export const ReviewModal = ({
               </Card>
             ))
           ) : (
-            <Empty description="Be the first person to write a review!" />
+            <Empty
+              className="!my-4"
+              description="Be the first person to write a review!"
+            />
           )}
         </div>
         <div className="flex justify-between items-center">
@@ -96,7 +94,7 @@ export const ReviewModal = ({
             <span className=""> reviews</span>
           </div>
           <Button type="primary" onClick={openCreateReviewModal}>
-            create your own review !
+            Review Now!
           </Button>
         </div>
       </div>
