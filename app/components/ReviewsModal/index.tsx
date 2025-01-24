@@ -64,7 +64,7 @@ export const ReviewModal = ({
             <Spin />
           ) : reviews.length !== 0 ? (
             reviews.map((review) => (
-              <Card style={{ minWidth: 300 }}>
+              <Card style={{ minWidth: 300 }} key={review.id}>
                 <div className="w-full rounded-md flex gap-4 flex-col ">
                   <div className="flex flex-row gap-4 items-center">
                     <Avatar src={getRandomAvatar(review.userId)} />
