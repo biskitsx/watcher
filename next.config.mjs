@@ -11,7 +11,7 @@ const config = withPWA({
     // next.js config
     reactStrictMode: false,
     swcMinify: false,
-  })
+})
 
 export default config
   

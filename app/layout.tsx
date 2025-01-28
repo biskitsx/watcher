@@ -41,6 +41,13 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
       </head>
+
+      <link rel="manifest" href="/manifest.json" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+      />
+
       <SessionProvider session={session}>
         <AntdRegistry>
           <ConfigProvider
