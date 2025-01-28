@@ -1,0 +1,22 @@
+{
+    "name": "Watcher",
+     "short_name": "Watcher",
+    "description": "A simple app to keep track of your favorite movies and TV shows.",
+     "start_url": "/",
+     "display": "standalone",
+     "background_color": "#FFFFFF",
+     "theme_color": "#FFFFFF",
+     "orientation": "portrait",
+     "icons": [
+       {
+         "src": "/logo.png",
+         "sizes": "192x192",
+         "type": "image/png"
+       },
+       {
+         "src": "/logo.png",
+         "sizes": "512x512",
+         "type": "image/png"
+       }
+     ]
+   }
