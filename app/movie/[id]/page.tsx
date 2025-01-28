@@ -1,8 +1,4 @@
-import {
-  getCreditsByMovieId,
-  getMovieById,
-  getUpcomingMovies,
-} from "@/app/api/movie/actions";
+import { getCreditsByMovieId, getMovieById } from "@/app/api/movie/actions";
 import { MediaSlider } from "@/components/media/MediaSlider";
 import { Container } from "@/components/layout/Container";
 import { MediaDetail } from "@/components/media/MediaDetail";
@@ -17,20 +13,29 @@ export default async function Home({
 }) {
   try {
     const idInt = parseInt(id);
-    const [recommendMedia, media, credits] = await Promise.all([
-      getContentBaseRecommendations(idInt, "movie"),
+    const [media, credits] = await Promise.all([
       getMovieById(id),
       getCreditsByMovieId(id),
     ]);
-    onClickMedia(media.id!, media.type);
 
+    const recommend = await getContentBaseRecommendations(
+      idInt,
+      "movie",
+      media
+    );
+    const mediaWithMultipleRating = recommend[20];
+
+    onClickMedia(media.id!, media.type);
     return (
       <PageContainer>
-        <MediaDetail media={media} casts={credits.cast} />
+        <MediaDetail
+          media={!!mediaWithMultipleRating ? mediaWithMultipleRating : media}
+          casts={credits.cast}
+        />
         <Container>
           <MediaSlider
             name="You may also like"
-            items={recommendMedia}
+            items={recommend}
             type="movie"
             href="#"
           />

@@ -4,13 +4,16 @@ import { HomeCarousel } from "@/components/media/HomeCarousel";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Container } from "@/components/layout/Container";
 import { getTopAnime } from "@/app/api/anime/actions";
-import { getAiringTodaySeries } from "@/app/api/serie/actions";
+import {
+  getAiringTodaySeries,
+  getTopRatedSeries,
+} from "@/app/api/serie/actions";
 import { Shape1 } from "./components/svg/shape-1";
 import { JoinToday } from "./components/JoinToday";
 
 export default async function Home() {
   const upcomingMovies = await getUpcomingMovies({ page: 1 });
-  const series = await getAiringTodaySeries({ page: 1 });
+  const series = await getTopRatedSeries({ page: 1 });
   const topAnimes = await getTopAnime({ page: 1 });
   return (
     <PageContainer>

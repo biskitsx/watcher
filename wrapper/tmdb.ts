@@ -1,6 +1,7 @@
 import { TMDB_TOKEN } from "@/data/baseUrl";
 import { MediaInfoProps } from "./media-info";
 import { MediaMap, getUserDataMedia } from "@/app/api/media/actions";
+import { getMultiPlatformRating } from "@/app/api/mdblist/actions";
 export const tmdbImagesURL = "https://image.tmdb.org/t/p/original";
 
 export const tmdbConvertToMediaInfo = (
@@ -52,12 +53,25 @@ export const getTMDbHelperList = async (
     const userDataMedia = await getUserDataMedia();
     if (userDataMedia) {
       const res = tmdbConvertToMediaInfoList(json.results, type, userDataMedia);
-      return res;
+      const multiPlatFormResponse = await getMultiPlatformRating(res, type, [
+        "tomatoes",
+        "score",
+        "imdb",
+        "tmdb",
+      ]);
+      return multiPlatFormResponse;
     }
     const res = tmdbConvertToMediaInfoList(json.results, type);
 
-    return res;
+    const multiPlatFormResponse = await getMultiPlatformRating(res, type, [
+      "imdb",
+      "tmdb",
+      "tomatoes",
+      "score",
+    ]);
+    return multiPlatFormResponse;
   } catch (error) {
+    console.log(error);
     return [] as MediaInfoProps[];
   }
 };
@@ -97,6 +111,29 @@ export const getTMDb = async (path: string) => {
     return json;
   } catch (error: any) {
     console.error("error:", error);
+    throw new Error(error);
+  }
+};
+
+export const convertTMDbIDtoIMDbID = async (
+  type: "serie" | "movie",
+  tmdbID: string
+) => {
+  try {
+    const url = `https://api.themoviedb.org/3/movie/${tmdbID}/external_ids`;
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: TMDB_TOKEN,
+      },
+    };
+
+    const res = await fetch(url, options);
+    const json = await res.json();
+
+    return json.imdb_id;
+  } catch (error: any) {
     throw new Error(error);
   }
 };

@@ -4,7 +4,7 @@ import { MediaInfoProps } from "@/wrapper/media-info";
 import Link from "next/link";
 import { formatTheDate } from "@/util/formattedDate";
 import { cn } from "@/util/cn";
-import { Dropdown, MenuProps } from "antd";
+import { Dropdown, Image, MenuProps, Tooltip } from "antd";
 import { FaBookmark, FaEllipsisV, FaHeart, FaStar } from "react-icons/fa";
 import { useMemo, useState } from "react";
 import {
@@ -109,6 +109,23 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
     }
   };
 
+  const getImageSrcByPlatform = (platform: string) => {
+    switch (platform) {
+      case "imdb":
+        return "/platform/imdb.webp";
+      case "tmdb":
+        return "/platform/tmdb.jpg";
+      case "tomatoes":
+        return "/platform/tomatoes.png";
+      case "mal":
+        return "/platform/mal.webp";
+      case "anilist":
+        return "/platform/anilist.png";
+      default:
+        return "";
+    }
+  };
+
   const items: MenuProps["items"] = useMemo(() => {
     return [
       {
@@ -153,6 +170,7 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
     ];
   }, [isFavorite, isWatchlist, rating]);
 
+  const isAnime = media.type === "anime";
   return (
     <div className="">
       <div
@@ -179,10 +197,16 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
               />
             </Link>
           </div>
-          <RadialProgress
-            value={media.vote_average * 10}
-            className="absolute -bottom-4 left-2"
-          />
+          <Tooltip title="Average Score">
+            <RadialProgress
+              value={
+                media.multiPlatformRatings?.score
+                  ? media.multiPlatformRatings.score
+                  : media.vote_average * 10
+              }
+              className="absolute -bottom-4 left-2"
+            />
+          </Tooltip>
           <div className="absolute right-2 top-2 cursor-default">
             {/* <div className="w-6 h-6 rounded-full opacity-50 bg-white flex items-center justify-center" /> */}
             <Dropdown menu={{ items }} trigger={["click"]}>
@@ -193,10 +217,37 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
           </div>
         </div>
         <div className="py-2 px-1">
-          <Link
-            href={`/${media.type}/${media.id}`}
-            // className="!truncate font-semibold"
-          >
+          <div className="flex gap-4 sm:gap-6 rounded-md ">
+            {!!media.multiPlatformRatings &&
+              Object.entries(media.multiPlatformRatings).map(([key, value]) => {
+                // if (isAnime)
+                if (key === "score") return null;
+                const isValExist = value > 0;
+                const src = getImageSrcByPlatform(key);
+                return (
+                  <Tooltip
+                    key={key}
+                    title={`${key} Rating`}
+                    placement="top"
+                    className="!capitalize"
+                  >
+                    <div className="flex flex-col gap-1 items-center hover:scale-105 transition-all ">
+                      <Image
+                        src={src}
+                        width={30}
+                        height={30}
+                        preview={false}
+                        className="!rounded-md "
+                      />
+                      <h1 className="font-semibold text-xs">
+                        {isValExist ? `${value}%` : "NR"}
+                      </h1>
+                    </div>
+                  </Tooltip>
+                );
+              })}
+          </div>
+          <Link href={`/${media.type}/${media.id}`}>
             <h3 className="truncate font-semibold hover:text-blue-400 transition-all">
               {media.title}
             </h3>

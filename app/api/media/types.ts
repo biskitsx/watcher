@@ -43,3 +43,12 @@ export interface SeriesEpisode {
   episode_type: string;
   season_number: string;
 }
+
+export interface MultiplePlatformsRating {
+  score?: number;
+  tmdb?: number;
+  imdb?: number;
+  tomatoes?: number;
+  anilist?: number;
+  mal?: number;
+}
