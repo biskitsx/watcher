@@ -13,16 +13,25 @@ export default async function Home({
 }) {
   try {
     const idInt = parseInt(id);
-    const [media, recommend, credits] = await Promise.all([
+    const [media, credits] = await Promise.all([
       getSeriesById(id),
-      getContentBaseRecommendations(idInt, "serie"),
       getCreditsBySerieId(id),
     ]);
+    const recommend = await getContentBaseRecommendations(
+      idInt,
+      "serie",
+      media
+    );
     onClickMedia(media.id!, media.type);
+
+    const mediaWithMultipleRating = recommend[20];
 
     return (
       <PageContainer>
-        <MediaDetail media={media} casts={credits.cast} />
+        <MediaDetail
+          media={!!mediaWithMultipleRating ? mediaWithMultipleRating : media}
+          casts={credits.cast}
+        />
         <Container>
           <MediaSlider
             name="You may also like"

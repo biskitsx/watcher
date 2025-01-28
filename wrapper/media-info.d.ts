@@ -1,7 +1,8 @@
+import { MultiplePlatformsRating } from "@/app/api/media/types";
 import { Media } from "@prisma/client";
 
 export interface MediaInfoProps {
-  id?: string;
+  id: string;
   title: string;
   poster_path: string;
   backdrop_path: string;
@@ -12,4 +13,5 @@ export interface MediaInfoProps {
   userMediaData?: Media;
   genres?: { id: number; name: string }[];
   episodes?: number;
+  multiPlatformRatings?: MultiplePlatformsRating;
 }

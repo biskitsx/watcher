@@ -34,6 +34,7 @@ export default async function Home() {
     getTopRatedSeries({ page: 1 }),
     shouldRenderUserbased(),
   ]);
+
   return (
     <PageContainer>
       <MediaCarousel items={trendingSeries} />

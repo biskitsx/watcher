@@ -7,6 +7,7 @@ import {
 } from "../../../wrapper/jikan";
 import { getUserDataMedia } from "../media/actions";
 import { Character, PaginationProps, SearchProps } from "../media/types";
+import { getAnimeMultiplePlatformsRating } from "../anilist/actions";
 
 export const getTopAnime = async ({ page }: PaginationProps) => {
   return await getJikanHelperList("top/anime?page=" + page);
@@ -78,10 +79,12 @@ export const getAnimeRecommendationsByJikan = async (id: number) => {
         json.data as any[],
         userDataMedia
       );
-      return res;
+      const multiplePlatform = await getAnimeMultiplePlatformsRating(res);
+      return multiplePlatform;
     }
     const res = jikanConvertToMediaInfoListRecommend(json.data);
-    return res;
+    const multiplePlatform = await getAnimeMultiplePlatformsRating(res);
+    return multiplePlatform;
   } catch (error) {
     console.log(error);
     throw error;

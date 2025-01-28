@@ -10,6 +10,7 @@ import {
   Button,
   useDisclosure,
   useToast,
+  Progress,
 } from "@chakra-ui/react";
 import { RadialProgress } from "./RadialProgress";
 import { palatte } from "@/constant/palatte";
@@ -23,9 +24,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toastConfig } from "../toast/ToastConfig";
 import { Status } from "@prisma/client";
-import { Image } from "antd";
+import { Image, Tooltip } from "antd";
 import { FaBookmark, FaHeart } from "react-icons/fa";
-import { IconContext } from "react-icons/lib";
 import { tmdbImagesURL } from "@/data/baseUrl";
 import { CastProps, Character } from "@/app/api/media/types";
 import { RatingModal } from "@/app/components/RatingModal";
@@ -168,6 +168,22 @@ export const MediaDetail = ({
       console.error(error);
     }
   };
+  const getImageSrcByPlatform = (platform: string) => {
+    switch (platform) {
+      case "imdb":
+        return "/platform/imdb.webp";
+      case "tmdb":
+        return "/platform/tmdb.jpg";
+      case "tomatoes":
+        return "/platform/tomatoes.png";
+      case "mal":
+        return "/platform/mal.webp";
+      case "anilist":
+        return "/platform/anilist.png";
+      default:
+        return "";
+    }
+  };
 
   const handleOnFavorite = async () => {
     try {
@@ -217,6 +233,7 @@ export const MediaDetail = ({
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
                 }}
               />
+              {/* <Progress value={80} /> */}
               <Stack
                 direction={"column"}
                 className="text-white w-full  overflow-x-hidden"
@@ -231,7 +248,11 @@ export const MediaDetail = ({
                 <Stack direction={"row"}>
                   <div>
                     <RadialProgress
-                      value={media.vote_average * 10}
+                      value={
+                        media.multiPlatformRatings?.score
+                          ? media.multiPlatformRatings.score
+                          : media.vote_average * 10
+                      }
                       size="48px"
                       thickness="3px"
                       className="text-sm"
@@ -248,6 +269,36 @@ export const MediaDetail = ({
                       ))}
                   </Stack>
                 </Stack>
+                <div className="flex gap-6  rounded-md p-1 ">
+                  {!!media.multiPlatformRatings &&
+                    Object.entries(media.multiPlatformRatings).map(
+                      ([key, value]) => {
+                        if (key === "score") return null;
+                        const isValExist = value > 0;
+                        const src = getImageSrcByPlatform(key);
+                        return (
+                          <Tooltip
+                            key={key}
+                            title={`${key} Rating`}
+                            placement="top"
+                            className="!capitalize"
+                          >
+                            <div className="flex flex-col gap-1 items-center hover:scale-105 transition-all ">
+                              <Image
+                                src={src}
+                                width={30}
+                                height={30}
+                                preview={false}
+                              />
+                              <h1 className="font-semibold text-xs">
+                                {isValExist ? `${value}%` : "NR"}
+                              </h1>
+                            </div>
+                          </Tooltip>
+                        );
+                      }
+                    )}
+                </div>
                 <Stack direction={"row"} className="uppercase">
                   <Button
                     bgColor={palatte.darkBlue}
@@ -269,7 +320,10 @@ export const MediaDetail = ({
                     width={"40px"}
                     padding={0}
                   >
-                    <FaHeart color={isFavorite ? "red" : "white"} />
+                    <FaHeart
+                      // color={isFavorite ? "#dfdfe3" : "white"}
+                      fill={isFavorite ? "violet" : "white"}
+                    />
                   </Button>
                   <Button
                     bg={palatte.darkBlue}

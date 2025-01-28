@@ -1,5 +1,6 @@
 import { MediaMap, getUserDataMedia } from "@/app/api/media/actions";
 import { MediaInfoProps } from "./media-info";
+import { getAnimeMultiplePlatformsRating } from "@/app/api/anilist/actions";
 
 export const jikanConvertToMediaInfo = (
   item: any,
@@ -50,10 +51,14 @@ export const getJikanHelperList = async (pathname: string) => {
     const userDataMedia = await getUserDataMedia();
     if (userDataMedia) {
       const res = jikanConvertToMediaInfoList(json.data, userDataMedia);
-      return res;
+      const multiplePlatformsRating = await getAnimeMultiplePlatformsRating(
+        res
+      );
+      return multiplePlatformsRating;
     }
     const res = jikanConvertToMediaInfoList(json.data);
-    return res;
+    const multiplePlatformsRating = await getAnimeMultiplePlatformsRating(res);
+    return multiplePlatformsRating;
   } catch (error) {
     console.log(error);
     return [] as MediaInfoProps[];

@@ -63,7 +63,9 @@ export const JoinToday = ({ media }: JoinTodayProps) => {
   return (
     <Box className="relative shadow-md">
       <Box
-        backgroundImage={media.backdrop_path}
+        backgroundImage={
+          media.backdrop_path ? media.backdrop_path : media.poster_path
+        }
         backgroundPosition="top"
         backgroundSize="cover"
       >
