@@ -5,6 +5,8 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import { getCreditsBySerieId, getSeriesById } from "@/app/api/serie/actions";
 import { onClickMedia } from "@/app/api/media/actions";
 import { getContentBaseRecommendations } from "@/app/api/recommend/actions";
+import { get } from "http";
+import { getMediaWatchProviders } from "@/app/watch_providers/actions";
 
 export default async function Home({
   params: { id },
@@ -13,9 +15,10 @@ export default async function Home({
 }) {
   try {
     const idInt = parseInt(id);
-    const [media, credits] = await Promise.all([
+    const [media, credits, providers] = await Promise.all([
       getSeriesById(id),
       getCreditsBySerieId(id),
+      getMediaWatchProviders(idInt, "tv"),
     ]);
     const recommend = await getContentBaseRecommendations(
       idInt,
@@ -31,6 +34,7 @@ export default async function Home({
         <MediaDetail
           media={!!mediaWithMultipleRating ? mediaWithMultipleRating : media}
           casts={credits.cast}
+          providers={providers}
         />
         <Container>
           <MediaSlider

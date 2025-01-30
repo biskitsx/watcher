@@ -59,7 +59,8 @@ export const getMultiPlatformRating = async (
 
     return newMediasWithMultiPlatformRating;
   } catch (error) {
-    throw error;
+    return medias;
+    // throw error;
   }
 };
 
@@ -74,6 +75,7 @@ export const getRatingFromMDBList = async (
     const media_type = mediaType === "movie" ? "movie" : "show";
     const api_key = process.env.MDBLIST_TOKEN || "";
 
+    // const url = `https://mdblist.com/api/rating/${media_type}/${return_rating}?apikey=${api_key}`;
     const url = `https://mdblist.com/api/rating/${media_type}/${return_rating}?apikey=${api_key}`;
     const payload = {
       ids: tmdbIDsNumber,
@@ -89,10 +91,14 @@ export const getRatingFromMDBList = async (
     };
 
     const res = await fetch(url, options);
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch from MDBList: ${res.statusText}`);
+    }
     const json: MDBListRatingResponse = await res.json();
     return json;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw error;
   }
 };
