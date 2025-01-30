@@ -32,16 +32,19 @@ import { RatingModal } from "@/app/components/RatingModal";
 import { MotionFaded } from "../motion/MotionFaded";
 import { CreateReviewModal } from "@/app/components/CreateReviewModal";
 import { ReviewModal } from "@/app/components/ReviewsModal";
+import { WatchProvider } from "@/app/watch_providers/types";
 
 interface MediaDetailProps {
   media: MediaInfoProps;
   casts?: CastProps[];
   aniemeCasts?: Character[];
+  providers?: WatchProvider[];
 }
 export const MediaDetail = ({
   media,
   casts,
   aniemeCasts,
+  providers,
 }: MediaDetailProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
@@ -223,16 +226,42 @@ export const MediaDetail = ({
               className="container py-12"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={media.poster_path}
-                alt={media.poster_path}
-                width={300}
-                className="self-center hover:scale-105 transition-all object-cover w-[240px]"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
-                }}
-              />
+              <div className="w-full md:w-[300px] flex items-center justify-center flex-col">
+                <img
+                  src={media.poster_path}
+                  alt={media.poster_path}
+                  width={300}
+                  className="self-center hover:scale-105 transition-all object-cover w-[240px]"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+                  }}
+                />
+                {providers && providers?.length != 0 && (
+                  <div className="p-4 gap-2 flex flex-col items-center justify-center">
+                    {/* <Text className="text-white text-lg font-semibold ">
+                      Watch Providers
+                    </Text> */}
+                    <Box className="flex gap-3 justify-center w-full">
+                      {providers.map((provider, index) => (
+                        <Tooltip title={provider.provider_name} key={index}>
+                          <Image
+                            className="!rounded-md !overflow-hidden"
+                            key={index}
+                            src={`${tmdbImagesURL}${provider.logo_path}`}
+                            width={35}
+                            height={35}
+                            preview={false}
+                          />
+                        </Tooltip>
+                      ))}
+                    </Box>
+                    <h1 className="text-white font-medium text-sm">
+                      Now Streaming
+                    </h1>
+                  </div>
+                )}
+              </div>
               {/* <Progress value={80} /> */}
               <Stack
                 direction={"column"}

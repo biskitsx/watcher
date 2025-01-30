@@ -59,7 +59,8 @@ export const getMultiPlatformRating = async (
 
     return newMediasWithMultiPlatformRating;
   } catch (error) {
-    throw error;
+    return medias;
+    // throw error;
   }
 };
 
@@ -89,10 +90,14 @@ export const getRatingFromMDBList = async (
     };
 
     const res = await fetch(url, options);
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch from MDBList: ${res.statusText}`);
+    }
     const json: MDBListRatingResponse = await res.json();
     return json;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw error;
   }
 };
