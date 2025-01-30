@@ -75,7 +75,6 @@ export const getRatingFromMDBList = async (
     const media_type = mediaType === "movie" ? "movie" : "show";
     const api_key = process.env.MDBLIST_TOKEN || "";
 
-    // const url = `https://mdblist.com/api/rating/${media_type}/${return_rating}?apikey=${api_key}`;
     const url = `https://mdblist.com/api/rating/${media_type}/${return_rating}?apikey=${api_key}`;
     const payload = {
       ids: tmdbIDsNumber,
