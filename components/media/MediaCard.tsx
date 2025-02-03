@@ -200,8 +200,8 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
           <Tooltip title="Average Score">
             <RadialProgress
               value={
-                media.multiPlatformRatings?.score
-                  ? media.multiPlatformRatings.score
+                media.multiPlatformRatings?.score_average
+                  ? media.multiPlatformRatings.score_average
                   : media.vote_average * 10
               }
               className="absolute -bottom-4 left-2"
@@ -221,7 +221,14 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
             {!!media.multiPlatformRatings &&
               Object.entries(media.multiPlatformRatings).map(([key, value]) => {
                 // if (isAnime)
-                if (key === "score") return null;
+                if (
+                  key === "score_average" ||
+                  key === "score" ||
+                  key === "metacritic" ||
+                  key === "trakt" ||
+                  key === "letterboxd"
+                )
+                  return null;
                 const isValExist = value > 0;
                 const src = getImageSrcByPlatform(key);
                 return (

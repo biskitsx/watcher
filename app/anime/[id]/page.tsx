@@ -34,7 +34,6 @@ export default async function Home({
 
     const mediaWithMultipleRating = recommend[20];
 
-    console.log(mediaWithMultipleRating);
     return (
       <PageContainer>
         <Suspense fallback={<MediaDetailLoading />}>

@@ -45,10 +45,15 @@ export interface SeriesEpisode {
 }
 
 export interface MultiplePlatformsRating {
+  score_average?: number;
   score?: number;
   tmdb?: number;
   imdb?: number;
   tomatoes?: number;
   anilist?: number;
   mal?: number;
+  trackt?: number;
+  letterboxd?: number;
+  metacritic?: number;
+  regerebert?: number;
 }

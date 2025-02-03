@@ -1,7 +1,16 @@
 import { MediaInfoProps } from "@/wrapper/media-info";
 import { MDBListRatingResponse } from "./types";
 import { MultiplePlatformsRating } from "../media/types";
-type ReturnRating = "imdb" | "tmdb" | "tomatoes" | "score";
+export type ReturnRating =
+  | "imdb"
+  | "tmdb"
+  | "tomatoes"
+  | "trakt"
+  | "letterboxd"
+  | "metacritic"
+  | "regerebert"
+  | "score"
+  | "score_average";
 
 export const dynamic = "force-dynamic";
 
@@ -11,10 +20,10 @@ export const getMultiPlatformRating = async (
   return_rating: ReturnRating[]
 ) => {
   try {
-    // return medias;
     let tmdbKeyPlatFormValue: Map<string, MultiplePlatformsRating> = new Map();
     const platformPromises = return_rating.map(async (platform) => {
-      const shouldTime = platform === "imdb" ? true : false;
+      const shouldTime =
+        platform === "imdb" || platform === "letterboxd" ? true : false;
       const mediasID = medias.map((media) => media.id);
 
       const response = await getRatingFromMDBList(

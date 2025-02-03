@@ -15,7 +15,7 @@ import {
 } from "../movie/actions";
 import { getAnimeRecommendationsByJikan, getTopAnime } from "../anime/actions";
 import prisma from "@/prisma";
-import { getMultiPlatformRating } from "../mdblist/actions";
+import { ReturnRating, getMultiPlatformRating } from "../mdblist/actions";
 import { getAnimeMultiplePlatformsRating } from "../anilist/actions";
 import { cache } from "react";
 
@@ -89,6 +89,7 @@ const getModelRecommendations = async (
 
     return convertedData;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -98,43 +99,67 @@ export const getContentBaseRecommendations = async (
   type: "movie" | "serie" | "anime",
   additionalMedia?: MediaInfoProps
 ) => {
+  const returnRatings: ReturnRating[] = [
+    "tomatoes",
+    "imdb",
+    "tmdb",
+    "trakt",
+    "letterboxd",
+    "metacritic",
+    "score_average",
+  ];
   try {
     const payload = {
       mediaId: id,
       number: 20,
     };
 
-    const recommendations = await getModelRecommendations(
+    const recommendations: MediaInfoProps[] = await getModelRecommendations(
       type,
       "content",
       payload
     );
 
-    const medias = additionalMedia
+    const medias = !!additionalMedia
       ? [...recommendations, additionalMedia]
       : recommendations;
+
     if (type === "anime") {
       const multiplatform = await getAnimeMultiplePlatformsRating(medias);
       return multiplatform;
     }
-    const multiplatform = await getMultiPlatformRating(medias, type, [
-      "tomatoes",
-      "imdb",
-      "tmdb",
-      "score",
-    ]);
-
+    const multiplatform = await getMultiPlatformRating(
+      medias,
+      type,
+      returnRatings
+    );
     return multiplatform;
   } catch (error) {
-    let someMedias = [];
+    let someMedias = !!additionalMedia ? [additionalMedia] : [];
     if (type === "serie") {
-      someMedias = await getSerieRecommendationsFromTMDB(id);
+      const recommends = await getSerieRecommendationsFromTMDB(id);
+      const multiplatform = await getMultiPlatformRating(
+        [...recommends, ...someMedias],
+        type,
+        returnRatings
+      );
+      return multiplatform;
     } else if (type === "movie") {
-      someMedias = await getMovieRecommendationsFromTMDB(id);
+      const recommends = await getMovieRecommendationsFromTMDB(id);
+      const multiplatform = await getMultiPlatformRating(
+        [...recommends, ...someMedias],
+        type,
+        returnRatings
+      );
+      return multiplatform;
     } else {
-      someMedias = await getAnimeRecommendationsByJikan(id);
+      const recommends = await getAnimeRecommendationsByJikan(id);
+      const multiplatform = await getAnimeMultiplePlatformsRating([
+        ...someMedias,
+        ...recommends,
+      ]);
+      return multiplatform;
     }
-    return someMedias;
   }
 };
 
