@@ -89,6 +89,7 @@ const getModelRecommendations = async (
 
     return convertedData;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -104,15 +105,16 @@ export const getContentBaseRecommendations = async (
       number: 20,
     };
 
-    const recommendations = await getModelRecommendations(
+    const recommendations: MediaInfoProps[] = await getModelRecommendations(
       type,
       "content",
       payload
     );
 
-    const medias = additionalMedia
+    const medias = !!additionalMedia
       ? [...recommendations, additionalMedia]
       : recommendations;
+
     if (type === "anime") {
       const multiplatform = await getAnimeMultiplePlatformsRating(medias);
       return multiplatform;
@@ -121,20 +123,36 @@ export const getContentBaseRecommendations = async (
       "tomatoes",
       "imdb",
       "tmdb",
-      "score",
+      "score_average",
     ]);
 
     return multiplatform;
   } catch (error) {
-    let someMedias = [];
+    let someMedias = !!additionalMedia ? [additionalMedia] : [];
     if (type === "serie") {
-      someMedias = await getSerieRecommendationsFromTMDB(id);
+      const recommends = await getSerieRecommendationsFromTMDB(id);
+      const multiplatform = await getMultiPlatformRating(
+        [...recommends, ...someMedias],
+        type,
+        ["tomatoes", "imdb", "tmdb", "score"]
+      );
+      return multiplatform;
     } else if (type === "movie") {
-      someMedias = await getMovieRecommendationsFromTMDB(id);
+      const recommends = await getMovieRecommendationsFromTMDB(id);
+      const multiplatform = await getMultiPlatformRating(
+        [...recommends, ...someMedias],
+        type,
+        ["tomatoes", "imdb", "tmdb", "score"]
+      );
+      return multiplatform;
     } else {
-      someMedias = await getAnimeRecommendationsByJikan(id);
+      const recommends = await getAnimeRecommendationsByJikan(id);
+      const multiplatform = await getAnimeMultiplePlatformsRating([
+        ...someMedias,
+        ...recommends,
+      ]);
+      return multiplatform;
     }
-    return someMedias;
   }
 };
 

@@ -200,8 +200,8 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
           <Tooltip title="Average Score">
             <RadialProgress
               value={
-                media.multiPlatformRatings?.score
-                  ? media.multiPlatformRatings.score
+                media.multiPlatformRatings?.score_average
+                  ? media.multiPlatformRatings.score_average
                   : media.vote_average * 10
               }
               className="absolute -bottom-4 left-2"

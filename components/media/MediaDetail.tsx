@@ -278,8 +278,8 @@ export const MediaDetail = ({
                   <div>
                     <RadialProgress
                       value={
-                        media.multiPlatformRatings?.score
-                          ? media.multiPlatformRatings.score
+                        media.multiPlatformRatings?.score_average
+                          ? media.multiPlatformRatings.score_average
                           : media.vote_average * 10
                       }
                       size="48px"
@@ -302,7 +302,8 @@ export const MediaDetail = ({
                   {!!media.multiPlatformRatings &&
                     Object.entries(media.multiPlatformRatings).map(
                       ([key, value]) => {
-                        if (key === "score") return null;
+                        if (key === "score_average" || key === "score")
+                          return null;
                         const isValExist = value > 0;
                         const src = getImageSrcByPlatform(key);
                         return (

@@ -45,6 +45,7 @@ export interface SeriesEpisode {
 }
 
 export interface MultiplePlatformsRating {
+  score_average?: number;
   score?: number;
   tmdb?: number;
   imdb?: number;
