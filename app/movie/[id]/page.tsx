@@ -14,12 +14,12 @@ export default async function Home({
 }) {
   try {
     const idInt = parseInt(id);
-    const [credits, providers] = await Promise.all([
+    const [media, credits, providers] = await Promise.all([
+      getMovieById(id),
       getCreditsByMovieId(id),
       getMediaWatchProviders(idInt, "movie"),
     ]);
 
-    const media = await getMovieById(id);
     const recommend = await getContentBaseRecommendations(
       idInt,
       "movie",
