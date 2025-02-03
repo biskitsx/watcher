@@ -52,4 +52,8 @@ export interface MultiplePlatformsRating {
   tomatoes?: number;
   anilist?: number;
   mal?: number;
+  trackt?: number;
+  letterboxd?: number;
+  metacritic?: number;
+  regerebert?: number;
 }

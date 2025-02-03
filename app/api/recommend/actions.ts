@@ -15,7 +15,7 @@ import {
 } from "../movie/actions";
 import { getAnimeRecommendationsByJikan, getTopAnime } from "../anime/actions";
 import prisma from "@/prisma";
-import { getMultiPlatformRating } from "../mdblist/actions";
+import { ReturnRating, getMultiPlatformRating } from "../mdblist/actions";
 import { getAnimeMultiplePlatformsRating } from "../anilist/actions";
 import { cache } from "react";
 
@@ -99,6 +99,15 @@ export const getContentBaseRecommendations = async (
   type: "movie" | "serie" | "anime",
   additionalMedia?: MediaInfoProps
 ) => {
+  const returnRatings: ReturnRating[] = [
+    "tomatoes",
+    "imdb",
+    "tmdb",
+    "trakt",
+    "letterboxd",
+    "metacritic",
+    "score_average",
+  ];
   try {
     const payload = {
       mediaId: id,
@@ -119,13 +128,11 @@ export const getContentBaseRecommendations = async (
       const multiplatform = await getAnimeMultiplePlatformsRating(medias);
       return multiplatform;
     }
-    const multiplatform = await getMultiPlatformRating(medias, type, [
-      "tomatoes",
-      "imdb",
-      "tmdb",
-      "score_average",
-    ]);
-
+    const multiplatform = await getMultiPlatformRating(
+      medias,
+      type,
+      returnRatings
+    );
     return multiplatform;
   } catch (error) {
     let someMedias = !!additionalMedia ? [additionalMedia] : [];
@@ -134,7 +141,7 @@ export const getContentBaseRecommendations = async (
       const multiplatform = await getMultiPlatformRating(
         [...recommends, ...someMedias],
         type,
-        ["tomatoes", "imdb", "tmdb", "score"]
+        returnRatings
       );
       return multiplatform;
     } else if (type === "movie") {
@@ -142,7 +149,7 @@ export const getContentBaseRecommendations = async (
       const multiplatform = await getMultiPlatformRating(
         [...recommends, ...someMedias],
         type,
-        ["tomatoes", "imdb", "tmdb", "score"]
+        returnRatings
       );
       return multiplatform;
     } else {

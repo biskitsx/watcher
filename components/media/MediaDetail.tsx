@@ -183,6 +183,12 @@ export const MediaDetail = ({
         return "/platform/mal.webp";
       case "anilist":
         return "/platform/anilist.png";
+      case "letterboxd":
+        return "/platform/letterboxd.png";
+      case "metacritic":
+        return "/platform/metacritic.png";
+      case "trakt":
+        return "/platform/trakt.png";
       default:
         return "";
     }

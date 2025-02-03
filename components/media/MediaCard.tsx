@@ -221,7 +221,14 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
             {!!media.multiPlatformRatings &&
               Object.entries(media.multiPlatformRatings).map(([key, value]) => {
                 // if (isAnime)
-                if (key === "score") return null;
+                if (
+                  key === "score_average" ||
+                  key === "score" ||
+                  key === "metacritic" ||
+                  key === "trakt" ||
+                  key === "letterboxd"
+                )
+                  return null;
                 const isValExist = value > 0;
                 const src = getImageSrcByPlatform(key);
                 return (

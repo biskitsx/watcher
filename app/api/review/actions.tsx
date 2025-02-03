@@ -18,7 +18,6 @@ export const CreateReview = async ({
   mediaType,
 }: CreateReviewParams) => {
   try {
-    console.log({ title, content, point, mediaId, mediaType });
     const session = await getServerSession(authOptions);
     if (!session) {
       throw new Error("Unauthorized");
