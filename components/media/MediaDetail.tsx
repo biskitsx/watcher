@@ -416,6 +416,9 @@ export const MediaDetail = ({
           }}
           media={media}
           openCreateReviewModal={() => {
+            if (!session.data) {
+              return router.push("/auth/login");
+            }
             setIsReviewsModalOpen(false);
             setIsCreateReviewModalOpen(true);
           }}

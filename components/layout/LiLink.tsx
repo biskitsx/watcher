@@ -12,13 +12,16 @@ export const LiLink = ({ currentPathname, pathname }: LiLinkProps) => {
     liClassName = "active_link";
   }
 
+  const shouldAdds = ["movie", "serie"].includes(pathname);
+  const pathnameLabel = shouldAdds ? `${pathname}s` : pathname;
+
   return (
     <li className={liClassName}>
       <Link
         href={pathname == "home" ? "/" : `/${pathname}`}
         className="capitalize"
       >
-        {pathname}
+        {pathnameLabel}
       </Link>
     </li>
   );
