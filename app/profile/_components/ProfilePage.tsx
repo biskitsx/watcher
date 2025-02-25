@@ -54,7 +54,7 @@ export default function ProfilePage({
             </div>
             <div className="flex flex-col gap-6 w-full">
               <div className="text-3xl font-semibold text-center md:text-start">
-                hello, {user?.name}
+                Hello, {user?.name}
               </div>
               <div className="flex gap-4 justify-center md:justify-start w-full">
                 {/* {scores.map((score, index) => ( */}
