@@ -69,7 +69,7 @@ jobs:
           ref: main
       - name: Update image version
         run: |
-          sed -i "s/newName: ksuphaky\/watcher/{n;s/newTag: .*/newTag: pr-26;}" ./gitops/apps/watcher/overlays/dev/kustomization.yaml
+          sed -i "/newName: ksuphaky\/watcher/{n;s/newTag: .*/newTag: pr-26/;}" ./gitops/apps/watcher/overlay/dev/kustomization.yaml
         # run: |
         #   sed -i "/newName: ksuphaky\/watcher/{n;s/newTag: .*/newTag: {{ steps.meta.outputs.labels }};}" ./gitops/apps/watcher/overlays/dev/kustomization.yaml
       - name: Commit and Push Changes
