@@ -65,7 +65,7 @@ jobs:
       - name: Checkout GitOps Repo
         uses: actions/checkout@v4
         with:
-          repository: ksuphaky/watcher-infra
+          repository: biskitsx/watcher-infra
           ref: main
       - name: Update image version
         run: |
