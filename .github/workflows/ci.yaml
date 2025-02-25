@@ -61,6 +61,7 @@ jobs:
 
   update-gitops-version:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Checkout GitOps Repo
         uses: actions/checkout@v4
