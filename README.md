@@ -1,12 +1,13 @@
 # Watcher 🍿
 
 ## Overview
+![poster](https://img5.pic.in.th/file/secure-sv1/Watcher-A1-594x841mm-1.jpg)
 Watcher is a web application designed to enhance the experience of tracking, discovering, and engaging with various types of entertainment media, including movies, series, and anime. The application provides users with a seamless experience across all devices, making it easier to plan their media consumption while receiving personalized recommendations.
 
 ## Project Background and Importance
 With the growing popularity of entertainment media, users often face challenges in organizing and keeping track of their viewing activities. Some common issues include:
 - Difficulty in tracking release dates and planning media consumption.
-- Lack of a comprehensive platform to display all types of entertainment media.
+- Lack of a **comprehensive** platform to display all types of entertainment media.
 - Inconvenience in finding relevant media recommendations.
 - The need for a centralized place to read and share reviews across different platforms.
 
@@ -17,7 +18,7 @@ Watcher is designed to:
 - Enhance user experience by providing a smooth and accessible interface.
 - Allow users to easily plan and manage their entertainment activities.
 - Deliver accurate and personalized media recommendations.
-- Foster a community for entertainment enthusiasts to share and discuss their interests.
+- Foster a community **for** entertainment enthusiasts to share and discuss their interests.
 
 ## Project Scope
 Watcher is a web-based application that provides users with tools to efficiently manage and discover entertainment content. The key features include:
@@ -30,7 +31,7 @@ Watcher is a web-based application that provides users with tools to efficiently
 
 ## GitOps
 ![alt text](https://img5.pic.in.th/file/secure-sv1/Screenshot-2568-02-27-at-14.26.43.png)
-Watcher follows a GitOps approach for infrastructure management using the [**watcher-infra**](https://github.com/biskitsx/watcher-infra) repository. This repository is responsible for automating deployments, managing infrastructure as code, and ensuring consistency across environments. By leveraging **GitOps**nciples, Watcher benefits from:
+Watcher follows a GitOps approach for infrastructure management using the [**watcher-infra**]() repository. This repository is responsible for automating deployments, managing infrastructure as code, and ensuring consistency across environments. By leveraging **GitOps**nciples, Watcher benefits from:
 - **Automated Deployments**: Continuous integration and deployment pipelines ensure smooth updates.
 - **Version Control for Infrastructure**: All changes are tracked and auditable.
 - **Scalability and Reliability**: Infrastructure is managed declaratively, making scaling and maintenance easier.
