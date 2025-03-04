@@ -169,6 +169,7 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
       },
     ];
   }, [isFavorite, isWatchlist, rating]);
+  const tmdbMultiPlatformKeys = ["imdb", "tmdb", "tomatoes"];
 
   const isAnime = media.type === "anime";
   return (
@@ -218,41 +219,64 @@ export const MediaCard = ({ media, isLong, size }: MediaCardProps) => {
         </div>
         <div className="py-2 px-1">
           <div className="flex gap-4 sm:gap-6 rounded-md ">
-            {!!media.multiPlatformRatings &&
-              Object.entries(media.multiPlatformRatings).map(([key, value]) => {
-                // if (isAnime)
-                if (
-                  key === "score_average" ||
-                  key === "score" ||
-                  key === "metacritic" ||
-                  key === "trakt" ||
-                  key === "letterboxd"
+            {!!media.multiPlatformRatings
+              ? Object.entries(media.multiPlatformRatings).map(
+                  ([key, value]) => {
+                    if (
+                      key === "score_average" ||
+                      key === "score" ||
+                      key === "metacritic" ||
+                      key === "trakt" ||
+                      key === "letterboxd"
+                    )
+                      return null;
+                    const isValExist = value > 0;
+                    const src = getImageSrcByPlatform(key);
+                    return (
+                      <Tooltip
+                        key={key}
+                        title={`${key} Rating`}
+                        placement="top"
+                        className="!capitalize"
+                      >
+                        <div className="flex flex-col gap-1 items-center hover:scale-105 transition-all ">
+                          <Image
+                            src={src}
+                            width={30}
+                            height={30}
+                            preview={false}
+                            className="!rounded-md "
+                          />
+                          <h1 className="font-semibold text-xs">
+                            {isValExist ? `${value}%` : "NR"}
+                          </h1>
+                        </div>
+                      </Tooltip>
+                    );
+                  }
                 )
-                  return null;
-                const isValExist = value > 0;
-                const src = getImageSrcByPlatform(key);
-                return (
-                  <Tooltip
-                    key={key}
-                    title={`${key} Rating`}
-                    placement="top"
-                    className="!capitalize"
-                  >
-                    <div className="flex flex-col gap-1 items-center hover:scale-105 transition-all ">
-                      <Image
-                        src={src}
-                        width={30}
-                        height={30}
-                        preview={false}
-                        className="!rounded-md "
-                      />
-                      <h1 className="font-semibold text-xs">
-                        {isValExist ? `${value}%` : "NR"}
-                      </h1>
-                    </div>
-                  </Tooltip>
-                );
-              })}
+              : tmdbMultiPlatformKeys.map((key) => {
+                  const src = getImageSrcByPlatform(key);
+                  return (
+                    <Tooltip
+                      key={key}
+                      title={`${key} Rating`}
+                      placement="top"
+                      className="!capitalize"
+                    >
+                      <div className="flex flex-col gap-1 items-center hover:scale-105 transition-all ">
+                        <Image
+                          src={src}
+                          width={30}
+                          height={30}
+                          preview={false}
+                          className="!rounded-md"
+                        />
+                        <h1 className="font-semibold text-xs">NR</h1>
+                      </div>
+                    </Tooltip>
+                  );
+                })}
           </div>
           <Link href={`/${media.type}/${media.id}`}>
             <h3 className="truncate font-semibold hover:text-blue-400 transition-all">

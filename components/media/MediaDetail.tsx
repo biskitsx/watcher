@@ -216,6 +216,15 @@ export const MediaDetail = ({
     }
   };
 
+  const tmdbMultiPlatformKeys = [
+    "imdb",
+    "tmdb",
+    "tomatoes",
+    "trakt",
+    "letterboxd",
+    "metacritic",
+  ];
+
   const [isCreateReviewModalOpen, setIsCreateReviewModalOpen] = useState(false);
   return (
     <>
@@ -305,12 +314,36 @@ export const MediaDetail = ({
                   </Stack>
                 </Stack>
                 <div className="flex gap-6  rounded-md p-1 ">
-                  {!!media.multiPlatformRatings &&
-                    Object.entries(media.multiPlatformRatings).map(
-                      ([key, value]) => {
-                        if (key === "score_average" || key === "score")
-                          return null;
-                        const isValExist = value > 0;
+                  {!!media.multiPlatformRatings
+                    ? Object.entries(media.multiPlatformRatings).map(
+                        ([key, value]) => {
+                          if (key === "score_average" || key === "score")
+                            return null;
+                          const isValExist = value > 0;
+                          const src = getImageSrcByPlatform(key);
+                          return (
+                            <Tooltip
+                              key={key}
+                              title={`${key} Rating`}
+                              placement="top"
+                              className="!capitalize"
+                            >
+                              <div className="flex flex-col gap-1 items-center hover:scale-105 transition-all ">
+                                <Image
+                                  src={src}
+                                  width={30}
+                                  height={30}
+                                  preview={false}
+                                />
+                                <h1 className="font-semibold text-xs">
+                                  {isValExist ? `${value}%` : "NR"}
+                                </h1>
+                              </div>
+                            </Tooltip>
+                          );
+                        }
+                      )
+                    : tmdbMultiPlatformKeys.map((key) => {
                         const src = getImageSrcByPlatform(key);
                         return (
                           <Tooltip
@@ -325,15 +358,13 @@ export const MediaDetail = ({
                                 width={30}
                                 height={30}
                                 preview={false}
+                                className="!rounded-md"
                               />
-                              <h1 className="font-semibold text-xs">
-                                {isValExist ? `${value}%` : "NR"}
-                              </h1>
+                              <h1 className="font-semibold text-xs">NR</h1>
                             </div>
                           </Tooltip>
                         );
-                      }
-                    )}
+                      })}
                 </div>
                 <Stack direction={"row"} className="uppercase">
                   <Button

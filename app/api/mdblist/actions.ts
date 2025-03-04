@@ -42,8 +42,6 @@ export const getMultiPlatformRating = async (
             [platform]: shouldTime ? score * 10 : score,
           });
         });
-      } else {
-        console.warn(`No ratings found for platform: ${platform}`);
       }
     });
 
