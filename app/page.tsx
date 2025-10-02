@@ -12,7 +12,7 @@ import { Shape1 } from "./components/svg/shape-1";
 import { JoinToday } from "./components/JoinToday";
 
 export default async function Home() {
-  const upcomingMovies = await getUpcomingMovies({ page: 1 });
+  const upcomingMovies = await getUpcomingMovies({ page: 2 });
   const series = await getTopRatedSeries({ page: 1 });
   const topAnimes = await getTopAnime({ page: 1 });
   return (
